@@ -1,0 +1,25 @@
+name: Build and publish Foundry module
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JavaScript and manifest
+        run: |
+          node --check scripts/h0d-template-manager.js
+          python3 -m json.tool module.json > /dev/null
+      - name: Package and publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(python3 -c 'import json;print(json.load(open("module.json"))["version"])')
+          TAG="$VERSION"
+          if gh release view "$TAG" >/dev/null 2>&1; then echo "Release $TAG already exists"; exit 0; fi
+          zip -q -r h0d-template-manager.zip module.json scripts styles data templates reference README.md CHANGELOG.md VALIDATION.txt
+          gh release create "$TAG" h0d-template-manager.zip module.json --target "$GITHUB_SHA" --title "H0D-template-manager $TAG" --notes-file CHANGELOG.md
