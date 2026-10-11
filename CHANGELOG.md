@@ -1,3 +1,8 @@
+## 1.5.2 — Cohérence de l'affichage des pièces neutralisées
+- Fiche Machine v3.15 : le panneau de réglage PV ne présente plus tout 0 PV comme une destruction physique.
+- Les états Detache et Detruit continuent d'être distingués par la fiche existante.
+- Aucune modification des autres templates et aucune migration au démarrage.
+
 ## 1.5.1 — Ordre logique du menu Template Manager
 
 - Aucun changement fonctionnel des templates ni des migrations.
