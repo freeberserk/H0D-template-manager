@@ -1,0 +1,68 @@
+[
+  {
+    "kind": "Actor",
+    "id": "uympqkQiS6MHHmIx",
+    "name": "H0D_Actor-template-PJ v3.62",
+    "file": "H0D_Actor-template-PJ-v3.62.json"
+  },
+  {
+    "kind": "Actor",
+    "id": "H0DCreatActor001",
+    "name": "H0D_Actor-template-creature v1.17",
+    "file": "H0D_Actor-template-creature-v1.17.json"
+  },
+  {
+    "kind": "Actor",
+    "id": "wRHfQ4gZbHTaYOsR",
+    "name": "H0D_Actor-template-machine v3.14",
+    "file": "H0D_Actor-template-machine-v3.14.json"
+  },
+  {
+    "kind": "Item",
+    "id": "O6qwtv7ozECILPHV",
+    "name": "H0D_Arme v2.6",
+    "file": "H0D_Arme-v2.6.json"
+  },
+  {
+    "kind": "Item",
+    "id": "dEeBbuthkI0CVMa3",
+    "name": "H0D_Armure v1.8",
+    "file": "H0D_Armure-v1.8.json"
+  },
+  {
+    "kind": "Item",
+    "id": "H0DDonTalent0001",
+    "name": "H0D_Don_Talent v2.5",
+    "file": "H0D_Don_Talent-v2.5.json"
+  },
+  {
+    "kind": "Item",
+    "id": "H0DCreaMod000001",
+    "name": "H0D_Modificateur v1.3",
+    "file": "H0D_Modificateur-v1.3.json"
+  },
+  {
+    "kind": "Item",
+    "id": "H0DObjTpl0000001",
+    "name": "H0D_Objet v2.9",
+    "file": "H0D_Objet-v2.9.json"
+  },
+  {
+    "kind": "Item",
+    "id": "H0DResTpl0000001",
+    "name": "H0D_Ressource v2.5",
+    "file": "H0D_Ressource-v2.5.json"
+  },
+  {
+    "kind": "Item",
+    "id": "H0DWeaponMach001",
+    "name": "H0D_arme_Machine v3.9",
+    "file": "H0D_arme_Machine-v3.9.json"
+  },
+  {
+    "kind": "Item",
+    "id": "H0DCompMach00001",
+    "name": "H0D_Pièce_Détachable v2.6",
+    "file": "H0D_Piece_Detachable-v2.6.json"
+  }
+]

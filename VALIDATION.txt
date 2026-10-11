@@ -1,0 +1,19 @@
+H0D Template Manager v1.2.2 — BAC — détails de jets compacts
+
+Contrôles statiques effectués :
+- H0D_Actor-template-PJ v3.60: ID stable uympqkQiS6MHHmIx; 99 champs formulaire strictement conservés; seul rollMessage d'attaque (H0D_Quick_Arme_Attaque) modifié.
+- H0D_Actor-template-creature v1.16: ID stable H0DCreatActor001; 43 champs formulaire strictement conservés; seul rollMessage d'attaque (H0D_Creature_Arme_Attaque_Aff) modifié.
+- H0D_Actor-template-machine v3.11: ID stable wRHfQ4gZbHTaYOsR; 32 champs formulaire strictement conservés; seul rollMessage d'attaque (H0D_Machine_Arme_Attaque_Aff) modifié.
+- size != auto : 0.
+- index.json, module.json et tous les templates JSON : chargement valide.
+- Moteur de calcul, ciblage, consommation de munitions, critique, cooldown, DEF privée MJ et anti-blindage inchangés.
+- Rendu compact : propriétés statiques d'arme retirées du détail; modificateurs contextuels affichés seulement s'ils influencent le jet.
+
+
+INTÉGRITÉ V2 / 1.3.0
+- Machine canonique attendue : H0D_Actor-template-machine v3.12
+- Pièce canonique attendue : H0D_Pièce_Détachable v2.6
+- Vérifier qu'une pièce détruite ne fait PAS diminuer H0D_Machine_PV_Max_Calc.
+- Vérifier Zone anatomique + Protection du corps sur la fiche Pièce.
+- Vérifier CORPS PROTÉGÉ / CORPS EXPOSÉ sur la fiche Machine.
+- L'overkill est testé dans H0D Machine Health Manager, pas dans le Template Manager.

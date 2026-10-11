@@ -1,0 +1,841 @@
+{
+  "folder": "swJi9Pih8g8AmZln",
+  "name": "H0D_Ressource v2.5",
+  "type": "_equippableItemTemplate",
+  "_id": "H0DResTpl0000001",
+  "img": "icons/commodities/currency/coin-oval-rune-copper.webp",
+  "system": {
+    "hidden": [],
+    "header": {
+      "contents": [],
+      "key": "custom_header",
+      "type": "panel"
+    },
+    "body": {
+      "contents": [
+        {
+          "key": "",
+          "colSpan": 1,
+          "rowSpan": 1,
+          "cssClass": "zd-page",
+          "role": "0",
+          "editRole": 0,
+          "permission": "0",
+          "tooltip": "",
+          "visibilityFormula": "",
+          "editableFormula": "",
+          "escapeHTML": false,
+          "type": "panel",
+          "contents": [
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-orange",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-orange-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "RESSOURCE · COMPOSANT",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_Ressource_Type",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Ressource",
+                        "defaultValue": "Plaque",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Plaque",
+                            "value": "Plaque métallique"
+                          },
+                          {
+                            "key": "Fibre",
+                            "value": "Fibre synthétique"
+                          },
+                          {
+                            "key": "Lentille",
+                            "value": "Lentille optique"
+                          },
+                          {
+                            "key": "Cellule",
+                            "value": "Cellule d’énergie"
+                          },
+                          {
+                            "key": "Circuit",
+                            "value": "Circuit ancien"
+                          },
+                          {
+                            "key": "Fluide",
+                            "value": "Fluide élémentaire"
+                          },
+                          {
+                            "key": "Noyau",
+                            "value": "Noyau de machine"
+                          },
+                          {
+                            "key": "PieceRare",
+                            "value": "Pièce rare"
+                          },
+                          {
+                            "key": "Antique",
+                            "value": "Matériau antique (compatibilité)"
+                          },
+                          {
+                            "key": "Autre",
+                            "value": "Autre"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_Ressource_Qualite",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Qualité",
+                        "defaultValue": "Commune",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Commune",
+                            "value": "Commune"
+                          },
+                          {
+                            "key": "Abimee",
+                            "value": "Abîmée"
+                          },
+                          {
+                            "key": "Stable",
+                            "value": "Stable"
+                          },
+                          {
+                            "key": "Intacte",
+                            "value": "Intacte"
+                          },
+                          {
+                            "key": "Rare",
+                            "value": "Rare"
+                          },
+                          {
+                            "key": "Instable",
+                            "value": "Instable"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_Ressource_Quantite",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Quantité",
+                        "defaultValue": "1",
+                        "allowDecimal": false,
+                        "minVal": "1",
+                        "maxVal": "999",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Stockage",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Transporté par",
+                        "defaultValue": "PJ",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "PJ",
+                            "value": "Porteur / PJ"
+                          },
+                          {
+                            "key": "Monture",
+                            "value": "Monture / machine alliée"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      }
+                    ]
+                  ],
+                  "cols": "2",
+                  "rows": "2",
+                  "layout": "ll"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "VALEUR & CHARGE",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "label",
+                        "size": "auto",
+                        "icon": "",
+                        "value": "Valeur u.",
+                        "prefix": "",
+                        "suffix": "",
+                        "rollMessage": "",
+                        "altRollMessage": "",
+                        "rollMessageToChat": true,
+                        "altRollMessageToChat": true,
+                        "style": "bold",
+                        "align": "center"
+                      },
+                      {
+                        "key": "",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "label",
+                        "size": "auto",
+                        "icon": "",
+                        "value": "Valeur totale",
+                        "prefix": "",
+                        "suffix": "",
+                        "rollMessage": "",
+                        "altRollMessage": "",
+                        "rollMessageToChat": true,
+                        "altRollMessageToChat": true,
+                        "style": "bold",
+                        "align": "center"
+                      },
+                      {
+                        "key": "",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "label",
+                        "size": "auto",
+                        "icon": "",
+                        "value": "Charge u.",
+                        "prefix": "",
+                        "suffix": "",
+                        "rollMessage": "",
+                        "altRollMessage": "",
+                        "rollMessageToChat": true,
+                        "altRollMessageToChat": true,
+                        "style": "bold",
+                        "align": "center"
+                      },
+                      {
+                        "key": "",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "label",
+                        "size": "auto",
+                        "icon": "",
+                        "value": "Charge totale",
+                        "prefix": "",
+                        "suffix": "",
+                        "rollMessage": "",
+                        "altRollMessage": "",
+                        "rollMessageToChat": true,
+                        "altRollMessageToChat": true,
+                        "style": "bold",
+                        "align": "center"
+                      }
+                    ]
+                  ],
+                  "cols": "4",
+                  "rows": "1",
+                  "layout": "cccc"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_Ressource_Valeur_Unitaire",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Valeur unitaire",
+                        "defaultValue": "1",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "999",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Ressource_Valeur_Totale",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "label",
+                        "size": "auto",
+                        "icon": "",
+                        "value": "${H0D_Ressource_Quantite * H0D_Ressource_Valeur_Unitaire}$",
+                        "prefix": "",
+                        "suffix": "",
+                        "rollMessage": "",
+                        "altRollMessage": "",
+                        "rollMessageToChat": true,
+                        "altRollMessageToChat": true,
+                        "style": "bold",
+                        "align": "center"
+                      },
+                      {
+                        "key": "H0D_Ressource_Charge_Unitaire",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Charge unitaire",
+                        "defaultValue": "0",
+                        "allowDecimal": true,
+                        "minVal": "0",
+                        "maxVal": "99",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Ressource_Charge_Totale",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "label",
+                        "size": "auto",
+                        "icon": "",
+                        "value": "${H0D_Ressource_Quantite * H0D_Ressource_Charge_Unitaire}$",
+                        "prefix": "",
+                        "suffix": "",
+                        "rollMessage": "",
+                        "altRollMessage": "",
+                        "rollMessageToChat": true,
+                        "altRollMessageToChat": true,
+                        "style": "bold",
+                        "align": "center"
+                      }
+                    ]
+                  ],
+                  "cols": "4",
+                  "rows": "1",
+                  "layout": "cccc"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-orange",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-orange-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "ORIGINE & USAGE",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_Ressource_Element",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Élément du Fluide élémentaire.",
+                        "visibilityFormula": "${equalText(H0D_Ressource_Type,'Fluide')}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Élément",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "Aucun"
+                          },
+                          {
+                            "key": "Feu",
+                            "value": "Feu"
+                          },
+                          {
+                            "key": "Gel",
+                            "value": "Gel"
+                          },
+                          {
+                            "key": "Choc",
+                            "value": "Choc"
+                          },
+                          {
+                            "key": "Acide",
+                            "value": "Acide"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_Ressource_Origine",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Machine / origine",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_Ressource_Composant",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Composant précis",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      },
+                      {
+                        "key": "H0D_Ressource_Usage",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Usage principal",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      }
+                    ]
+                  ],
+                  "cols": "2",
+                  "rows": "2",
+                  "layout": "ll"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "NOTES",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "H0D_Ressource_Notes",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "textArea",
+                  "size": "auto",
+                  "label": "État, particularités, destination prévue...",
+                  "defaultValue": "",
+                  "style": "dialog"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            }
+          ],
+          "flow": "vertical",
+          "align": "center",
+          "verticalAlign": "top",
+          "collapsible": false,
+          "defaultCollapsed": false,
+          "title": "",
+          "titleStyle": "default"
+        }
+      ],
+      "key": "custom_body",
+      "type": "panel"
+    },
+    "templateSystemUniqueVersion": 10,
+    "display": {
+      "width": 760,
+      "height": 700,
+      "fix_size": false,
+      "pp_width": 64,
+      "pp_height": 64
+    },
+    "uniqueId": "H0DResTpl0000001"
+  },
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "custom-system-builder": {
+      "version": "6.0.2",
+      "templateHistory": "[]",
+      "templateHistoryRedo": "[]"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "custom-system-builder",
+    "systemVersion": "6.0.2",
+    "createdTime": 1790346615333,
+    "modifiedTime": 1790350109033,
+    "lastModifiedBy": "Vg51uJzTE9AkQ5Cy",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "les-cendres-dhelios",
+      "uuid": "Item.H0DResTpl0000001",
+      "coreVersion": "14.367",
+      "systemId": "custom-system-builder",
+      "systemVersion": "6.0.2"
+    }
+  },
+  "items": []
+}

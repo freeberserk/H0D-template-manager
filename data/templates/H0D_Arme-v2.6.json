@@ -1,0 +1,1681 @@
+{
+  "folder": "igIKG4EtBGIAYBqK",
+  "name": "H0D_Arme v2.6",
+  "type": "_equippableItemTemplate",
+  "_id": "O6qwtv7ozECILPHV",
+  "img": "icons/weapons/bows/shortbow-recurve-yellow-blue.webp",
+  "system": {
+    "hidden": [],
+    "header": {
+      "key": "custom_header",
+      "type": "panel",
+      "contents": [
+        {
+          "key": "",
+          "colSpan": 1,
+          "rowSpan": 1,
+          "cssClass": "zd-header-title",
+          "role": "0",
+          "editRole": 0,
+          "permission": "0",
+          "tooltip": "",
+          "visibilityFormula": "",
+          "editableFormula": "",
+          "escapeHTML": false,
+          "type": "label",
+          "size": "auto",
+          "icon": "crosshairs",
+          "value": "ZERO DAWN — ARME",
+          "prefix": "",
+          "suffix": "",
+          "rollMessage": "",
+          "altRollMessage": "",
+          "rollMessageToChat": true,
+          "altRollMessageToChat": true,
+          "style": "title"
+        }
+      ]
+    },
+    "body": {
+      "key": "custom_body",
+      "type": "panel",
+      "contents": [
+        {
+          "key": "",
+          "colSpan": 1,
+          "rowSpan": 1,
+          "cssClass": "zd-page",
+          "role": "0",
+          "editRole": 0,
+          "permission": "0",
+          "tooltip": "",
+          "visibilityFormula": "",
+          "editableFormula": "",
+          "escapeHTML": false,
+          "type": "panel",
+          "contents": [
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "crosshairs",
+                  "value": "ARME — ZERO DAWN",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_Arme_Categorie",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Catégorie obligatoire : Mêlée, Distance, Jet ou Spéciale. Elle pilote les automatismes du PJ et des créatures.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "size": "auto",
+                        "label": "Catégorie",
+                        "defaultValue": "",
+                        "selectedOptionType": "custom",
+                        "options": [
+                          {
+                            "key": "melee",
+                            "value": "Mêlée"
+                          },
+                          {
+                            "key": "distance",
+                            "value": "Distance"
+                          },
+                          {
+                            "key": "jet",
+                            "value": "Jet"
+                          },
+                          {
+                            "key": "speciale",
+                            "value": "Spéciale"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_Arme_Carac_Attaque",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Mêlée utilise automatiquement FOR ; Distance utilise automatiquement DEX. Choix manuel uniquement pour Jet et Spéciale.",
+                        "visibilityFormula": "${or(equalText(H0D_Arme_Categorie,'jet'),equalText(H0D_Arme_Categorie,'speciale'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "size": "auto",
+                        "label": "Carac. attaque",
+                        "defaultValue": "aucune",
+                        "selectedOptionType": "custom",
+                        "options": [
+                          {
+                            "key": "FOR",
+                            "value": "FOR"
+                          },
+                          {
+                            "key": "DEX",
+                            "value": "DEX"
+                          },
+                          {
+                            "key": "aucune",
+                            "value": "Aucune"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_Arme_Carac_Degats",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "size": "auto",
+                        "label": "Carac. dégâts",
+                        "defaultValue": "aucune",
+                        "selectedOptionType": "custom",
+                        "options": [
+                          {
+                            "key": "FOR",
+                            "value": "FOR"
+                          },
+                          {
+                            "key": "DEX",
+                            "value": "DEX"
+                          },
+                          {
+                            "key": "aucune",
+                            "value": "Aucune"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_Arme_Bonus_Attaque",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Bonus attaque",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "30",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Arme_Degats",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Dégâts",
+                        "defaultValue": "1d6",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      },
+                      {
+                        "key": "H0D_Arme_Bonus_Degats",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Bonus dégâts",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "30",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_Arme_Type_Degats",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "size": "auto",
+                        "label": "Type de dégâts",
+                        "defaultValue": "Perforant",
+                        "selectedOptionType": "custom",
+                        "options": [
+                          {
+                            "key": "Perforant",
+                            "value": "Perforant"
+                          },
+                          {
+                            "key": "Tranchant",
+                            "value": "Tranchant"
+                          },
+                          {
+                            "key": "Contondant",
+                            "value": "Contondant"
+                          },
+                          {
+                            "key": "Energie",
+                            "value": "Énergie"
+                          },
+                          {
+                            "key": "Explosif",
+                            "value": "Explosif"
+                          },
+                          {
+                            "key": "Autre",
+                            "value": "Autre"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_Arme_Portee",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": 0,
+                        "editRole": 0,
+                        "permission": 0,
+                        "tooltip": "Intervalle de portée de base en mètres. Allonge s’ajoute automatiquement à cette valeur.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Portée (m)",
+                        "defaultValue": "0",
+                        "allowDecimal": true,
+                        "minVal": "0",
+                        "maxVal": "9999",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Arme_Mains",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "1 = arme à une main · 1+ = une main pour tenir/utiliser, avec une main libre nécessaire pour alimenter/recharger (cas typique : arcs) · 2 = arme nécessitant deux mains.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "size": "auto",
+                        "label": "Mains",
+                        "defaultValue": "1",
+                        "selectedOptionType": "custom",
+                        "options": [
+                          {
+                            "key": "1",
+                            "value": "1"
+                          },
+                          {
+                            "key": "1+",
+                            "value": "1+"
+                          },
+                          {
+                            "key": "2",
+                            "value": "2"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_Arme_Critique_Seuil",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Valeur naturelle minimale du d20 qui peut menacer un critique. Ex. 20 ou 19.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Menace critique",
+                        "defaultValue": "20",
+                        "allowDecimal": false,
+                        "minVal": "10",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Arme_Critique_Multiplicateur",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Multiplicateur de dégâts du critique confirmé. x2 par défaut.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Multiplicateur",
+                        "defaultValue": "2",
+                        "allowDecimal": false,
+                        "minVal": "2",
+                        "maxVal": "5",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Arme_Equipee",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Indique si l’arme est portée et accessible sur le personnage. Ce statut est distinct de « En main », qui représente l’arme effectivement tenue.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "checkbox",
+                        "size": "auto",
+                        "label": "Équipée",
+                        "defaultValue": null,
+                        "defaultChecked": false
+                      }
+                    ]
+                  ],
+                  "cols": "3",
+                  "rows": "4",
+                  "layout": "ccc"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "TRANSPORT",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "label",
+                        "size": "auto",
+                        "icon": "",
+                        "value": "Transporté par",
+                        "prefix": "",
+                        "suffix": "",
+                        "rollMessage": "",
+                        "altRollMessage": "",
+                        "rollMessageToChat": true,
+                        "altRollMessageToChat": true,
+                        "style": "bold",
+                        "align": "left"
+                      },
+                      {
+                        "key": "H0D_Stockage",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Détermine si l'objet compte dans la charge du PJ ou dans celle de sa monture.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "",
+                        "defaultValue": "PJ",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "PJ",
+                            "value": "PJ"
+                          },
+                          {
+                            "key": "Monture",
+                            "value": "Monture / machine alliée"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      }
+                    ]
+                  ],
+                  "cols": "2",
+                  "rows": "1",
+                  "layout": "lc"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-orange",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-orange-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "ÉQUIPEMENT & MUNITIONS",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_Arme_Active",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Indique si l’arme est actuellement tenue en main. Dégainer une autre arme suit les règles d’action de mouvement du SRD, sauf capacité particulière.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "checkbox",
+                        "size": "auto",
+                        "label": "En main",
+                        "defaultValue": null,
+                        "defaultChecked": false
+                      },
+                      {
+                        "key": "H0D_Arme_Encombrement",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Charges",
+                        "defaultValue": "1",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "20",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Arme_Zone",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Zone / rayon",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_Arme_Mode_Munition",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Mêlée : aucune munition. Distance/Spéciale : fonctionnement normal. Jet : peut utiliser le mode Direct pour représenter les exemplaires lancés (javelots, couteaux, haches, etc.) qu'il faudra récupérer ou remplacer.",
+                        "visibilityFormula": "${not(equalText(H0D_Arme_Categorie,'melee'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Mode munitions",
+                        "defaultValue": "Aucune",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucune",
+                            "value": "Aucune"
+                          },
+                          {
+                            "key": "Direct",
+                            "value": "Direct"
+                          },
+                          {
+                            "key": "Chargeur",
+                            "value": "Chargeur"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_Arme_Type_Munition",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Famille de munition compatible. Pour une arme de jet, la munition peut représenter l'exemplaire effectivement lancé. La famille Projectile peut servir aux javelots et autres armes de jet.",
+                        "visibilityFormula": "${and(not(equalText(H0D_Arme_Categorie,'melee')),not(equalText(H0D_Arme_Mode_Munition,'Aucune')))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Famille requise",
+                        "defaultValue": "Fleche",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Fleche",
+                            "value": "Flèche"
+                          },
+                          {
+                            "key": "Carreau",
+                            "value": "Carreau"
+                          },
+                          {
+                            "key": "Projectile",
+                            "value": "Projectile / arme de jet"
+                          },
+                          {
+                            "key": "Cartouche",
+                            "value": "Cartouche"
+                          },
+                          {
+                            "key": "Bombe",
+                            "value": "Bombe / charge"
+                          },
+                          {
+                            "key": "Cellule",
+                            "value": "Cellule / énergie"
+                          },
+                          {
+                            "key": "Cable",
+                            "value": "Câble"
+                          },
+                          {
+                            "key": "Autre",
+                            "value": "Autre"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_Arme_Consommation_Munition",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Quantité consommée par une attaque normale.",
+                        "visibilityFormula": "${and(not(equalText(H0D_Arme_Categorie,'melee')),not(equalText(H0D_Arme_Mode_Munition,'Aucune')))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Consommation / attaque",
+                        "defaultValue": "1",
+                        "allowDecimal": false,
+                        "minVal": "1",
+                        "maxVal": "99",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_Arme_Recharge",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Temps / action de rechargement ou de récupération. Visible pour les modes Direct et Chargeur. Le trait Rapide indique un rechargement libre/gratuit.",
+                        "visibilityFormula": "${and(not(equalText(H0D_Arme_Categorie,'melee')),not(equalText(H0D_Arme_Mode_Munition,'Aucune')))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Rechargement",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      },
+                      null,
+                      null
+                    ],
+                    [
+                      {
+                        "key": "H0D_Arme_Munitions",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Nombre actuellement chargé.",
+                        "visibilityFormula": "${and(not(equalText(H0D_Arme_Categorie,'melee')),equalText(H0D_Arme_Mode_Munition,'Chargeur'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Munitions actuelles",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "999",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_Arme_Munitions_Max",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Capacité maximale du chargeur.",
+                        "visibilityFormula": "${and(not(equalText(H0D_Arme_Categorie,'melee')),equalText(H0D_Arme_Mode_Munition,'Chargeur'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Capacité du chargeur",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "999",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      null
+                    ]
+                  ],
+                  "cols": "3",
+                  "rows": "4",
+                  "layout": "ccc"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": true,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "PROPRIÉTÉS",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_Arme_Element",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "size": "auto",
+                        "label": "Élément",
+                        "defaultValue": "Aucun",
+                        "selectedOptionType": "custom",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "Aucun"
+                          },
+                          {
+                            "key": "Feu",
+                            "value": "Feu"
+                          },
+                          {
+                            "key": "Gel",
+                            "value": "Gel"
+                          },
+                          {
+                            "key": "Choc",
+                            "value": "Choc"
+                          },
+                          {
+                            "key": "Acide",
+                            "value": "Acide"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      null,
+                      null
+                    ],
+                    [
+                      {
+                        "key": "H0D_Arme_Origine",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Origine / faction",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      },
+                      {
+                        "key": "H0D_Arme_Cout",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Coût / valeur",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      },
+                      null
+                    ]
+                  ],
+                  "cols": "3",
+                  "rows": "2",
+                  "layout": "ccc"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-section zd-teal",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "panel",
+                  "contents": [
+                    {
+                      "key": "",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "zd-teal-title",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "TRAITS",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "title"
+                    },
+                    {
+                      "key": "",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Précis → Attaque · Allonge → Portée · Polyvalent → type secondaire · Lourd → FOR minimale · Surchauffe → cooldown.",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "Trait = choix · Nom personnalisé seulement pour Autre · Valeur/Type uniquement quand le trait en a besoin.",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    },
+                    {
+                      "key": "H0D_Arme_Traits_Table",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Ajouter autant de traits que nécessaire.",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "dynamicTable",
+                      "contents": [],
+                      "rowLayout": [
+                        {
+                          "key": "H0D_Arme_Trait_Type",
+                          "colSpan": 1,
+                          "rowSpan": 1,
+                          "cssClass": "",
+                          "role": "0",
+                          "editRole": 0,
+                          "permission": "0",
+                          "tooltip": "Traits d'arme normalisés. Précis, Allonge, Lourd, Anti-blindage et Surchauffe utilisent une valeur ; Polyvalent utilise un type de dégâts ; Portée spéciale conserve une portée propre à un mode/effet spécial. Anti-blindage réduit directement la DEF adverse pour le jet d'attaque. Rapide indique un rechargement libre/gratuit.",
+                          "visibilityFormula": "",
+                          "editableFormula": "",
+                          "escapeHTML": false,
+                          "type": "select",
+                          "label": "",
+                          "defaultValue": "silencieux",
+                          "size": "auto",
+                          "options": [
+                            {
+                              "key": "silencieux",
+                              "value": "Silencieux"
+                            },
+                            {
+                              "key": "precis",
+                              "value": "Précis (+ATQ)"
+                            },
+                            {
+                              "key": "allonge",
+                              "value": "Allonge (+m)"
+                            },
+                            {
+                              "key": "polyvalent",
+                              "value": "Polyvalent (type secondaire)"
+                            },
+                            {
+                              "key": "rapide",
+                              "value": "Rapide — rechargement gratuit"
+                            },
+                            {
+                              "key": "lourd",
+                              "value": "Lourd (FOR min.)"
+                            },
+                            {
+                              "key": "anti_blindage",
+                              "value": "Anti-blindage (-DEF)"
+                            },
+                            {
+                              "key": "surchauffe",
+                              "value": "Surchauffe (rounds)"
+                            },
+                            {
+                              "key": "modulaire",
+                              "value": "Modulaire"
+                            },
+                            {
+                              "key": "ancien",
+                              "value": "Ancien"
+                            },
+                            {
+                              "key": "fragile",
+                              "value": "Fragile"
+                            },
+                            {
+                              "key": "portee",
+                              "value": "Portée spéciale (m)"
+                            },
+                            {
+                              "key": "traction",
+                              "value": "Traction"
+                            },
+                            {
+                              "key": "entrave",
+                              "value": "Entrave"
+                            },
+                            {
+                              "key": "leger",
+                              "value": "Léger"
+                            },
+                            {
+                              "key": "briseur",
+                              "value": "Briseur"
+                            },
+                            {
+                              "key": "outil",
+                              "value": "Outil"
+                            },
+                            {
+                              "key": "secret",
+                              "value": "Secret"
+                            },
+                            {
+                              "key": "autre",
+                              "value": "Autre / personnalisé"
+                            }
+                          ],
+                          "tableKey": null,
+                          "tableKeyColumn": null,
+                          "tableLabelColumn": null,
+                          "colName": "Trait",
+                          "align": "center"
+                        },
+                        {
+                          "key": "H0D_Arme_Trait_Perso",
+                          "colSpan": 1,
+                          "rowSpan": 1,
+                          "cssClass": "",
+                          "role": "0",
+                          "editRole": 0,
+                          "permission": "0",
+                          "tooltip": "Nom du trait lorsque « Autre / personnalisé » est choisi.",
+                          "visibilityFormula": "${equalText(sameRow('H0D_Arme_Trait_Type'),'autre')}$",
+                          "editableFormula": "",
+                          "escapeHTML": false,
+                          "type": "textField",
+                          "size": "auto",
+                          "label": "",
+                          "defaultValue": "",
+                          "charList": "",
+                          "maxLength": "",
+                          "autocomplete": "",
+                          "colName": "Nom personnalisé",
+                          "align": "center"
+                        },
+                        {
+                          "key": "H0D_Arme_Trait_Valeur",
+                          "colSpan": 1,
+                          "rowSpan": 1,
+                          "cssClass": "",
+                          "role": "0",
+                          "editRole": 0,
+                          "permission": "0",
+                          "tooltip": "Précis : bonus d'attaque · Allonge : bonus de mètres · Portée spéciale : portée propre en mètres · Lourd : FOR minimale · Anti-blindage : points de DEF adverse ignorés · Surchauffe : rounds.",
+                          "visibilityFormula": "${switchCase(sameRow('H0D_Arme_Trait_Type'),'precis',true,'allonge',true,'portee',true,'lourd',true,'anti_blindage',true,'surchauffe',true,false)}$",
+                          "editableFormula": "",
+                          "escapeHTML": false,
+                          "type": "numberField",
+                          "size": "auto",
+                          "label": "",
+                          "defaultValue": "0",
+                          "allowDecimal": true,
+                          "minVal": "-999",
+                          "maxVal": "999",
+                          "allowRelative": false,
+                          "showControls": true,
+                          "controlsStyle": "hover",
+                          "controlsCustomIncrements": "",
+                          "inputStyle": "text",
+                          "colName": "Valeur",
+                          "align": "center"
+                        },
+                        {
+                          "key": "H0D_Arme_Trait_Parametre",
+                          "colSpan": 1,
+                          "rowSpan": 1,
+                          "cssClass": "",
+                          "role": "0",
+                          "editRole": 0,
+                          "permission": "0",
+                          "tooltip": "Type de dégâts secondaire du trait Polyvalent.",
+                          "visibilityFormula": "${equalText(sameRow('H0D_Arme_Trait_Type'),'polyvalent')}$",
+                          "editableFormula": "",
+                          "escapeHTML": false,
+                          "type": "select",
+                          "label": "",
+                          "defaultValue": "Aucun",
+                          "size": "auto",
+                          "options": [
+                            {
+                              "key": "Aucun",
+                              "value": "Aucun"
+                            },
+                            {
+                              "key": "Perforant",
+                              "value": "Perforant"
+                            },
+                            {
+                              "key": "Tranchant",
+                              "value": "Tranchant"
+                            },
+                            {
+                              "key": "Contondant",
+                              "value": "Contondant"
+                            },
+                            {
+                              "key": "Energie",
+                              "value": "Énergie"
+                            },
+                            {
+                              "key": "Explosif",
+                              "value": "Explosif"
+                            },
+                            {
+                              "key": "Autre",
+                              "value": "Autre"
+                            }
+                          ],
+                          "tableKey": null,
+                          "tableKeyColumn": null,
+                          "tableLabelColumn": null,
+                          "colName": "Type",
+                          "align": "center"
+                        },
+                        {
+                          "key": "H0D_Arme_Trait_Note",
+                          "colSpan": 1,
+                          "rowSpan": 1,
+                          "cssClass": "",
+                          "role": "0",
+                          "editRole": 0,
+                          "permission": "0",
+                          "tooltip": "Précision courte ou règle narrative du trait.",
+                          "visibilityFormula": "",
+                          "editableFormula": "",
+                          "escapeHTML": false,
+                          "type": "textField",
+                          "size": "auto",
+                          "label": "",
+                          "defaultValue": "",
+                          "charList": "",
+                          "maxLength": "",
+                          "autocomplete": "",
+                          "colName": "Note",
+                          "align": "center"
+                        }
+                      ],
+                      "head": true,
+                      "deleteWarning": true,
+                      "canPlayerAdd": true,
+                      "sortOption": "manual",
+                      "showDelete": true
+                    },
+                    {
+                      "key": "H0D_Arme_Trait_Attaque_Total",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Somme des traits Précis.",
+                      "visibilityFormula": "false",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "${sum(lookup('H0D_Arme_Traits_Table','H0D_Arme_Trait_Valeur','H0D_Arme_Trait_Type','precis'))}$",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    },
+                    {
+                      "key": "H0D_Arme_Trait_Portee_Total",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Bonus de portée des traits Allonge.",
+                      "visibilityFormula": "false",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "${sum(lookup('H0D_Arme_Traits_Table','H0D_Arme_Trait_Valeur','H0D_Arme_Trait_Type','allonge'))}$",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    },
+                    {
+                      "key": "H0D_Arme_Trait_Cooldown_Total",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Durée du cooldown en rounds.",
+                      "visibilityFormula": "false",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "${sum(lookup('H0D_Arme_Traits_Table','H0D_Arme_Trait_Valeur','H0D_Arme_Trait_Type','surchauffe'))}$",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    },
+                    {
+                      "key": "H0D_Arme_Trait_TypeSecondaire_Calc",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Type secondaire Polyvalent.",
+                      "visibilityFormula": "false",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "${first(lookup('H0D_Arme_Traits_Table','H0D_Arme_Trait_Parametre','H0D_Arme_Trait_Type','polyvalent'),'Aucun')}$",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    },
+                    {
+                      "key": "H0D_Arme_Trait_Lourd_FOR_Min_Calc",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "FOR minimale du trait Lourd.",
+                      "visibilityFormula": "false",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "${first(lookup('H0D_Arme_Traits_Table','H0D_Arme_Trait_Valeur','H0D_Arme_Trait_Type','lourd'),0)}$",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    },
+                    {
+                      "key": "H0D_Arme_Trait_AntiBlindage_Total",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Points de DEF adverse ignorés par l’arme. Se cumule avec l’anti-blindage de la munition.",
+                      "visibilityFormula": "false",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "${sum(lookup('H0D_Arme_Traits_Table','H0D_Arme_Trait_Valeur','H0D_Arme_Trait_Type','anti_blindage'))}$",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    },
+                    {
+                      "key": "H0D_Arme_Trait_Portee_Speciale_Calc",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Portée propre du premier trait Portée spéciale.",
+                      "visibilityFormula": "false",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "${first(lookup('H0D_Arme_Traits_Table','H0D_Arme_Trait_Valeur','H0D_Arme_Trait_Type','portee'),0)}$",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    },
+                    {
+                      "key": "",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "Résumé des effets chiffrés des traits.",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "Auto : ATQ ${H0D_Arme_Trait_Attaque_Total}$ · Allonge +${H0D_Arme_Trait_Portee_Total}$ m · Portée spéciale ${H0D_Arme_Trait_Portee_Speciale_Calc}$ m · Anti-blindage ${H0D_Arme_Trait_AntiBlindage_Total}$ · Cooldown ${H0D_Arme_Trait_Cooldown_Total}$ · FOR min ${H0D_Arme_Trait_Lourd_FOR_Min_Calc}$",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label"
+                    }
+                  ],
+                  "flow": "vertical",
+                  "align": "center",
+                  "verticalAlign": "top",
+                  "collapsible": false,
+                  "defaultCollapsed": false,
+                  "title": "",
+                  "titleStyle": "default"
+                },
+                {
+                  "key": "H0D_Arme_Effet_Special",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "textArea",
+                  "size": "auto",
+                  "label": "Effet spécial",
+                  "defaultValue": "",
+                  "style": "dialog"
+                },
+                {
+                  "key": "H0D_Arme_Notes",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "textArea",
+                  "size": "auto",
+                  "label": "Description / notes",
+                  "defaultValue": "",
+                  "style": "dialog"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            }
+          ],
+          "flow": "vertical",
+          "align": "center",
+          "verticalAlign": "top",
+          "collapsible": false,
+          "defaultCollapsed": false,
+          "title": "",
+          "titleStyle": "default"
+        }
+      ]
+    },
+    "templateSystemUniqueVersion": 2945523113,
+    "display": {
+      "width": 900,
+      "height": 780,
+      "fix_size": false,
+      "pp_width": 125,
+      "pp_height": 125
+    },
+    "uniqueId": "O6qwtv7ozECILPHV"
+  },
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "custom-system-builder": {
+      "version": "6.0.2",
+      "templateHistory": "[]",
+      "templateHistoryRedo": "[]"
+    }
+  },
+  "_stats": {
+    "coreVersion": "14.367",
+    "systemId": "custom-system-builder",
+    "systemVersion": "6.0.2",
+    "createdTime": 1790946289399,
+    "modifiedTime": 1790946289399,
+    "lastModifiedBy": "Vg51uJzTE9AkQ5Cy",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "les-cendres-dhelios_bac_a_sable",
+      "uuid": "Item.O6qwtv7ozECILPHV",
+      "coreVersion": "14.367",
+      "systemId": "custom-system-builder",
+      "systemVersion": "6.0.2"
+    }
+  },
+  "items": []
+}

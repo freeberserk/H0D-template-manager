@@ -1,0 +1,171 @@
+<section class="h0d-tm-shell">
+  <header class="h0d-tm-hero">
+    <div>
+      <h1><i class="fa-solid fa-shield-halved"></i> H0D — Template Manager</h1>
+      <p>Source canonique des templates · installation contrôlée · audit en lecture seule · synchronisation sécurisée</p>
+    </div>
+    <span class="h0d-tm-version">v{{moduleVersion}}</span>
+  </header>
+
+  <nav class="h0d-tm-actionbar">
+    <button type="button" data-action="audit"><i class="fa-solid fa-magnifying-glass-chart"></i> Audit monde</button>
+    <button type="button" data-action="exportAudit"><i class="fa-solid fa-file-export"></i> Exporter audit</button>
+    <button type="button" data-action="snapshot"><i class="fa-solid fa-floppy-disk"></i> Exporter snapshot</button>
+    <button type="button" data-action="installAll" class="primary"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
+    <button type="button" data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
+    <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}}><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
+    <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}}><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer versions sûres</button>
+    <button type="button" data-action="restore"><i class="fa-solid fa-clock-rotate-left"></i> Restaurer dernier cycle</button>
+    <button type="button" data-action="closeApp"><i class="fa-solid fa-xmark"></i> Fermer</button>
+  </nav>
+
+  <div class="h0d-tm-scroll">
+    <section class="h0d-tm-summary-grid">
+      <article class="h0d-tm-card">
+        <span>Templates</span>
+        <strong>{{#if auditSummary.available}}{{auditSummary.templates.ok}} OK{{else}}11 actifs{{/if}}</strong>
+        <small>{{#if auditSummary.available}}{{auditSummary.templates.update}} MAJ · {{auditSummary.templates.absent}} absent(s){{else}}Audit non lancé{{/if}}</small>
+      </article>
+      <article class="h0d-tm-card">
+        <span>Fiches monde</span>
+        <strong>{{#if auditSummary.available}}{{auditSummary.documents.ok}} saines{{else}}—{{/if}}</strong>
+        <small>{{#if auditSummary.available}}{{auditSummary.documents.warnings}} à examiner · {{auditSummary.documents.errors}} erreur(s){{else}}Audit en lecture seule{{/if}}</small>
+      </article>
+      <article class="h0d-tm-card">
+        <span>Armes de référence</span>
+        <strong>{{weaponSummary.referenceFound}} / {{weaponSummary.referenceWeapons}}</strong>
+        <small>{{weaponSummary.mechanicalDiffs}} différence(s) mécanique(s)</small>
+      </article>
+      <article class="h0d-tm-card">
+        <span>Armures / boucliers</span>
+        <strong>{{armorSummary.ok}} / {{armorSummary.matched}} conformes</strong>
+        <small>{{armorSummary.mechanicalDiffs}} écart(s) mécanique(s)</small>
+      </article>
+      <article class="h0d-tm-card">
+        <span>Dernier cycle</span>
+        <strong class="small-value">{{lastCycle}}</strong>
+        <small>5 sauvegardes internes max / fiche</small>
+      </article>
+    </section>
+
+    {{#if warningTriage.available}}
+    <section class="h0d-tm-section">
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-list-check"></i> TRIAGE DES AVERTISSEMENTS</h2><span>migration contrôlée · base stable 1.2.0 · chat compact 1.2.2</span></div>
+      <div class="h0d-tm-weapon-grid">
+        <article><span>Fiches à examiner</span><strong>{{warningTriage.warningDocuments}}</strong></article>
+        <article><span>Entrées warning</span><strong>{{warningTriage.warningEntries}}</strong></article>
+        <article><span>Version seule</span><strong>{{warningTriage.versionOnlyCandidates}}</strong></article>
+        <article><span>Champs manquants seuls</span><strong>{{warningTriage.missingOnlyCandidates}}</strong></article>
+        <article><span>Version + champs</span><strong>{{warningTriage.mixedCandidates}}</strong></article>
+        <article><span>Legacy informatif</span><strong>{{warningTriage.legacyInfoDocuments}}</strong></article>
+        <article><span>Compendiums à examiner</span><strong>{{warningTriage.shared.warnings}}</strong></article>
+      </div>
+      <div class="h0d-tm-table">
+        <div class="h0d-tm-row header"><span>Famille</span><span>Fiches</span><span>Avertissements</span><span>Répartition</span></div>
+        {{#each warningTriage.byTemplate}}
+        <div class="h0d-tm-row">
+          <span><strong>{{name}}</strong><small>{{ok}} OK · {{legacy}} avec legacy informatif</small></span>
+          <span>{{total}}</span>
+          <span class="status {{#if warnings}}warning{{else}}ok{{/if}}">{{warnings}} warning(s) · {{errors}} erreur(s)</span>
+          <span><small>Version seule {{staleOnly}} · Champs seuls {{missingOnly}} · Mixte {{mixed}}</small></span>
+        </div>
+        {{/each}}
+      </div>
+      <div class="h0d-tm-weapon-actions">
+        <p><strong>Migration sûre disponible : {{safeVersionCandidates}} candidat(s).</strong> La v1.2.0 stable traite les avertissements « version seule » des PJ, armures/boucliers, dons/talents, armes, objets et pièces détachables en recollectant les candidats après chaque migration. Les cas avec champs manquants ou warnings mixtes restent exclus ; les valeurs locales, dynamicTables et propriétés legacy sont conservées.</p>
+        <p>Les cas « champs manquants seuls », « version + champs », les armes-machines et les compendiums restent exclus de cette action.</p>
+        {{#if warningTriage.topMissingProps.length}}<p>Les propriétés manquantes les plus fréquentes sont incluses dans l’export d’audit sous <code>warningTriage.topMissingProps</code>.</p>{{/if}}
+      </div>
+    </section>
+    {{/if}}
+
+    <section class="h0d-tm-section">
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-user-shield"></i> ACTORS</h2><span>3 templates</span></div>
+      <div class="h0d-tm-table">
+        <div class="h0d-tm-row header"><span>Template canonique</span><span>Installé</span><span>État</span><span>Actions</span></div>
+        {{#each actorTemplates}}
+        <div class="h0d-tm-row">
+          <span><strong>{{name}}</strong><small>ID · {{id}}</small></span>
+          <span>{{status.installed}}</span>
+          <span class="status {{status.code}}"><i class="{{status.icon}}"></i> {{status.label}}</span>
+          <span class="actions">
+            <button type="button" data-action="openTemplate" data-key="{{key}}" title="Ouvrir"><i class="fa-solid fa-up-right-from-square"></i> Ouvrir</button>
+            <button type="button" data-action="updateTemplate" data-key="{{key}}"><i class="fa-solid fa-download"></i> {{#if status.doc}}Mettre à jour{{else}}Installer{{/if}}</button>
+            <button type="button" data-action="auditTemplate" data-key="{{key}}"><i class="fa-solid fa-stethoscope"></i> Auditer</button>
+          </span>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <section class="h0d-tm-section">
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-toolbox"></i> ITEMS</h2><span>8 templates actifs</span></div>
+      <div class="h0d-tm-table">
+        <div class="h0d-tm-row header"><span>Template canonique</span><span>Installé</span><span>État</span><span>Actions</span></div>
+        {{#each itemTemplates}}
+        <div class="h0d-tm-row">
+          <span><strong>{{name}}</strong><small>ID · {{id}}</small></span>
+          <span>{{status.installed}}</span>
+          <span class="status {{status.code}}"><i class="{{status.icon}}"></i> {{status.label}}</span>
+          <span class="actions">
+            <button type="button" data-action="openTemplate" data-key="{{key}}"><i class="fa-solid fa-up-right-from-square"></i> Ouvrir</button>
+            <button type="button" data-action="updateTemplate" data-key="{{key}}"><i class="fa-solid fa-download"></i> {{#if status.doc}}Mettre à jour{{else}}Installer{{/if}}</button>
+            <button type="button" data-action="auditTemplate" data-key="{{key}}"><i class="fa-solid fa-stethoscope"></i> Auditer</button>
+          </span>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <section class="h0d-tm-section h0d-tm-legacy">
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-box-archive"></i> LEGACY / COMPATIBILITÉ</h2></div>
+      <div class="h0d-tm-legacy-line">
+        <div><strong>{{legacy.name}}</strong><small>{{#if legacy.installed}}{{legacy.usages}} utilisation(s) détectée(s){{else}}Déjà retiré du monde{{/if}}</small></div>
+        {{#if legacy.installed}}
+          {{#if legacy.canRemove}}
+          <button type="button" data-action="retireTrait" class="danger"><i class="fa-solid fa-trash"></i> Retirer (inutilisé)</button>
+          {{else}}
+          <span class="status warning"><i class="fa-solid fa-triangle-exclamation"></i> Conservé : encore utilisé</span>
+          {{/if}}
+        {{/if}}
+      </div>
+    </section>
+
+    <section class="h0d-tm-section">
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-crosshairs"></i> CONFORMITÉ DES ARMES</h2><span>référentiel testé v0.5.2</span></div>
+      <div class="h0d-tm-weapon-grid">
+        <article><span>Références</span><strong>{{weaponSummary.referenceWeapons}}</strong></article>
+        <article><span>✅ Trouvées</span><strong>{{weaponSummary.referenceFound}}</strong></article>
+        <article><span>❌ Absentes</span><strong>{{weaponSummary.referenceMissing}}</strong></article>
+        <article><span>🎯 PJ / Aloy</span><strong>{{weaponSummary.pjEmbeddedWeapons}} / {{weaponSummary.aloyEmbeddedWeapons}}</strong></article>
+        <article><span>⚠ Différences</span><strong>{{weaponSummary.mechanicalDiffs}}</strong></article>
+        <article><span>🔧 Réparables</span><strong>{{weaponSummary.repairableWeapons}}</strong></article>
+        <article><span>Hors référentiel</span><strong>{{weaponSummary.unreferenced}}</strong></article>
+      </div>
+      <div class="h0d-tm-weapon-actions">
+        <p>Le contrôle compare uniquement les mécaniques. Les armes inconnues sont laissées intactes. Les PNJ ne sont jamais réparés par ce bouton.</p>
+      </div>
+    </section>
+
+    <section class="h0d-tm-section">
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-shield"></i> CONFORMITÉ ARMURES & BOUCLIERS</h2><span>Excel · référentiel v1.0.8</span></div>
+      <div class="h0d-tm-weapon-grid">
+        <article><span>Références Excel</span><strong>{{armorSummary.referenceItems}}</strong></article>
+        <article><span>Équipements PJ</span><strong>{{armorSummary.embeddedItems}}</strong></article>
+        <article><span>Armures / boucliers</span><strong>{{armorSummary.armors}} / {{armorSummary.shields}}</strong></article>
+        <article><span>✅ Conformes</span><strong>{{armorSummary.ok}}</strong></article>
+        <article><span>⚠ Différences</span><strong>{{armorSummary.mechanicalDiffs}}</strong></article>
+        <article><span>Hors référentiel</span><strong>{{armorSummary.unreferenced}}</strong></article>
+        <article><span>⚑ Source à préciser</span><strong>{{armorSummary.sourceWarnings}}</strong></article>
+      </div>
+      <div class="h0d-tm-weapon-actions">
+        <p>Audit des armures/boucliers embarqués sur les Actors utilisant le template PJ. Les équipements inconnus restent intacts. MAX DEX et la résistance texte restent informatifs tant que le template Armure ne possède pas de champ dédié. La réparation ne touche que les mécaniques validées et conserve les traits locaux supplémentaires non couverts par le référentiel.</p>
+      </div>
+    </section>
+
+    <section class="h0d-tm-note">
+      <i class="fa-solid fa-circle-info"></i>
+      <div><strong>Aucune modification automatique au démarrage.</strong><br>Audit = lecture seule. Aucun snapshot JSON n’est exporté automatiquement. Le bouton « Exporter snapshot » reste manuel ; synchronisation et réparation conservent leurs sauvegardes internes par fiche.</div>
+    </section>
+  </div>
+</section>

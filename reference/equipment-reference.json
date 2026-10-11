@@ -1,0 +1,124 @@
+{
+  "format": "H0D_EQUIPMENT_REFERENCE",
+  "formatVersion": 2,
+  "sourceWorkbook": "reference/template_arme.xlsx",
+  "sourceSheet": "Bouclier + Armures",
+  "generatedAt": "2026-10-07",
+  "notes": {
+    "mobility": "Malus/bonus de mobilité (vitesse).",
+    "maxDex": "Valeur de référence informative : le template Armure v1.8 n'a pas encore de propriété MAX DEX dédiée, donc elle n'est pas réparée ni comptée comme écart mécanique.",
+    "resistanceText": "Champ texte de référence (ENTRAVE, DETECTION, TRANCHANT, etc.). Il reste informatif et distinct des résistances élémentaires Feu/Gel/Choc/Acide.",
+    "traits": "Les traits nommés dans les colonnes valeur/paramètre sont associés explicitement. Un trait sans valeur devient valeur 0. Les traits absents de la liste du template sont conservés en 'autre' avec leur nom dans perso."
+  },
+  "armorShieldReferences": [
+    {
+      "name": "cuir renforcé",
+      "aliases": ["Cuir Renforcee", "Cuir renforcée", "Armure de Cuir Renforcee", "Armure de cuir renforcée"],
+      "type": "armure", "zone": "corps", "bonusDefense": 2, "charges": 2, "mobility": "-1.5", "maxDex": 12,
+      "carrier": "PJ", "resistanceText": "ENTRAVE",
+      "resistances": {"feu":0,"gel":0,"choc":0,"acide":0},
+      "origin": "Clan de la dent d'Ambre",
+      "traits": [
+        {"type":"renforce","perso":"","value":1,"param":"DEF"},
+        {"type":"lourd","perso":"","value":14,"param":"FOR"}
+      ],
+      "compareTraits": true,
+      "description": "Armure lourde en cuir avecplastron en piéces de machines",
+      "sourceWarnings": []
+    },
+    {
+      "name": "Tenue de soigneur",
+      "aliases": ["Tenue de soigneuse"],
+      "type": "armure", "zone": "corps", "bonusDefense": 1, "charges": 0, "mobility": "3", "maxDex": 18,
+      "carrier": "PJ", "resistanceText": "-",
+      "resistances": {"feu":0,"gel":0,"choc":0,"acide":0},
+      "origin": "Clan de la dent d'Ambre",
+      "traits": [{"type":"autre","perso":"LEGERE","value":0,"param":""}],
+      "compareTraits": true,
+      "description": "Une tenue en tissu agrémentée de piéces de machines",
+      "sourceWarnings": []
+    },
+    {
+      "name": "armure de récupérateur",
+      "aliases": ["Tablier de récupérateur", "tenue de récupérateur", "Tenue de récupérateur"],
+      "type": "armure", "zone": "corps", "bonusDefense": 2, "charges": 1, "mobility": "0", "maxDex": 14,
+      "carrier": "PJ", "resistanceText": "-",
+      "resistances": {"feu":0,"gel":0,"choc":0,"acide":0},
+      "origin": "Clan de la dent d'Ambre",
+      "traits": [{"type":"autre","perso":"FONCTIONNELLE","value":1,"param":"démontage"}],
+      "compareTraits": true,
+      "description": "Une tenue  en cuir tressé agrémentée poches et de piéces de machines",
+      "sourceWarnings": []
+    },
+    {
+      "name": "Armure rapide",
+      "aliases": [],
+      "type": "armure", "zone": "torse", "bonusDefense": 1, "charges": 1, "mobility": "0", "maxDex": 16,
+      "carrier": "PJ", "resistanceText": "DECTECTION",
+      "resistances": {"feu":0,"gel":0,"choc":0,"acide":0},
+      "origin": "Clan de la dent d'Ambre",
+      "traits": [{"type":"discret","perso":"","value":-3,"param":"perception enemi"}],
+      "compareTraits": true,
+      "description": "harnais et épaulières en cuir agrémentée de piéces de machines",
+      "sourceWarnings": []
+    },
+    {
+      "name": "Armure légére",
+      "aliases": ["Armure légère", "Tenue légère"],
+      "type": "armure", "zone": "corps", "bonusDefense": 1, "charges": 0, "mobility": "3", "maxDex": 18,
+      "carrier": "PJ", "resistanceText": "-",
+      "resistances": {"feu":0,"gel":0,"choc":0,"acide":0},
+      "origin": "Clan de la dent d'Ambre",
+      "traits": [
+        {"type":"souple","perso":"","value":0,"param":""},
+        {"type":"autre","perso":"LEGERE","value":0,"param":""}
+      ],
+      "compareTraits": true,
+      "description": "Une tenue en tissu agrémentée de piéces de machines",
+      "sourceWarnings": []
+    },
+    {
+      "name": "Bouclier lourd",
+      "aliases": [],
+      "type": "bouclier", "zone": "bras", "bonusDefense": 2, "charges": 2, "mobility": "-1.5", "maxDex": null,
+      "carrier": "PJ", "resistanceText": "-",
+      "resistances": {"feu":1,"gel":1,"choc":1,"acide":1},
+      "origin": "Clan de la dent d'Ambre",
+      "traits": [
+        {"type":"lourd","perso":"","value":14,"param":"FOR"},
+        {"type":"autre","perso":"COUVERTURE","value":-2,"param":"pour toucher"}
+      ],
+      "compareTraits": true,
+      "description": "PAVOIS de piéces de machines\nDemande don de bouclier",
+      "sourceWarnings": []
+    },
+    {
+      "name": "Boulier léger",
+      "aliases": ["Bouclier léger", "Bouclier leger"],
+      "type": "bouclier", "zone": "bras", "bonusDefense": 1, "charges": 1, "mobility": "0", "maxDex": null,
+      "carrier": "PJ", "resistanceText": "-",
+      "resistances": {"feu":0,"gel":0,"choc":0,"acide":0},
+      "origin": "Clan de la dent d'Ambre",
+      "traits": [],
+      "compareTraits": true,
+      "description": "-",
+      "sourceWarnings": []
+    },
+    {
+      "name": "Armure de chasse renforcee",
+      "aliases": ["Aloy — Armure de chasse renforcée", "Aloy - Armure de chasse renforcée", "Armure de chasse renforcée"],
+      "type": "armure", "zone": "corps", "bonusDefense": 3, "charges": 0, "mobility": "3", "maxDex": 18,
+      "carrier": "PJ", "resistanceText": "TRANCHANT",
+      "resistances": {"feu":1,"gel":1,"choc":1,"acide":1},
+      "origin": "Aloy",
+      "traits": [
+        {"type":"souple","perso":"","value":0,"param":""},
+        {"type":"modulaire","perso":"","value":1,"param":"DEF"},
+        {"type":"autre","perso":"LEGERE","value":0,"param":""}
+      ],
+      "compareTraits": true,
+      "description": "Armure Légére renforcée d'ALoy",
+      "sourceWarnings": []
+    }
+  ]
+}

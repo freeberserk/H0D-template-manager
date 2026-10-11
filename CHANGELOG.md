@@ -1,0 +1,259 @@
+## 1.5.1 — Ordre logique du menu Template Manager
+
+- Aucun changement fonctionnel des templates ni des migrations.
+- Barre d’actions réorganisée dans l’ordre de travail recommandé :
+  1. Audit monde
+  2. Exporter audit
+  3. Exporter snapshot
+  4. Installer/mettre à jour
+  5. Synchroniser le monde
+  6. Réparer équipements
+  7. Migrer versions sûres
+  8. Restaurer dernier cycle
+  9. Fermer
+- Le libellé **Réparer équipements** est conservé.
+
+## 1.5.0 — Ergonomie de la fiche PJ
+
+- Base conservée : v1.4.1.
+- PJ canonique : **H0D_Actor-template-PJ v3.62**.
+- **Attaques rapides** déplacées au-dessus du groupe Combat / Sauvegardes / Actions héroïques.
+- **Repos / récupération** retiré du bloc Actions héroïques et transformé en bloc autonome.
+- **Compétences rapides** activées :
+  - Perception est toujours présente et non remplaçable ;
+  - 3 emplacements personnalisables par le joueur ;
+  - choix parmi Acrobaties, Athlétisme, Discrétion, Survie, Technologie ancienne,
+    Réparation / Artisanat, Soins et Diplomatie / Intimidation ;
+  - chaque raccourci lance directement le d20 et affiche une carte H0D harmonisée.
+- Valeurs par défaut des trois raccourcis : Athlétisme, Discrétion, Survie.
+- Aucun changement de règle ou de calcul des compétences principales.
+
+## 1.4.1 — Dégâts des attaques Machine
+
+- Correctif de la carte Attaque Machine.
+- Le champ `H0D_ArmeMachine_Degats` est maintenant réellement lancé avec Foundry, comme pour les attaques PJ/créatures.
+- La ligne publique affiche désormais le résultat : `9 — Contondant` au lieu de `2d6+1 Contondant`.
+- La formule d'origine reste visible dans `Détails du jet`.
+- Si une ancienne attaque contient une formule non lançable, la carte retombe proprement sur le texte brut au lieu de planter.
+- Machine canonique : **v3.14**.
+
+## 1.4.0 — Cartes de jets harmonisées
+
+- PJ v3.61, Créature v1.17, Machine v3.13.
+- Référence visuelle : carte Attaque PJ.
+- Attaques : Résultat / Verdict / Cible / Dégâts / Effet éventuel / Détails.
+- Compétences, aptitudes et sauvegardes : Résultat / Détails, sans verdict.
+- Focus, initiative, dégâts, dé d’action et progression harmonisés.
+- DEF et marge restent privées MJ.
+- Correction des minuscules badges inline-roll CSB dans les cartes H0D.
+- Créatures et machines ajoutées aux migrations staleOnly sûres.
+
+## 1.3.0 — Intégrité Machines v2
+
+- Base conservée intégralement depuis la v1.2.2 stable (audit, BAC, migrations sûres, cartes de jets).
+- Machine **v3.12** et Pièce détachable **v2.6**.
+- Ajout des champs `H0D_Composant_Zone` et `H0D_Composant_Protection_Corps`.
+- L'Intégrité max devient une référence fixe : détruire/détacher une pièce ne réduit plus le maximum.
+- La fiche Machine affiche automatiquement **CORPS PROTÉGÉ** / **CORPS EXPOSÉ** selon les protections encore actives.
+- Le tableau des composants affiche Zone et Protection.
+- Les anciennes clés de PV sont conservées pour éviter toute rupture de données.
+- Nouvelle API publique `getTemplate(key)` exposée sur `game.modules.get("h0d-template-manager").api` pour les Builders.
+- Aucune migration automatique au démarrage.
+
+## 1.2.2 — BAC — détails de jets compacts
+
+- PJ **v3.60**, Créature **v1.16**, Machine **v3.11**.
+- Les cartes d’attaque n’utilisent plus « Détails du jet » comme fiche technique de l’arme.
+- Détails = d20 + modificateurs effectivement appliqués + bonus total.
+- Les modificateurs nuls/contextes sans effet sont masqués.
+- Portée affichée uniquement lorsqu’elle applique réellement un malus.
+- Type de dégâts, portée nominale, seuil critique permanent et descriptions longues de munitions retirés du détail.
+- Munition/élément/cooldown restent en métadonnées compactes seulement lorsqu’ils sont pertinents.
+- Critique n’apparaît dans la carte principale qu’en cas de menace réelle.
+- Logique de combat, ciblage, DEF privée MJ, anti-blindage, consommation de munitions, critiques et cooldown inchangés.
+
+## 1.2.1 — BAC — refonte visuelle des cartes de jets
+
+- Base de sécurité inchangée par rapport à la 1.2.0 stable.
+- Nouveau renderer CSS commun pour les cartes de chat H0D.
+- PJ **v3.59** : jet libre, caractéristiques, sauvegardes, initiative, compétences, connaissances, Focus, points d’action, attaques/dégâts et dé de vie harmonisés visuellement.
+- Créature **v1.15** : initiative, sauvegardes, aptitudes, attaques et dégâts harmonisés.
+- Machine **v3.10** : initiative, sauvegardes, attaques et dégâts harmonisés.
+- Les cartes d’attaque conservent toute leur logique actuelle : ciblage, résultat naturel, DEF privée MJ, anti-blindage, portée, munition, critique et cooldown.
+- Aucun champ de formulaire n’est ajouté, supprimé ou renommé dans les trois Actors.
+
+# Changelog
+
+## 1.2.0 — stable
+- Première version déclarée **stable / production** pour le serveur officiel après validation successive sur le BAC.
+- Fige le moteur de migration `staleOnly` validé en v1.1.3 : Actor PJ, armures/boucliers, dons/talents, armes, objets et pièces détachables uniquement.
+- Les `missingOnly`, `mixed`, armes-machines et compendiums restent volontairement exclus de la migration sûre.
+- Déplace le bouton **Migrer versions sûres** dans la barre d’actions supérieure, à côté de **Réparer équipements**, afin de centraliser les opérations de maintenance.
+- Aucun changement du réparateur d’équipements : références et mécaniques déjà validées restent inchangées.
+- Aucune migration automatique au démarrage ; snapshots JSON toujours manuels et sauvegardes internes conservées avant mutation.
+- Cette 1.2.0 sert de point de retour stable avant les essais 1.2.1+ sur le BAC.
+
+## 1.1.3
+- Fiabilise **Migrer versions sûres** pour les Embedded Items CSB : les candidats sont désormais recollectés depuis le monde après chaque `reloadTemplate()` au lieu d'être traités depuis une liste figée.
+- Corrige le comportement observé en v1.1.2 où seuls 7 des 35 `staleOnly` restants avaient effectivement migré avant que les références suivantes ne deviennent incohérentes avec la collection embarquée courante.
+- Conserve strictement le même scope : Actor PJ, armures/boucliers, dons/talents, armes, objets et pièces détachables **staleOnly** uniquement.
+- `missingOnly`, `mixed`, armes-machines et compendiums restent exclus.
+- Ré-résolution UUID, sauvegarde interne et vérification stricte des valeurs locales inchangées.
+- Ajoute une limite dure de tentatives, évite de retenter en boucle un candidat en erreur et enregistre le nombre de candidats restants dans `safeVersionMigration`.
+- Réparateur équipements inchangé.
+
+## 1.1.2
+- Étend **Migrer versions sûres** aux familles `item-arme`, `item-objet` et `item-piece` lorsque le document est strictement `staleOnly`.
+- Conserve le scope déjà validé : Actor PJ, armures/boucliers et dons/talents.
+- Cible le reliquat observé sur le BAC après v1.1.1 : **35 candidats version seule** (15 armes, 18 objets, 2 pièces détachables).
+- Les `missingOnly`, `mixed`, armes-machines et compendiums restent exclus ; aucun champ manquant n'est inventé ou rempli par défaut.
+- Réutilise la ré-résolution UUID avant/après `reloadTemplate()`, la sauvegarde interne par fiche et la vérification stricte des valeurs locales.
+- Le réparateur équipements reste inchangé et les propriétés legacy sont conservées.
+
+## 1.1.1
+- Corrige la migration contrôlée des versions sûres en ré-résolvant chaque document par UUID juste avant et juste après `reloadTemplate()`.
+- Évite les références Document périmées lorsque CSB recrée un Actor ou ses Embedded Items pendant un reload.
+- Ajoute `safeVersionMigration` dans l’export d’audit avec le détail `tenté / réussi / erreur / version avant-après`.
+- Scope inchangé : PJ, armures/boucliers et dons/talents `staleOnly` uniquement. Aucun traitement des `missingOnly`, `mixed`, armes, objets, machines/pièces ou compendiums.
+- Réparateur équipements inchangé.
+
+# 1.1.0
+
+- Première migration contrôlée des warnings : bouton **Migrer versions sûres**.
+- Scope strict : uniquement les fiches monde `staleOnly` des familles **PJ**, **Armures/Boucliers** et **Dons/Talents**.
+- Les cas avec propriétés manquantes (`missingOnly` / `mixed`) sont exclus, ainsi que les armes, objets, armes-machines, pièces détachables et compendiums.
+- Avant chaque fiche, création d’une sauvegarde interne liée au cycle de migration ; aucun snapshot JSON n’est téléchargé automatiquement.
+- La migration recharge le template CSB puis restaure intégralement les valeurs locales top-level : dynamicTables, textes, mécaniques et propriétés legacy existantes restent prioritaires.
+- Les éventuelles nouvelles propriétés non-input produites par le template sont conservées.
+- Vérification post-migration : les valeurs locales d’origine doivent être identiques et `templateSystemUniqueVersion` doit correspondre à la version canonique ; sinon la fiche est signalée en erreur.
+- Après migration, un nouvel audit est lancé automatiquement pour mesurer la baisse réelle des warnings.
+- Le réparateur équipements validé en v1.0.10 reste inchangé.
+
+# 1.0.11
+
+- Bloc **Réparer équipements** figé après validation BAC : 0 écart mécanique sur les armes, armures et boucliers référencés.
+- Nouveau **triage des avertissements** en lecture seule dans l’audit et l’interface.
+- Séparation des fiches en trois catégories : **version seule**, **champs manquants seuls**, **version + champs manquants**.
+- Ventilation des warnings par famille de template (PJ, armes, armures, dons/talents, objets, ressources, machines, pièces…).
+- Comptage séparé des propriétés legacy informatives et des warnings des compendiums partagés.
+- Export d’audit enrichi avec `warningTriage.byTemplate`, `warningTriage.byScope` et `warningTriage.topMissingProps`.
+- Aucune migration automatique des 239 fiches à examiner dans cette version : la v1.0.11 sert à définir les prochains lots de réparation sans masquer les écarts structurels.
+
+# v1.0.10
+
+- Correctif ciblé de la `dynamicTable` des traits d’armes à partir du diagnostic runtime v1.0.9.
+- Les traits d’armes sont désormais réinjectés dans le format natif CSB 6 : objet indexé (`"0"`, `"1"`, …), avec `$deleted: false` et les cinq champs de ligne attendus.
+- La **Hache de chasse** peut à nouveau être réparée : sa ligne vide doit être remplacée par le trait canonique `OUTIL`.
+- La comparaison d’audit reste normalisée en tableau ; seul le format d’écriture runtime change.
+- Le réparateur armures/boucliers validé reste inchangé.
+- Le diagnostic des dynamicTable introduit en v1.0.9 est conservé dans l’audit pour vérification.
+- Aucun nettoyage global des warnings n’est effectué.
+
+# v1.0.9
+
+- Version de diagnostic ciblée sur `H0D_Arme_Traits_Table` après l’échec reproductible de la v1.0.8 sur la Hache de chasse.
+- L’audit exporte désormais, pour chaque mismatch de traits d’arme, la structure runtime brute de la table courante, de la référence de compendium, de l’override canonique et du template d’arme.
+- L’audit recherche également jusqu’à 3 armes de référence possédant réellement le trait `OUTIL` et exporte leur dynamicTable brute comme exemples de structure CSB valide.
+- Sécurité : lorsqu’une arme ne diffère **que** par `H0D_Arme_Traits_Table`, le bouton Réparer équipements la laisse volontairement intacte en v1.0.9 ; aucune nouvelle tentative destructive n’est faite tant que le format runtime exact n’est pas identifié.
+- Les réparations scalaires d’armes restent disponibles si un autre écart mécanique apparaît.
+- Le réparateur armures/boucliers validé reste inchangé.
+- Aucun nettoyage global des warnings n’est effectué.
+
+# v1.0.8
+
+- Correctif ciblé sur `H0D_Arme_Traits_Table` : suppression explicite de la propriété racine avant réinjection de la table canonique.
+- Corrige le cas de la **Hache de chasse**, qui conservait une ligne vide au lieu du trait `OUTIL` après réparation.
+- Le réparateur armures/boucliers validé en v1.0.7 est laissé inchangé.
+- Le bouton unique **Réparer équipements** reste dans la barre supérieure et continue de traiter armes + armures + boucliers en une seule action.
+- Aucun nettoyage des 147/159 warnings n'est inclus dans cette version : ce chantier reste séparé.
+
+# v1.0.7
+
+- Bouton unique **Réparer équipements** déplacé dans la barre de menus supérieure ; suppression des deux boutons dupliqués dans les sections Armes et Armures/Boucliers.
+- Correction du remplacement des `dynamicTable` de traits : purge explicite des anciennes lignes avant écriture, afin d'empêcher l'accumulation de doublons à chaque réparation.
+- Armes : la table `H0D_Arme_Traits_Table` est maintenant remplacée exactement, ce qui corrige notamment le trait `OUTIL` de la Hache de chasse.
+- Armures/boucliers : reconstruction canonique des traits gérés et résistances élémentaires, avec conservation des traits locaux supplémentaires hors référentiel.
+- Audit armures : les traits locaux hors référentiel ne créent plus de faux mismatch ; les doublons/variantes des traits gérés restent détectés.
+- La réparation d'armure n'écrase pas les champs narratifs et ne supprime pas encore les propriétés legacy : elles restent pour le chantier séparé des warnings.
+
+# v1.0.6
+
+- Réparation combinée des armes + armures/boucliers référencés.
+- Comparaison numérique des armes normalisée (ex. `"1"` = `1`).
+- Hache de chasse : mécanique canonique issue du classeur (1d8 tranchant, FOR, trait OUTIL), sans dépendre d’un ancien compendium.
+- Armures/boucliers : réparation des champs mécaniques validés uniquement ; narratif, MAX DEX et résistance texte non écrasés.
+- Les traits locaux supplémentaires non couverts par le référentiel sont conservés.
+- Sauvegarde interne par document réparé ; aucun snapshot JSON automatique.
+
+# 1.0.5
+
+- Référentiel armures/boucliers reconstruit depuis `référence_arme-armure(1).xlsx` : 8 références.
+- Correction du mapping `Malus/bonus mobilité` : les valeurs `-1.5`, `0`, `+3` alimentent désormais uniquement `H0D_Armure_Malus`.
+- Ajout de `MAX DEX` au référentiel comme information de référence non destructive : le template Armure v1.8 n'a pas encore de champ dédié, donc ce point n'est ni compté comme écart ni réparé.
+- La colonne texte `Résitances` devient informative (`ENTRAVE`, `DECTECTION`, `TRANCHANT`, etc.) et n'est plus interprétée comme résistance élémentaire.
+- Les résistances Feu / Gel / Choc / Acide restent comparées via les traits élémentaires du template.
+- Parsing des traits clarifié : valeurs/paramètres nommés, traits personnalisés via `autre`, et `MODULAIRE : 1 / DEF` conservé distinct de `RENFORCE`.
+- L'armure d'Aloy conserve également `TRANCHANT` dans les informations de référence : MODULAIRE n'est donc pas assimilé à un simple +1 DEF.
+- Alias sûr `Tenue légère` → `Armure légére` ajouté ; `Tenue de dresseur` reste hors référentiel.
+- Audit armures/boucliers toujours en lecture seule : aucune réparation automatique activée dans cette version.
+- Snapshots JSON toujours manuels ; aucune sauvegarde exportée sur un simple audit/clic.
+
+## 1.0.4
+- Snapshots JSON automatiques supprimés : le bouton **Exporter snapshot** reste disponible manuellement.
+- Synchronisation et réparation conservent les sauvegardes internes par document, sans téléchargement automatique.
+- Référentiel armes étendu à **21 noms** avec la `Hache de chasse`.
+- Nouveau référentiel **Armures & Boucliers** dérivé de `template_arme.xlsx` / onglet `Bouclier + Armures` : 7 références.
+- Audit armures/boucliers limité aux Actors utilisant le template PJ, sans traitement spécial Aloy.
+- Comparaison mécanique : type, zone, DEF, charge, mobilité, résistances et traits déterministes.
+- Origine/description sont suivies séparément comme différences narratives.
+- Les ambiguïtés Excel sont exposées comme `sourceWarnings` et exclues de la comparaison détaillée des traits.
+- Aucune réparation armure/bouclier en v1.0.4 : étape de sécurisation en lecture seule.
+
+## 1.0.3
+- `H0D_Actor-template-PJ` passe en **v3.58**, construit directement sur l’export `v3.57_update` remanié dans Foundry.
+- La disposition manuelle du MJ devient la base canonique : les grandes zones sont de vraies tables CSB, sans dépendre d’un faux positionnement CSS.
+- Inventaire PJ : vrai 2×2 **Armes | Armures / Objets | Munitions**, puis Ressources en pleine largeur.
+- Chargement Monture/Machine : même 2×2, avec ajout de **Munitions transportées** en bas à droite et Ressources transportées en pleine largeur dessous.
+- Les vues d’Items sont réellement compactées :
+  - Armes : Équipée / En main / Charge / Ranger.
+  - Armures : DEF / Portée / Charge / Ranger.
+  - Objets : Qté / Charge / Actif / Ranger.
+  - Munitions : Active / Qté / Charge / Ranger.
+  - Ressources : Type / Qté / Charge / Ranger.
+  - Monture : informations limitées au transport, à la charge et au transfert.
+- `H0D_Arme_Active` est conservé mais son sens joueur est désormais **En main**. Attaques rapides = arme stockée sur le PJ + En main.
+- Ranger une arme sur la monture désactive `En main` et `Équipée`; armures/objets/munitions rangés cessent aussi d’être actifs.
+- Le calcul de charge de la monture compte le container Munitions une seule fois et les objets de monture excluent explicitement les munitions.
+- Historique d’édition CSB de l’export utilisateur nettoyé avant intégration ; ID du template et clés mécaniques conservés.
+
+## 1.0.2
+- `H0D_Actor-template-PJ` passe en **v3.57**.
+- `H0D_Arme` passe en **v2.6** ; la clé `H0D_Arme_Active` est conservée, mais le libellé **Prête** devient **En main**.
+- Onglet `Personnage` : Combat + Sauvegardes passent sur deux colonnes et Actions héroïques / récupération prennent toute la largeur afin d'éviter les débordements constatés en jeu.
+- Onglet `Inventaire & monture` : ordre fixé à **Armes | Armures** puis **Objets | Munitions** ; **Ressources** passent en pleine largeur dessous.
+- Même disposition pour le chargement de la monture/machine.
+- Les munitions stockées sur la monture sont séparées des objets dans un container dédié ; le calcul de charge de monture les comptabilise explicitement, sans double comptage.
+- Vues d'inventaire allégées :
+  - Armes PJ : Équipée / En main / Charge / Ranger.
+  - Armures PJ : DEF / Portée / Charge / Ranger.
+  - Objets PJ : Qté / Charge / Actif / Ranger.
+  - Munitions PJ : Active / Qté / Charge / Ranger.
+  - Ressources : Type / Qté / Charge / Ranger.
+  - chargement Monture : informations réduites à ce qui sert au transport et au transfert.
+- Les anciennes colonnes et formules utiles sont conservées dans le template lorsqu'elles participent à une mécanique ; seule leur visibilité est réduite.
+- Aucun rappel de la monture n'est ajouté à l'onglet `Personnage`.
+
+## 1.0.1
+- Refonte visuelle légère Horizon de la fiche PJ uniquement (`H0D_Actor-template-PJ v3.56`).
+- Onglets joueur : **Personnage**, **Compétences & progression**, **Inventaire & monture** ; onglet **Technique** toujours réservé au MJ.
+- `Personnage` recentré sur les usages de table : identité, niveau, PV/DEF/saves, caractéristiques, attaques rapides, compétences rapides et Focus.
+- `Compétences & progression` affiche les compétences détaillées avec modificateur de caractéristique, bonus automatiques/dons, rangs, divers et total ; dons/talents, classes, progression par niveau et notes sont conservés.
+- Boutons de transfert `→ Monture` / `→ PJ` basés sur `H0D_Stockage`, sans duplication d'Item.
+- Nouveau panneau **Attaques rapides** : affiche les armes portées par le PJ dont l'état `H0D_Arme_Active` est actif et réutilise la mécanique d'attaque existante.
+- Rendu des jets de caractéristiques, sauvegardes, compétences et dégâts enrichi dans le chat ; logique mécanique inchangée.
+- Style Horizon léger ajouté au PJ et aux cartes de chat. PNJ, créatures et machines restent fonctionnels et inchangés visuellement.
+
+## 1.0.0
+- Interface ApplicationV2 du Template Manager restaurée et stabilisée.
+- 11 templates canoniques embarqués.
+- Audit, snapshots, synchronisation, restauration, conformité des armes et gestion Legacy.

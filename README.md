@@ -1,100 +1,167 @@
-# H0D Template Manager
+# H0D Template Manager — v1.2.2 BAC — détails de jets compacts
 
-Gestionnaire central des templates de **JDR Zero Dawn** pour **Foundry VTT v14 + Custom System Builder 6.x**.
 
-## Objectif de la v0.1.0
 
-Éviter qu'une mise à jour de template fasse perdre les informations des PJ, créatures, machines, armes ou autres Items H0D.
+## Essai v1.2.2 — détails de jets compacts
 
-Le module embarque les **12 templates canoniques** du patch critique v1.3 :
+Cette passe conserve le moteur de jets de la 1.2.1 et réduit uniquement le rendu des attaques : le volet **Détails du jet** explique désormais le calcul du résultat au lieu de recopier les propriétés de l’arme. Les trois templates Actor deviennent **PJ v3.60**, **Créature v1.16** et **Machine v3.11**.
 
-### Actors
-- H0D_Actor-template-PJ v3.54
-- H0D_Actor-template-creature v1.13
-- H0D_Actor-template-machine v3.8
+## Essai v1.2.1 — cartes de jets H0D
 
-### Items
-- H0D_Arme v2.4
-- H0D_Armure v1.7
-- H0D_Objet v2.8
-- H0D_Ressource v2.4
-- H0D_Don_Talent v2.4
-- H0D_Modificateur v1.2
-- H0D_Trait v2.6
-- H0D_arme_Machine v3.8
-- H0D_Pièce_Détachable v2.4
+Cette branche part strictement de la base stable **v1.2.0** et ne modifie pas la logique de sécurisation, d’audit, de snapshot ou de migration. Elle ajoute uniquement la nouvelle présentation des jets dans le chat et met à jour les trois templates Actor qui émettent ces jets : **PJ v3.59**, **Créature v1.15**, **Machine v3.10**.
 
-Les IDs historiques sont conservés et deviennent les identifiants de référence H0D.
+Les cartes partagent désormais le même langage visuel Horizon : résultat prioritaire, type de jet clairement identifié, bonus visibles, puis détail repliable. Les calculs d’attaque, ciblage, DEF privée MJ, munitions, critiques, cooldowns et formules existantes sont conservés.
+
+Gestionnaire de templates pour **Foundry VTT 14 + Custom System Builder 6.0.2+**.
 
 ## Accès
 
-En tant que MJ, ouvrir les **contrôles Token** puis cliquer sur l'icône bouclier : **H0D Template Manager**.
+Dans les contrôles de scène **Tokens**, bouton bouclier : **H0D — Template Manager**.
 
-API également disponible :
+Il s'agit d'une vraie application Foundry (`ApplicationV2`) : **aucune macro de lancement n'est créée**.
 
-```js
-game.modules.get("h0d-template-manager").api.open();
-```
+## Barre d'actions
 
-## Fonctions
-
-### Audit
-Analyse les templates installés et tous les documents du monde liés aux IDs H0D :
-- Actors du monde ;
-- Items du monde ;
-- Items embarqués dans les Actors.
-
-Aucune donnée n'est modifiée pendant l'audit.
-
-### Installer / mettre à jour
-Installe les 12 templates canoniques dans deux dossiers dédiés :
-- `H0D — Templates Actors`
-- `H0D — Templates Items`
-
-Avant toute écriture, un snapshot JSON complet est téléchargé.
-
-### Synchroniser le monde
-Pour chaque document H0D :
-1. export d'un snapshot complet ;
-2. sauvegarde locale de `system.props`, du nom, de l'image et des informations de template ;
-3. `templateSystem.reloadTemplate()` ;
-4. restauration des anciennes valeurs dont les clés existent encore ;
-5. conservation des nouvelles clés à leur valeur par défaut.
-
-Les clés réellement supprimées ne sont pas réinjectées dans `system.props`, mais restent présentes dans la sauvegarde du document et dans le snapshot JSON.
-
-Le module conserve jusqu'aux **5 derniers backups** sur chaque document.
-
-### Restaurer le dernier cycle
-Restaure le nom, l'image et `system.props` enregistrés avant le dernier cycle de synchronisation.
-
-Cette fonction ne rétrograde pas automatiquement les templates : le snapshot JSON reste la sécurité complète si un rollback intégral est nécessaire.
-
-### Exporter snapshot
-Télécharge un JSON contenant :
-- les 12 références canoniques ;
-- les templates actuellement installés ;
-- les Actors H0D du monde avec leurs Items embarqués ;
-- les Items H0D présents directement dans le monde.
+- Audit monde (lecture seule)
+- Exporter audit
+- Réparer équipements
+- Migrer versions sûres (après audit : PJ, armures/boucliers, dons/talents, armes, objets et pièces détachables en `staleOnly`)
+- Installer/mettre à jour
+- Synchroniser le monde (Actors / Items / les deux, compendiums Items en option)
+- Restaurer dernier cycle
+- Exporter snapshot
+- Fermer
 
 ## Sécurité
 
-Le module **ne modifie jamais automatiquement** un Actor ou un Item au démarrage. Toutes les opérations d'écriture demandent une action du MJ.
+Aucune migration au démarrage. Les snapshots JSON sont désormais **manuels uniquement** via le bouton « Exporter snapshot » : aucun clic d’installation, audit, synchronisation ou réparation ne déclenche d’export automatique. Les documents synchronisés/réparés conservent jusqu'à 5 sauvegardes internes par fiche.
 
-Les images existantes des documents sont conservées lors d'une synchronisation CSB.
 
-## API pour les autres modules H0D
+## Migration contrôlée v1.2.0 stable
 
-```js
-const tm = game.modules.get("h0d-template-manager")?.api;
-const machineTemplate = tm?.getTemplate("actor-machine");
-const weaponTemplate = tm?.getTemplate("item-arme-machine");
-```
+La v1.2.0 fige le périmètre de sécurité validé sur le BAC : seuls les documents **strictement `staleOnly`** des familles **Actor PJ**, **Armure/Bouclier**, **Don/Talent**, **Arme**, **Objet** et **Pièce détachable** sont candidats. Les `missingOnly`, les cas mixtes, les armes-machines et les compendiums restent exclus.
 
-Le but est que Machine Builder, Loot et les futurs modules utilisent progressivement cette source centrale au lieu de redétecter les templates chacun de leur côté.
+Le changement porte sur l'exécution : après chaque `reloadTemplate()`, le manager **recollecte entièrement les candidats depuis l'état courant du monde** au lieu de continuer à parcourir une liste figée. Cette stratégie vise le comportement observé sur le BAC en v1.1.2, où 7 des 35 candidats restants avaient migré puis les Items embarqués suivants restaient inchangés. Elle protège contre les reconstructions de collections d'Embedded Items effectuées par CSB pendant un reload.
 
-## Évolution prévue
+Chaque document est toujours ré-résolu par UUID avant et après migration, reçoit une sauvegarde interne, et ses valeurs locales existantes (dynamicTables et propriétés legacy comprises) sont restaurées puis vérifiées. La boucle dispose d'une limite dure et mémorise les candidats en erreur afin d'éviter toute répétition infinie. Le rapport immédiat expose aussi le nombre de candidats restant après le cycle.
 
-Priorité suivante déjà identifiée : **audit et sauvegarde des compendiums partagés**, afin de sécuriser le contenu déjà propagé entre mondes avant une migration de templates.
 
-La v0.1.0 n'écrit volontairement dans aucun compendium.
+## Statut v1.2.0 — stable serveur principal
+
+Cette version est la base **stable / production** destinée au serveur officiel. Elle fige les mécanismes validés sur le BAC : audit, sauvegardes internes, réparateur d’équipements et migration `staleOnly`. Aucun traitement automatique des `missingOnly` ou `mixed` n’est ajouté en 1.2.0. Les expérimentations suivantes reprennent en branche 1.2.1+ sur le BAC.
+
+Le bouton **Migrer versions sûres** est désormais regroupé dans la barre d’actions supérieure, à côté de **Réparer équipements**, afin que toutes les opérations de maintenance soient au même endroit.
+
+## Templates actifs
+
+3 Actors + 8 Items. `H0D_Trait v2.6` n'est plus dans le catalogue actif ; sa suppression n'est proposée que si aucune utilisation n'est détectée.
+
+## Fiche PJ Horizon light
+
+La fiche PJ **v3.58** repart directement de l’export `v3.57_update` remanié dans Foundry et conserve les mécaniques existantes. La disposition manuelle devient la base canonique :
+
+- `Personnage` conserve la disposition CSB manuellement ajustée par le MJ.
+- `Inventaire & monture` utilise de vraies tables CSB 2×2 : **Armes | Armures**, puis **Objets | Munitions** ; **Ressources** restent en pleine largeur.
+- le chargement Monture/Machine reprend le même 2×2 et place **Ressources transportées** en pleine largeur dessous.
+- les listes d'Items sont réellement compactées : seules les informations utiles à la gestion courante restent dans la vue d'inventaire.
+- `H0D_Arme_Active` garde sa clé stable mais représente désormais explicitement **En main** ; les Attaques rapides affichent les armes en main stockées sur le PJ.
+- ranger une arme sur la monture retire automatiquement ses états `En main` et `Équipée` ; les autres équipements stockés cessent également d'être actifs.
+
+Aucune donnée d'arme n'est dupliquée : `Équipée`, `En main`, le stockage PJ/Monture et les munitions restent des propriétés des Items existants.
+
+## Migrations déjà intégrées
+
+- Armure : Traits simplifiés, résistances migrées vers Ignifugé / Anti-froid / Anti-choc / Anti-acide, Lourd et Renforcé ; Isolé reste descriptif.
+- Arme Machine : le mode Spéciale impose un cooldown minimum de 1 round.
+- Arme : Anti-blindage raccordé à la DEF effective adverse et Portée spéciale corrigée.
+- Tous les composants de templates sont en `size: auto`.
+
+## Conformité des armes
+
+Le manager conserve le contrôle des armes issu des tests v0.5.2 et ajoute la **Hache de chasse** au catalogue de noms de référence (21 entrées). Les mécaniques des armes restent lues depuis les compendiums déjà validés (`Arme` et `Item (Partagé)`). Les PNJ et armes hors référentiel sont laissés intacts. Le bouton unique **Réparer équipements** traite les différences mécaniques explicites des armes, armures et boucliers référencés.
+
+
+## Correctif v1.0.10 — traits d’armes
+
+La réparation des armures/boucliers est conservée telle qu’elle a été validée sur le BAC (11/11 conformes après réparation). Pour les armes, le diagnostic v1.0.9 a montré que CSB 6 stocke les dynamicTable runtime comme des objets indexés avec `$deleted: false`. La v1.0.10 réinjecte donc les traits dans ce format natif. Ce correctif cible le dernier écart observé : la Hache de chasse gardait une ligne vide au lieu du trait `OUTIL`.
+
+## Conformité armures & boucliers — v1.0.10
+
+Le classeur `reference/template_arme.xlsx` est embarqué avec un référentiel JSON dérivé de l’onglet **Bouclier + Armures**. Les 7 références sont auditées uniquement sur les Actors utilisant le template PJ.
+
+- comparaison mécanique : type, zone, DEF, charge, mobilité, résistances élémentaires et traits lorsque l’Excel permet un mapping non ambigu ;
+- comparaison narrative séparée : origine et description ;
+- les équipements inconnus restent `unreferenced` et ne sont jamais modifiés ;
+- les lignes Excel ambiguës (notamment plusieurs traits avec une valeur/paramètre scalaire) sont signalées et **ne servent pas à une réparation** ;
+- v1.0.10 répare les armures/boucliers référencés avec remplacement exact des lignes de traits gérées, sans dupliquer les dynamicTables.
+
+
+## Armures / boucliers — v1.0.10
+
+La référence embarquée contient 8 équipements issus de l’onglet `Bouclier + Armures`. Le champ `Malus/bonus mobilité` est comparé à `H0D_Armure_Malus`. `MAX DEX` et la colonne texte `Résitances` sont conservés dans le rapport comme informations de référence, mais ne sont pas appliqués au document tant que le template Armure v1.8 ne fournit pas de propriété dédiée. Les résistances Feu/Gel/Choc/Acide et les traits explicitement mappés restent contrôlés mécaniquement. La réparation est active via le bouton unique en barre supérieure ; les traits locaux hors référentiel sont conservés et ignorés par la comparaison canonique.
+
+
+## Diagnostic v1.0.9 — traits d’armes
+
+La v1.0.9 ajoute au rapport d’audit un bloc `weaponReference.traitDiagnostics` et, sur les armes concernées, un bloc `traitDiagnostic`. Ces données sont strictement en lecture seule et servent à comparer la structure runtime CSB d’une dynamicTable valide avec celle de la Hache de chasse. Pour ce test, il suffit d’installer la v1.0.9 puis d’exporter un audit ; il n’est pas nécessaire de lancer une réparation.
+
+
+## Diagnostic conservé — traits d’armes
+
+Le bloc `weaponReference.traitDiagnostics` reste présent pour contrôler le format runtime des dynamicTable après réparation.
+
+
+## Intégrité Machines v2 — v1.3.0
+
+La fiche Machine conserve les clés historiques de PV pour compatibilité, mais `H0D_Machine_PV_Actuels`
+représente désormais l'**Intégrité actuelle**. Le maximum reste :
+
+`Base d'Intégrité (corps) + PV max des pièces cochées Compte dans l'Intégrité`.
+
+La destruction d'une pièce ne fait plus diminuer le maximum. Les champs de pièce ajoutés sont :
+`H0D_Composant_Zone` et `H0D_Composant_Protection_Corps`.
+
+Le calcul des dégâts, du corps protégé/exposé et de l'overkill est délégué à
+**H0D Machine Health Manager v0.2.1+**.
+
+### API Builder
+
+`game.modules.get("h0d-template-manager").api.getTemplate("actor-machine")`
+renvoie le template canonique installé. La clé de la pièce détachable est `item-piece`.
+
+
+## Cartes de jets — standard v1.4.0
+- Attaque : Résultat, Verdict, Cible, Dégâts, Effet éventuel, Détails.
+- Compétence / Aptitude : Résultat, Détails ; aucun verdict.
+- Sauvegarde : Résultat, Détails ; aucun verdict.
+- Focus : Résultat + informations d’action, Détails.
+- DEF / marge : message privé MJ uniquement.
+Après installation des templates canoniques, utiliser « Migrer les versions sûres » pour PJ, créatures/factions et machines staleOnly.
+
+
+### Correctif 1.4.1 — dégâts Machine
+
+Les attaques Machine lancent désormais leur formule de dégâts et affichent le total dans la carte.
+Exemple : `2d6+1` avec un résultat de 9 devient `Dégâts  9 — Contondant`.
+La formule `2d6+1` reste consultable dans `Détails du jet`.
+
+
+## Fiche PJ — v1.5.0
+
+La page Personnage est réorganisée pour privilégier les actions utilisées en partie :
+
+1. identité / caractéristiques ;
+2. **attaques rapides** ;
+3. combat / sauvegardes / actions héroïques ;
+4. **repos / récupération** ;
+5. **compétences rapides** ;
+6. Focus.
+
+Les compétences rapides contiennent toujours **Perception**, plus trois emplacements librement
+configurables parmi les huit autres compétences principales. Les compétences complètes et leurs
+rangs/bonus restent gérés dans l'onglet correspondant.
+
+
+## Menu v1.5.1
+
+Le menu suit désormais le flux recommandé : audit → export audit → snapshot → installation/mise à jour → synchronisation → réparation des équipements → migration sûre → restauration → fermeture.
