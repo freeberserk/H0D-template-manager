@@ -1,3 +1,9 @@
+## 1.5.3 — Lisibilité du résultat des jets
+- Le total principal affiché sur les cartes H0D passe en **orange Horizon** déjà utilisé dans les fiches (`#e18b3d`).
+- Le changement s'applique aux cartes standard `h0d-chat-summary` et à l'ancien bloc `h0d-chat-result`.
+- Les styles Foundry résiduels sur le résultat sont neutralisés dans la cellule principale afin d'éviter le petit cartouche gris/blanc.
+- Aucun calcul, template ou migration n'est modifié.
+
 ## 1.5.2 — Cohérence de l'affichage des pièces neutralisées
 - Fiche Machine v3.15 : le panneau de réglage PV ne présente plus tout 0 PV comme une destruction physique.
 - Les états Detache et Detruit continuent d'être distingués par la fiche existante.
