@@ -225,6 +225,7 @@
   --h0d-chat-accent: #6ccbd1;
   --h0d-chat-accent-soft: rgba(108,203,209,.13);
   --h0d-chat-border: rgba(108,203,209,.40);
+  --h0d-chat-result: #e18b3d;
   position: relative;
   overflow: hidden;
   color: #ece7dc;
@@ -316,11 +317,11 @@
   letter-spacing:.08em;
 }
 .h0d-chat-result strong {
-  color:#fffaf0;
+  color:var(--h0d-chat-result);
   font-size:1.75em;
   line-height:1;
   font-weight:900;
-  text-shadow:0 0 10px color-mix(in srgb, var(--h0d-chat-accent) 28%, transparent);
+  text-shadow:0 0 10px rgba(225,139,61,.34);
 }
 .h0d-chat-sub {
   display:flex;
@@ -406,9 +407,10 @@
   padding-bottom:6px;
 }
 .h0d-chat-attack > table:first-of-type tr:first-child td:last-child {
-  color:#fffaf0;
+  color:var(--h0d-chat-result);
   font-size:1.55em;
   font-weight:900;
+  text-shadow:0 0 8px rgba(225,139,61,.30);
 }
 .h0d-chat-attack > table:first-of-type tr:nth-child(2) td {
   color:#f5e1c4;
@@ -473,7 +475,15 @@
 .h0d-chat-card > table.h0d-chat-summary { width:100%; margin:4px 0 0; border:1px solid rgba(255,255,255,.07); border-radius:5px; overflow:hidden; border-collapse:separate; border-spacing:0; }
 .h0d-chat-card > table.h0d-chat-summary tr:first-child { background:var(--h0d-chat-accent-soft) !important; }
 .h0d-chat-card > table.h0d-chat-summary tr:first-child td { padding-top:7px; padding-bottom:7px; font-size:11.5px; }
-.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child { color:#fffaf0; font-size:1.55em; line-height:1; font-weight:900; }
+.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child { color:var(--h0d-chat-result); font-size:1.55em; line-height:1; font-weight:900; text-shadow:0 0 8px rgba(225,139,61,.30); }
+.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child strong,
+.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child a,
+.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child span {
+  color:var(--h0d-chat-result) !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
 .h0d-chat-card > table.h0d-chat-summary tr:not(:first-child) td { padding-top:4px; padding-bottom:4px; font-size:11px; }
 .h0d-chat-attack > table.h0d-chat-summary tr:nth-child(2) td { color:#f5e1c4; font-weight:800; }
 .h0d-chat-card details td { font-size:10.5px; }
@@ -494,4 +504,14 @@
   min-width: 64px;
   font-weight: 800;
   text-align: center;
+}
+
+
+/* v1.5.3 — résultat de jet orange : contraste renforcé sur toutes les cartes H0D. */
+.h0d-chat-card .h0d-chat-result strong,
+.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child,
+.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child strong,
+.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child a,
+.h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child span {
+  color:var(--h0d-chat-result) !important;
 }
