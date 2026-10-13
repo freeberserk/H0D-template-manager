@@ -1,3 +1,10 @@
+# 1.6.4 — Réorganisation de la barre d’actions
+
+- Réorganisation visuelle de la barre du Template Manager.
+- Les actions opérationnelles restent en tête : **Installer/mettre à jour**, **Synchroniser le monde**, **Réparer équipements**, **Migrer versions sûres**.
+- **Audit monde**, **Exporter audit** et **Exporter snapshot** sont regroupés juste avant **Restaurer dernier cycle**.
+- Aucun comportement métier n’est modifié.
+
 # 1.6.3 — Paramètres techniques réservés au MJ
 
 - **H0D_Actor-template-PJ v3.65** devient la fiche PJ canonique.
