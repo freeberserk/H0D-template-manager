@@ -1,3 +1,20 @@
+# 1.6.3 — Paramètres techniques réservés au MJ
+
+- **H0D_Actor-template-PJ v3.65** devient la fiche PJ canonique.
+- Séparation explicite entre **lecture joueur** et **édition MJ** pour les correctifs manuels.
+- Les valeurs suivantes restent visibles dans leur contexte normal côté joueur, mais ne sont plus éditables hors de l’onglet Technique :
+  - Accès Focus ;
+  - bonus divers de DEF ;
+  - bonus divers de Vigueur, Réflexes et Volonté ;
+  - bonus divers des compétences principales, y compris Focus ;
+  - ajustement des points de compétence ;
+  - ajustement des PV maximum.
+- Les vrais champs d’édition correspondants sont regroupés dans **Technique → Paramètres MJ — Ajustements manuels**.
+- Les champs déjà techniques **Initiative — bonus divers** et **Seuil de dégâts massifs — bonus** restent réservés à Technique.
+- Les éléments de jeu courants restent éditables par les joueurs : identité, caractéristiques, rangs de compétence, statut de compétence de classe, niveaux de classe, progression par niveau, PV actuels, dégâts non létaux, points d’action, notes, raccourcis, inventaire et monture.
+- Le garde-fou Technique indique maintenant clairement que les valeurs manuelles affichées sur la fiche joueur se modifient ici.
+- Aucun changement de formule ou de règle : seules les possibilités d’édition et la présentation changent.
+
 # 1.6.2 — Correction du bloc Focus PJ
 
 - **H0D_Actor-template-PJ v3.64** devient la fiche PJ canonique.
