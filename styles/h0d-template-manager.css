@@ -546,3 +546,62 @@
 .h0d-chat-card > table.h0d-chat-summary tr:first-child td:last-child span {
   color:var(--h0d-chat-result) !important;
 }
+
+
+/* PJ v3.66 — progression visible en lecture seule côté joueur */
+.h0d-pj-sheet .h0d-progression-readonly {
+  gap: 3px;
+}
+
+.h0d-pj-sheet .h0d-progression-ro-caption,
+.h0d-pj-sheet .h0d-progression-summary-title {
+  display: block;
+  margin: 4px 0 6px;
+  text-align: center;
+  letter-spacing: .03em;
+}
+
+.h0d-pj-sheet .h0d-progression-ro-grid {
+  display: grid !important;
+  grid-template-columns: .55fr 1.55fr .55fr .55fr .55fr .8fr .8fr 1.55fr;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 6px;
+}
+
+.h0d-pj-sheet .h0d-progression-ro-head {
+  border-bottom: 1px solid rgba(119,214,220,.28);
+  background: rgba(119,214,220,.06);
+}
+
+.h0d-pj-sheet .h0d-progression-ro-row {
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.h0d-pj-sheet .h0d-progression-ro-grid > * {
+  min-width: 0;
+  text-align: center;
+}
+
+.h0d-pj-sheet .h0d-progression-summary-panel {
+  margin-top: 8px;
+}
+
+.h0d-pj-sheet .h0d-progression-summary td {
+  text-align: center;
+}
+
+.h0d-pj-sheet .h0d-progression-detail-table td {
+  text-align: center;
+}
+
+.h0d-pj-sheet .h0d-tech-progression-panel {
+  border-color: rgba(225,139,61,.46);
+}
+
+.h0d-pj-sheet .h0d-tech-note {
+  display: block;
+  margin: 2px 0 8px;
+  opacity: .85;
+  font-size: 11px;
+}
