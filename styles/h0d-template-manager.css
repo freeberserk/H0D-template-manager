@@ -650,3 +650,33 @@
 .h0d-pj-sheet .h0d-progression-history-table td:nth-child(7) { width: 10%; }
 .h0d-pj-sheet .h0d-progression-history-table th:nth-child(8),
 .h0d-pj-sheet .h0d-progression-history-table td:nth-child(8) { width: 36%; }
+
+
+/* v1.6.8 — cartes d'attaque : empêcher les libellés d'être écrasés par un effet long. */
+.h0d-chat-card > table.h0d-chat-summary {
+  table-layout: fixed;
+}
+
+.h0d-chat-card > table.h0d-chat-summary td:first-child {
+  width: 38%;
+  min-width: 0;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+.h0d-chat-card > table.h0d-chat-summary td:last-child {
+  width: 62%;
+  min-width: 0;
+  vertical-align: top;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.h0d-chat-attack > table.h0d-chat-summary tr:last-child td:first-child {
+  font-weight: 700;
+}
