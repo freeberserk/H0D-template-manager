@@ -2,7 +2,7 @@
   "id": "h0d-template-manager",
   "title": "H0D Template Manager",
   "description": "Gestionnaire centralisé H0D : audit, snapshots, migrations sûres, Intégrité Machines v2, améliorations d’équipement et fiche PJ avec paramètres techniques MJ.",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "authors": [
     {
       "name": "JDR Zero Dawn"
