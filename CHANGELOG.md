@@ -1,3 +1,13 @@
+# 1.6.2 — Correction du bloc Focus PJ
+
+- **H0D_Actor-template-PJ v3.64** devient la fiche PJ canonique.
+- Le bloc **FOCUS** de l’onglet Personnage conserve désormais toutes les actions Focus : **Scan rapide**, **Scan complet**, **Scan concentré** et **Marquer une pièce**.
+- Le bloc Personnage n’affiche plus la gestion de progression de la compétence Focus : seuls **Accès** et le **bonus Focus total** y restent visibles.
+- La compétence **Focus** est ajoutée à la table détaillée des compétences avec **INT**, **Rangs**, **Classe / occupation**, **bonus automatique**, **Divers** et **Total**.
+- Aucun jet générique Focus n’est ajouté dans la table des compétences : les jets restent centralisés dans le bloc FOCUS de l’onglet Personnage.
+- **Accès Focus** est conservé tel quel pour un futur branchement mécanique.
+- Aucun changement des formules de bonus Focus ni des règles de scan / marquage.
+
 # 1.6.1 — Simplification de la fiche PJ
 
 - **H0D_Actor-template-PJ v3.63** devient la fiche PJ canonique.
