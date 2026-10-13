@@ -1,4 +1,9 @@
-# H0D Template Manager — v1.7.2
+# H0D Template Manager — v1.7.3
+
+## v1.7.3 — Affichage du niveau PNJ distinct de la Menace / CR
+Le template Créature **v1.21** complète le panneau spécifique aux **Caravanes Libres** : l'indication **PNJ ORDINAIRE · NIVEAU N · MENACE / CR M** affiche les deux informations séparément. Pour les profils ordinaires SRD de CR 1–4, le Faction Builder v0.3.2 utilise **niveau PNJ = CR + 1**. Le bonus +1 aux caractéristiques est donc gagné dès **Menace 3 / niveau 4**. Le panneau Scores SRD et les dés cliquables des versions précédentes ne changent pas.
+
+Aucune modification des autres créatures, des calculs de combat, des sauvegardes, de la macro H0D — Attaques ni du template PJ. Mettre à jour le Template Manager, installer le template Créature v1.21 dans le monde, puis **synchroniser les Actors** après snapshot. Harmoniser ensuite les Caravanes déjà générées avec le bouton dédié du Faction Builder v0.3.2.
 
 ## v1.7.2 — Scores de caractéristiques pour les Caravanes Libres
 Le template Créature **v1.20** ajoute un petit panneau **« SCORES SRD · CARAVANES LIBRES »**, visible uniquement sur ces membres de faction. Il affiche les valeurs brutes FOR/DEX/CON/INT/SAG/CHA, telles que **15/14/13/12/10/8** (réparties selon le métier), distinctes des modificateurs déjà éditables et des dés de jet livrés en v1.19. Les scores sont calculés/générés par **H0D Faction Builder v0.3.1**, qui synchronise aussi le modificateur quand un score est édité dans la fiche. La formule de modificateur est la même que sur les PJ : floor((score−10)/2).
