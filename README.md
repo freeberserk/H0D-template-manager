@@ -1,6 +1,17 @@
-# H0D Template Manager — v1.6.0
+# H0D Template Manager — v1.6.1
 
+## v1.6.1 — Simplification de la fiche PJ
 
+La fiche PJ canonique passe en **v3.63**. Cette passe vise uniquement l'ergonomie et le nettoyage :
+
+- suppression de **Rite accompli** ;
+- suppression de la case **Bonus situationnel** sous les sauvegardes, qui n'alimentait aucun calcul ;
+- le bloc **Focus** conserve ses valeurs de compétence et uniquement les trois jets de scan (rapide, complet, concentré) ;
+- retrait du jet **Marquer une pièce** de ce bloc ;
+- ajout d'un avertissement visuel en tête de l'onglet **Technique** ;
+- retrait du champ legacy visible **ANCIEN CHAMP DONS / TALENTS**.
+
+Les anciennes propriétés présentes sur les personnages ne sont pas supprimées de force lors de la migration : elles peuvent rester comme données legacy invisibles. Les calculs de sauvegarde, de rangs et de bonus Focus sont inchangés.
 
 ## Essai v1.2.2 — détails de jets compacts
 
