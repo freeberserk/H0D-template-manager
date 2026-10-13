@@ -1,3 +1,15 @@
+# 1.6.1 — Simplification de la fiche PJ
+
+- **H0D_Actor-template-PJ v3.63** devient la fiche PJ canonique.
+- Suppression de la case **Rite accompli** : purement informative et non utilisée par les calculs.
+- Suppression de la case **Bonus situationnel** sous les sauvegardes : elle n'était référencée par aucune formule ; les champs **Bonus divers** restent disponibles pour Vigueur, Réflexes et Volonté.
+- Le bloc **Focus** conserve la compétence (Accès, Rangs, Classe / occupation, Divers) et les trois jets de scan : **rapide**, **complet** et **concentré**.
+- Le jet **Marquer une pièce** est retiré du bloc Focus afin de ne garder que les scans dans cette zone.
+- L'onglet **Technique** reçoit un garde-fou visuel rappelant que ses valeurs sont majoritairement automatiques.
+- Suppression du champ legacy visible **ANCIEN CHAMP DONS / TALENTS** (`H0D_Talents_Dons_Capacites`), non référencé ailleurs.
+- Les anciennes propriétés déjà présentes sur les PJ ne sont pas effacées de force : la migration sûre conserve les données locales et les anciens champs deviennent simplement des propriétés legacy invisibles.
+- Aucun changement des formules de sauvegarde, des coûts de rangs, des bonus Focus ou des règles de jeu.
+
 # 1.6.0 — Améliorations d’équipement à 3 emplacements
 
 - **H0D_Arme v2.7** : ajout de 3 emplacements fixes d’amélioration.
