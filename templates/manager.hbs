@@ -8,13 +8,13 @@
   </header>
 
   <nav class="h0d-tm-actionbar">
-    <button type="button" data-action="audit"><i class="fa-solid fa-magnifying-glass-chart"></i> Audit monde</button>
-    <button type="button" data-action="exportAudit"><i class="fa-solid fa-file-export"></i> Exporter audit</button>
-    <button type="button" data-action="snapshot"><i class="fa-solid fa-floppy-disk"></i> Exporter snapshot</button>
     <button type="button" data-action="installAll" class="primary"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
     <button type="button" data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
     <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}}><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
     <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}}><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer versions sûres</button>
+    <button type="button" data-action="audit"><i class="fa-solid fa-magnifying-glass-chart"></i> Audit monde</button>
+    <button type="button" data-action="exportAudit"><i class="fa-solid fa-file-export"></i> Exporter audit</button>
+    <button type="button" data-action="snapshot"><i class="fa-solid fa-floppy-disk"></i> Exporter snapshot</button>
     <button type="button" data-action="restore"><i class="fa-solid fa-clock-rotate-left"></i> Restaurer dernier cycle</button>
     <button type="button" data-action="closeApp"><i class="fa-solid fa-xmark"></i> Fermer</button>
   </nav>
