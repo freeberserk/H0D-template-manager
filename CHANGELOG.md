@@ -1,3 +1,9 @@
+## 1.7.1 — Jets de caractéristiques sur les fiches Créature/Faction
+
+- Template Créature v1.19 : six boutons de jet `1d20 + modificateur` (FOR/DEX/CON/INT/SAG/CHA), sans toucher aux champs éditables ni aux formules d'attaque, DEF, sauvegardes et PV.
+- Mise à niveau opt-in par Template Manager : installer v1.19 puis synchroniser Actors après snapshot.
+- Aucun changement au template PJ ni à la macro universelle H0D — Attaques v1.7.0.
+
 ## 1.7.0 — Macro universelle H0D — Attaques
 
 - Ajout du moteur `scripts/h0d-attacks.js` : reprise du code de la macro utilisateur v1.1, complétée par le support des PJ avec leurs calculs du template v3.67.
