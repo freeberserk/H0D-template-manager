@@ -16,6 +16,7 @@ jobs:
           node --check scripts/h0d-attacks.js
           node tests/h0d-attacks-smoke.mjs
           node tests/creature-ability-rolls.mjs
+          node tests/creature-faction-scores.mjs
           python3 -m json.tool module.json > /dev/null
       - name: Package and publish release
         env:
