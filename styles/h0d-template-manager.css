@@ -95,6 +95,18 @@
   background: transparent;
 }
 
+.h0d-pj-sheet .h0d-tech-warning {
+  display: block;
+  margin: 0 0 8px;
+  padding: 6px 8px;
+  border: 1px solid rgba(225,139,61,.45);
+  border-radius: 6px;
+  background: rgba(225,139,61,.10);
+  color: var(--h0d-pj-amber-soft);
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .h0d-pj-sheet input,
 .h0d-pj-sheet select,
 .h0d-pj-sheet textarea {
