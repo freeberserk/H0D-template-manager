@@ -1,3 +1,8 @@
+## 1.7.2 — Affichage des scores Modern SRD des Caravanes
+- Template Créature v1.20 : panneau supplémentaire avec six scores bruts éditables FOR/DEX/CON/INT/SAG/CHA, visible uniquement pour les Caravanes Libres.
+- Aucun changement aux modificateurs, aux dés de la v1.19, aux formules de combat ou au template PJ.
+- Synchronisation des scores et modificateurs assurée par Faction Builder v0.3.1 ; les anciennes fiches sont migrées volontairement, après snapshot.
+
 ## 1.7.1 — Jets de caractéristiques sur les fiches Créature/Faction
 
 - Template Créature v1.19 : six boutons de jet `1d20 + modificateur` (FOR/DEX/CON/INT/SAG/CHA), sans toucher aux champs éditables ni aux formules d'attaque, DEF, sauvegardes et PV.
