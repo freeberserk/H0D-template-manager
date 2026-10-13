@@ -1,3 +1,14 @@
+# 1.6.6 — Correction d’ouverture des Actors de faction
+
+- **H0D_Actor-template-creature v1.18** devient le template Créature canonique.
+- Correction de trois `visibilityFormula` incompatibles avec Custom System Builder 6.0.2 :
+  - affichage de **Faction** ;
+  - affichage de **Faction personnalisée** ;
+  - affichage de **Ajuster PV au maximum**.
+- Les formules ne sont plus encapsulées dans `${...}$` et utilisent désormais directement l’expression attendue par CSB.
+- Cette correction résout l’erreur `Unexpected operator { (char 2)` qui empêchait notamment l’ouverture des Actors générés avec `H0D_Creature_Type = Faction`.
+- Aucun profil de faction, aucune statistique et aucun équipement ne sont modifiés.
+
 # 1.6.5 — Progression technique réservée au MJ
 
 - **H0D_Actor-template-PJ v3.66** devient la fiche PJ canonique.
