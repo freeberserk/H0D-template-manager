@@ -361,10 +361,15 @@ async function collectSafeVersionCandidates() {
     const tpl=TEMPLATE_INDEX.find(e=>e.id===tid);
     if (!tpl || !SAFE_VERSION_KEYS.has(tpl.key)) continue;
     const source=await loadTemplate(tpl);
+    const wantedVersion=Number(source.system?.templateSystemUniqueVersion ?? 0);
+    const installed=installedTemplate(tpl);
+    // Une fiche ne peut être migrée sûrement que si le template canonique installé
+    // est déjà celui livré par le module. Sinon reloadTemplate() rechargerait l'ancienne structure.
+    if (!installed || Number(installed.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion) continue;
     const {inputs}=componentKeySets(source);
     const props=entry.doc.system?.props || {};
     const missing=[...inputs].filter(k=>!has(props,k));
-    const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0)!==Number(source.system?.templateSystemUniqueVersion ?? 0);
+    const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion;
     const additiveSafe=isSafeAdditiveMissing(tpl.key,missing);
     if (stale && (missing.length===0 || additiveSafe)) {
       // Ne pas conserver la référence Document : le reload d'un Actor peut recréer
@@ -375,7 +380,7 @@ async function collectSafeVersionCandidates() {
         kind:entry.kind,
         scope:entry.scope,
         templateEntry:tpl,
-        wantedVersion:Number(source.system?.templateSystemUniqueVersion ?? 0),
+        wantedVersion,
         migrationKind:additiveSafe ? "additive-safe" : "version-only",
         missingKeys:clone(missing)
       });
