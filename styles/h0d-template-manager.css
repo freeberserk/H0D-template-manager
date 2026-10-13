@@ -107,6 +107,25 @@
   font-weight: 700;
 }
 
+.h0d-pj-sheet .h0d-readonly-tech {
+  display: inline-block;
+  min-width: 2.2em;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgba(119,214,220,.06);
+  color: var(--h0d-pj-cyan-soft);
+  cursor: default;
+}
+
+.h0d-pj-sheet .h0d-tech-edit-panel {
+  border-color: rgba(225,139,61,.46);
+}
+
+.h0d-pj-sheet .h0d-tech-edit-table input,
+.h0d-pj-sheet .h0d-tech-edit-table select {
+  border-color: rgba(225,139,61,.38);
+}
+
 .h0d-pj-sheet input,
 .h0d-pj-sheet select,
 .h0d-pj-sheet textarea {
