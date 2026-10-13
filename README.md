@@ -1,4 +1,4 @@
-# H0D Template Manager — v1.2.2 BAC — détails de jets compacts
+# H0D Template Manager — v1.6.0
 
 
 
@@ -165,3 +165,16 @@ rangs/bonus restent gérés dans l'onglet correspondant.
 ## Menu v1.5.1
 
 Le menu suit désormais le flux recommandé : audit → export audit → snapshot → installation/mise à jour → synchronisation → réparation des équipements → migration sûre → restauration → fermeture.
+
+
+## v1.6.0 — Emplacements d’amélioration d’équipement
+
+Les templates **H0D_Arme v2.7** et **H0D_Armure v1.9** disposent désormais de trois emplacements fixes d’amélioration.
+
+Chaque emplacement stocke quatre propriétés indépendantes : **Installée**, **Nom**, **Rang** et **Effet / notes**. Les champs n’appliquent aucun bonus mécanique de façon implicite. Cette séparation permet de noter immédiatement les fabrications installées tout en gardant la porte ouverte à une future implémentation par ItemContainer qui pourra porter elle-même bonus d’attaque, dégâts, DEF ou autres effets.
+
+### Migration depuis Arme v2.6 / Armure v1.8
+
+Après **Installer/mettre à jour**, lancer un nouvel **Audit monde**, puis **Migrer versions sûres**.
+
+La 1.6.0 autorise explicitement ce seul cas de migration « version + champs manquants » : les 12 nouveaux champs d’amélioration d’une arme ou d’une armure. Le template est rechargé, les nouveaux champs prennent leurs valeurs par défaut, puis toutes les propriétés locales historiques sont réinjectées et vérifiées. Les autres mixes restent exclus.
