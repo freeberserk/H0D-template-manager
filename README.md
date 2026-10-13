@@ -1,4 +1,9 @@
-# H0D Template Manager — v1.7.3
+# H0D Template Manager — v1.7.4
+
+## v1.7.4 — Scores SRD visibles pour le Conseil héroïque
+Le template Créature **v1.22** étend uniquement le panneau des scores SRD aux **PNJ héroïques** (flag de données `H0D_Creature_Statut_PNJ = Héroïque`) en plus des Caravanes Libres ordinaires. Le libellé affiche **PNJ Héroïque · Niveau 4 · Menace / CR 4** au lieu de présenter le Conseil comme ordinaire.
+
+Les six dés de caractéristiques, champs MOD, formules d'attaque, PV, DEF, sauvegardes, inventaire et template PJ restent inchangés. Installe le template v1.22 puis synchronise les Actors via le Template Manager après snapshot du monde. Cette modification est liée au **Faction Builder v0.4.0**, qui crée/adopte les neuf membres du Conseil en tant que PNJ uniques.
 
 ## v1.7.3 — Affichage du niveau PNJ distinct de la Menace / CR
 Le template Créature **v1.21** complète le panneau spécifique aux **Caravanes Libres** : l'indication **PNJ ORDINAIRE · NIVEAU N · MENACE / CR M** affiche les deux informations séparément. Pour les profils ordinaires SRD de CR 1–4, le Faction Builder v0.3.2 utilise **niveau PNJ = CR + 1**. Le bonus +1 aux caractéristiques est donc gagné dès **Menace 3 / niveau 4**. Le panneau Scores SRD et les dés cliquables des versions précédentes ne changent pas.
