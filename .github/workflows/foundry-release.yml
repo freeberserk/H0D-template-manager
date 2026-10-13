@@ -13,6 +13,7 @@ jobs:
       - name: Validate JavaScript and manifest
         run: |
           node --check scripts/h0d-template-manager.js
+          node --check scripts/h0d-attacks.js
           python3 -m json.tool module.json > /dev/null
       - name: Package and publish release
         env:
