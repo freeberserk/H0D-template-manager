@@ -1,4 +1,10 @@
-# H0D Template Manager — v1.6.6
+# H0D Template Manager — v1.6.7
+
+## v1.6.7 — Historique de progression PJ corrigé
+
+La fiche PJ canonique passe en **v3.67**.
+
+L’historique par niveau visible par les joueurs utilise maintenant des tables CSB natives, avec huit colonnes correctement alignées. Les anciennes données de niveau restent reconnues même si leur valeur est stockée sous forme de texte. L’édition reste réservée à l’onglet **Technique**.
 
 ## v1.6.6 — Correction du template Créature
 
