@@ -1,3 +1,8 @@
+## 1.7.4 — Scores SRD des PNJ héroïques uniques
+- Créature v1.22 : panneau Scores SRD visible pour les membres du Conseil marqués Héroïque, ainsi que pour les Caravanes Libres.
+- Libellé de niveau distinguant Ordinaire / Héroïque, sans confusion avec la Menace/CR.
+- Aucun changement aux formules, armes, fiches PJ et macro H0D — Attaques.
+
 ## 1.7.3 — Niveau PNJ ordinaire distinct de la Menace
 - Créature v1.21 : libellé séparant niveau du PNJ ordinaire et Menace / CR sur les Caravanes Libres.
 - Aucun autre champ ni calcul des fiches Créature n'est modifié.
