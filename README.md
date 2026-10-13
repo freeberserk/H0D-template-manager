@@ -1,4 +1,8 @@
-# H0D Template Manager — v1.6.3
+# H0D Template Manager — v1.6.4
+
+## v1.6.4 — Barre d’actions réorganisée
+
+Les commandes opérationnelles sont maintenant affichées en premier, puis **Audit monde**, **Exporter audit** et **Exporter snapshot** juste avant **Restaurer dernier cycle**.
 
 ## v1.6.3 — Paramètres techniques réservés au MJ
 
