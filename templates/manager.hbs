@@ -50,11 +50,12 @@
 
     {{#if warningTriage.available}}
     <section class="h0d-tm-section">
-      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-list-check"></i> TRIAGE DES AVERTISSEMENTS</h2><span>migration contrôlée · base stable 1.2.0 · chat compact 1.2.2</span></div>
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-list-check"></i> TRIAGE DES AVERTISSEMENTS</h2><span>migration contrôlée · évolutions additives sûres 1.6.0</span></div>
       <div class="h0d-tm-weapon-grid">
         <article><span>Fiches à examiner</span><strong>{{warningTriage.warningDocuments}}</strong></article>
         <article><span>Entrées warning</span><strong>{{warningTriage.warningEntries}}</strong></article>
         <article><span>Version seule</span><strong>{{warningTriage.versionOnlyCandidates}}</strong></article>
+        <article><span>Ajout additif sûr</span><strong>{{warningTriage.additiveSafeCandidates}}</strong></article>
         <article><span>Champs manquants seuls</span><strong>{{warningTriage.missingOnlyCandidates}}</strong></article>
         <article><span>Version + champs</span><strong>{{warningTriage.mixedCandidates}}</strong></article>
         <article><span>Legacy informatif</span><strong>{{warningTriage.legacyInfoDocuments}}</strong></article>
@@ -67,13 +68,13 @@
           <span><strong>{{name}}</strong><small>{{ok}} OK · {{legacy}} avec legacy informatif</small></span>
           <span>{{total}}</span>
           <span class="status {{#if warnings}}warning{{else}}ok{{/if}}">{{warnings}} warning(s) · {{errors}} erreur(s)</span>
-          <span><small>Version seule {{staleOnly}} · Champs seuls {{missingOnly}} · Mixte {{mixed}}</small></span>
+          <span><small>Version seule {{staleOnly}} · Ajout sûr {{additiveSafe}} · Champs seuls {{missingOnly}} · Mixte {{mixed}}</small></span>
         </div>
         {{/each}}
       </div>
       <div class="h0d-tm-weapon-actions">
-        <p><strong>Migration sûre disponible : {{safeVersionCandidates}} candidat(s).</strong> La v1.2.0 stable traite les avertissements « version seule » des PJ, armures/boucliers, dons/talents, armes, objets et pièces détachables en recollectant les candidats après chaque migration. Les cas avec champs manquants ou warnings mixtes restent exclus ; les valeurs locales, dynamicTables et propriétés legacy sont conservées.</p>
-        <p>Les cas « champs manquants seuls », « version + champs », les armes-machines et les compendiums restent exclus de cette action.</p>
+        <p><strong>Migration sûre disponible : {{safeVersionCandidates}} candidat(s).</strong> Le manager traite les « versions seules » habituelles et, depuis la 1.6.0, les évolutions additives explicitement autorisées des emplacements d'amélioration d'armes/armures. Les valeurs locales, dynamicTables et propriétés legacy sont conservées.</p>
+        <p>Les autres cas « champs manquants seuls », les mixes non autorisés, les armes-machines et les compendiums restent exclus de cette action.</p>
         {{#if warningTriage.topMissingProps.length}}<p>Les propriétés manquantes les plus fréquentes sont incluses dans l’export d’audit sous <code>warningTriage.topMissingProps</code>.</p>{{/if}}
       </div>
     </section>
