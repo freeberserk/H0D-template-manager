@@ -1,4 +1,8 @@
-# H0D Template Manager — v1.6.7
+# H0D Template Manager — v1.6.8
+
+## v1.6.8 — Carte d’attaque PJ corrigée
+
+La mise en page du résumé des attaques est stabilisée : les libellés gardent une largeur suffisante même lorsqu’une arme possède un **Effet** très long. Les calculs restent inchangés.
 
 ## v1.6.7 — Historique de progression PJ corrigé
 
