@@ -1,5 +1,5 @@
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.6.5";
+const MODULE_VERSION = "1.6.6";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -7,7 +7,7 @@ const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
   {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.66", version:"3.66", file:"H0D_Actor-template-PJ-v3.66.json"},
-  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.17", version:"1.17", file:"H0D_Actor-template-creature-v1.17.json"},
+  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.18", version:"1.18", file:"H0D_Actor-template-creature-v1.18.json"},
   {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.15", version:"3.15", file:"H0D_Actor-template-machine-v3.15.json"},
   {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.7", version:"2.7", file:"H0D_Arme-v2.7.json"},
   {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v1.9", version:"1.9", file:"H0D_Armure-v1.9.json"},
