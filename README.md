@@ -1,4 +1,10 @@
-# H0D Template Manager — v1.6.5
+# H0D Template Manager — v1.6.6
+
+## v1.6.6 — Correction du template Créature
+
+Le template Créature passe en **v1.18**.
+
+Trois formules de visibilité incompatibles avec **Custom System Builder 6.0.2** ont été corrigées. Le cas le plus visible concernait les Actors de type **Faction**, qui pouvaient être générés mais dont la fiche refusait de s’ouvrir avec l’erreur `Unexpected operator { (char 2)`.
 
 ## v1.6.5 — Progression technique réservée au MJ
 
