@@ -1,8 +1,8 @@
 {
   "id": "h0d-template-manager",
   "title": "H0D Template Manager",
-  "description": "Gestionnaire centralisé H0D : audit, snapshots, migrations sûres, Intégrité Machines v2, améliorations d’équipement et fiche PJ avec paramètres techniques MJ.",
-  "version": "1.6.8",
+  "description": "Gestionnaire centralisé H0D : templates, audits, migrations sûres et nouvelle macro H0D — Attaques (PJ, factions, créatures, machines), sans remplacer la macro ennemie historique.",
+  "version": "1.7.0",
   "authors": [
     {
       "name": "JDR Zero Dawn"
