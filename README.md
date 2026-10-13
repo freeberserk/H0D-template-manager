@@ -1,4 +1,10 @@
-# H0D Template Manager — v1.6.4
+# H0D Template Manager — v1.6.5
+
+## v1.6.5 — Progression technique réservée au MJ
+
+La fiche PJ canonique passe en **v3.66**.
+
+La table de progression par niveau est désormais éditable uniquement dans l’onglet **Technique**. La vue joueur conserve un historique calculé en lecture seule. Le bloc **Détail technique** et la **Synthèse de progression** sont également clarifiés avec des libellés explicites.
 
 ## v1.6.4 — Barre d’actions réorganisée
 
