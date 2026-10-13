@@ -1,5 +1,5 @@
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.5.3";
+const MODULE_VERSION = "1.6.0";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -9,8 +9,8 @@ const TEMPLATE_INDEX = [
   {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.62", version:"3.62", file:"H0D_Actor-template-PJ-v3.62.json"},
   {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.17", version:"1.17", file:"H0D_Actor-template-creature-v1.17.json"},
   {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.15", version:"3.15", file:"H0D_Actor-template-machine-v3.15.json"},
-  {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.6", version:"2.6", file:"H0D_Arme-v2.6.json"},
-  {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v1.8", version:"1.8", file:"H0D_Armure-v1.8.json"},
+  {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.7", version:"2.7", file:"H0D_Arme-v2.7.json"},
+  {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v1.9", version:"1.9", file:"H0D_Armure-v1.9.json"},
   {key:"item-don-talent", family:"Item", kind:"Item", id:"H0DDonTalent0001", name:"H0D_Don_Talent v2.5", version:"2.5", file:"H0D_Don_Talent-v2.5.json"},
   {key:"item-modificateur", family:"Item", kind:"Item", id:"H0DCreaMod000001", name:"H0D_Modificateur v1.3", version:"1.3", file:"H0D_Modificateur-v1.3.json"},
   {key:"item-objet", family:"Item", kind:"Item", id:"H0DObjTpl0000001", name:"H0D_Objet v2.9", version:"2.9", file:"H0D_Objet-v2.9.json"},
@@ -37,6 +37,43 @@ const SAFE_VERSION_LABELS = {
   "item-objet":"objets",
   "item-piece":"pièces détachables"
 };
+
+const SAFE_ADDITIVE_MISSING_KEYS = {
+  "item-arme": new Set([
+    "H0D_Arme_Amelioration_1_Installee",
+    "H0D_Arme_Amelioration_1_Nom",
+    "H0D_Arme_Amelioration_1_Rang",
+    "H0D_Arme_Amelioration_1_Effet",
+    "H0D_Arme_Amelioration_2_Installee",
+    "H0D_Arme_Amelioration_2_Nom",
+    "H0D_Arme_Amelioration_2_Rang",
+    "H0D_Arme_Amelioration_2_Effet",
+    "H0D_Arme_Amelioration_3_Installee",
+    "H0D_Arme_Amelioration_3_Nom",
+    "H0D_Arme_Amelioration_3_Rang",
+    "H0D_Arme_Amelioration_3_Effet"
+  ]),
+  "item-armure": new Set([
+    "H0D_Armure_Amelioration_1_Installee",
+    "H0D_Armure_Amelioration_1_Nom",
+    "H0D_Armure_Amelioration_1_Rang",
+    "H0D_Armure_Amelioration_1_Effet",
+    "H0D_Armure_Amelioration_2_Installee",
+    "H0D_Armure_Amelioration_2_Nom",
+    "H0D_Armure_Amelioration_2_Rang",
+    "H0D_Armure_Amelioration_2_Effet",
+    "H0D_Armure_Amelioration_3_Installee",
+    "H0D_Armure_Amelioration_3_Nom",
+    "H0D_Armure_Amelioration_3_Rang",
+    "H0D_Armure_Amelioration_3_Effet"
+  ])
+};
+
+function isSafeAdditiveMissing(templateKey, missingKeys=[]) {
+  if (!missingKeys.length) return false;
+  const allowed=SAFE_ADDITIVE_MISSING_KEYS[templateKey];
+  return !!allowed && missingKeys.every(key=>allowed.has(key));
+}
 const templateCache = new Map();
 let equipmentReferenceCache = null;
 
@@ -328,7 +365,8 @@ async function collectSafeVersionCandidates() {
     const props=entry.doc.system?.props || {};
     const missing=[...inputs].filter(k=>!has(props,k));
     const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0)!==Number(source.system?.templateSystemUniqueVersion ?? 0);
-    if (stale && missing.length===0) {
+    const additiveSafe=isSafeAdditiveMissing(tpl.key,missing);
+    if (stale && (missing.length===0 || additiveSafe)) {
       // Ne pas conserver la référence Document : le reload d'un Actor peut recréer
       // ses Embedded Items et invalider les objets collectés au début du cycle.
       results.push({
@@ -337,7 +375,9 @@ async function collectSafeVersionCandidates() {
         kind:entry.kind,
         scope:entry.scope,
         templateEntry:tpl,
-        wantedVersion:Number(source.system?.templateSystemUniqueVersion ?? 0)
+        wantedVersion:Number(source.system?.templateSystemUniqueVersion ?? 0),
+        migrationKind:additiveSafe ? "additive-safe" : "version-only",
+        missingKeys:clone(missing)
       });
     }
   }
@@ -413,12 +453,14 @@ async function migrateSafeVersions() {
     .filter(key=>counts[key]>0)
     .map(key=>`<strong>${counts[key]}</strong> ${SAFE_VERSION_LABELS[key] || key}`)
     .join(" · ");
+  const additiveCount=initialCandidates.filter(c=>c.migrationKind==="additive-safe").length;
   const ok=await confirmDialog(
     "H0D — Migrer les versions sûres",
-    `<p>Mettre à niveau <strong>${initialCandidates.length} fiche(s)</strong> qui n'ont qu'un avertissement de version :</p>
+    `<p>Mettre à niveau <strong>${initialCandidates.length} fiche(s)</strong> :</p>
      <p>${detail}</p>
-     <p>Le manager traite les candidats <strong>un par un en les recollectant après chaque reloadTemplate()</strong>. Cela évite qu'une reconstruction d'Items embarqués invalide le reste de la liste, comportement observé en v1.1.2.</p>
-     <p>Les fiches avec champs manquants ou warnings mixtes restent exclues. Les valeurs locales, dynamicTables et propriétés legacy sont conservées. Une sauvegarde interne est créée par fiche ; aucun snapshot JSON n'est téléchargé automatiquement.</p>`,
+     <p><strong>${initialCandidates.length-additiveCount}</strong> candidat(s) « version seule » · <strong>${additiveCount}</strong> évolution(s) additive(s) sûre(s).</p>
+     <p>Les évolutions additives autorisées ici sont limitées aux nouveaux emplacements d'amélioration des armes et armures : le reload ajoute les nouveaux champs avec leurs valeurs par défaut, puis les anciennes propriétés locales sont réinjectées sans écrasement.</p>
+     <p>Le manager traite les candidats <strong>un par un en les recollectant après chaque reloadTemplate()</strong>. Les autres cas avec champs manquants ou warnings mixtes restent exclus. Les valeurs locales, dynamicTables et propriétés legacy sont conservées. Une sauvegarde interne est créée par fiche ; aucun snapshot JSON n'est téléchargé automatiquement.</p>`,
     "Migrer les versions sûres"
   );
   if (!ok) return [];
@@ -1048,9 +1090,15 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
   const warningDocs=docs.filter(d=>d.status==="warning");
   const errorDocs=docs.filter(d=>d.status==="error");
   const hasCode=(doc,code)=>(doc.warnings || []).some(w=>w.code===code);
+  const missingKeysOf=doc=>(doc.warnings || []).find(w=>w.code==="missing-props")?.keys || [];
+  const templateKeyOf=doc=>TEMPLATE_INDEX.find(e=>e.id===doc.templateId)?.key || "";
+  const additiveSafeDoc=doc=>hasCode(doc,"stale-template-version")
+    && hasCode(doc,"missing-props")
+    && isSafeAdditiveMissing(templateKeyOf(doc),missingKeysOf(doc));
   const staleOnly=warningDocs.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props"));
   const missingOnly=warningDocs.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version"));
-  const staleAndMissing=warningDocs.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version"));
+  const additiveSafe=warningDocs.filter(additiveSafeDoc);
+  const staleAndMissing=warningDocs.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
   const legacyInfoDocs=docs.filter(d=>(d.info || []).some(i=>i.code==="legacy-props"));
 
   const byTemplate=TEMPLATE_INDEX.map(entry=>{
@@ -1066,7 +1114,8 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
       errors:errors.length,
       staleOnly:warnings.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props")).length,
       missingOnly:warnings.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version")).length,
-      mixed:warnings.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version")).length,
+      additiveSafe:warnings.filter(additiveSafeDoc).length,
+      mixed:warnings.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
       legacy:related.filter(d=>(d.info || []).some(i=>i.code==="legacy-props")).length
     };
   }).filter(r=>r.total>0);
@@ -1095,6 +1144,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
     errorDocuments:errorDocs.length,
     warningEntries:warningDocs.reduce((sum,d)=>sum+(d.warnings || []).length,0),
     versionOnlyCandidates:staleOnly.length,
+    additiveSafeCandidates:additiveSafe.length,
     missingOnlyCandidates:missingOnly.length,
     mixedCandidates:staleAndMissing.length,
     legacyInfoDocuments:legacyInfoDocs.length,
@@ -1201,7 +1251,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       legacy:{installed:!!legacy,name:legacy?.name || "H0D_Trait v2.6",usages:legacyUsages.length,canRemove:!!legacy && legacyUsages.length===0},
       auditSummary:audit ? {available:true,createdAt:audit.createdAt,...audit.counts} : {available:false},
       warningTriage:audit?.warningTriage ? {available:true,...audit.warningTriage} : {available:false},
-      safeVersionCandidates:audit?.warningTriage ? audit.warningTriage.byTemplate.filter(r=>SAFE_VERSION_KEYS.has(r.key)).reduce((sum,r)=>sum+Number(r.staleOnly||0),0) : 0,
+      safeVersionCandidates:audit?.warningTriage ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0) : 0,
       weaponSummary:weapon.summary,
       armorSummary:armor.summary,
       hasEquipmentRepair:(weapon.summary.repairableWeapons+armor.summary.mismatch)>0,
