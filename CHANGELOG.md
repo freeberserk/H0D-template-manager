@@ -1,3 +1,12 @@
+# 1.6.5 — Progression technique réservée au MJ
+
+- **H0D_Actor-template-PJ v3.66** devient la fiche PJ canonique.
+- La table dynamique **Progression par niveau** est déplacée dans l’onglet **Technique** : niveau, classe, modificateur d’INT historique, DV retenu et notes ne sont plus modifiables depuis la vue joueur.
+- L’onglet **Compétences & progression** conserve un historique par niveau en **lecture seule**, alimenté par la même table technique.
+- Le bloc **Détail technique** affiche désormais explicitement **Effet CON cumulé** et **Niveaux PV manquants**.
+- L’ancienne ligne ambiguë **TOTAL** est remplacée par une **Synthèse de progression** avec quatre libellés : **Niveau total**, **Pts de compétence acquis**, **DV retenus cumulés**, **PV max**.
+- Aucun changement des formules de progression, de points de compétence ou de PV : seule la localisation de l’édition et la présentation sont modifiées.
+
 # 1.6.4 — Réorganisation de la barre d’actions
 
 - Réorganisation visuelle de la barre du Template Manager.
