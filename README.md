@@ -1,4 +1,14 @@
-# H0D Template Manager — v1.6.1
+# H0D Template Manager — v1.6.2
+
+## v1.6.2 — Correction du bloc Focus PJ
+
+La fiche PJ canonique passe en **v3.64**.
+
+- le bloc **FOCUS** de l’onglet Personnage conserve les quatre actions : Scan rapide, Scan complet, Scan concentré et Marquer une pièce ;
+- **Accès** et le **bonus Focus total** restent visibles dans ce bloc ;
+- **Rangs**, **Classe / occupation**, **bonus automatique**, **Divers** et **Total** sont désormais gérés dans une ligne **Focus** de la table détaillée des compétences ;
+- aucun jet Focus générique n’est ajouté dans la table des compétences : les jets restent exclusivement dans le bloc FOCUS ;
+- le champ **Accès Focus** est conservé pour un futur branchement mécanique.
 
 ## v1.6.1 — Simplification de la fiche PJ
 
