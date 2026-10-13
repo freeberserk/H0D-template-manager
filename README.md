@@ -1,4 +1,12 @@
-# H0D Template Manager — v1.7.0
+# H0D Template Manager — v1.7.1
+
+## v1.7.1 — Jets de caractéristiques des Créatures et Factions
+
+Le template Créature passe en **v1.19**, en conservant son identifiant et ses formules de combat. Une deuxième ligne discrète sous les champs FOR, DEX, CON, INT, SAG et CHA propose **Jet FOR / Jet DEX / ...** avec le dé cliquable, exactement comme les jets **1d20 + modificateur** du SRD / des fiches PJ H0D.
+
+**Installation :** après la mise à jour du module, aller dans H0D — Template Manager, installer / mettre à jour le template Créature v1.19, exporter un snapshot de sécurité, puis synchroniser **Actors** pour actualiser les fiches existantes. Le gestionnaire ne synchronise pas automatiquement les fiches. Leurs statistiques, capacités et équipements ne sont pas réinitialisés par l'ajout de boutons.
+
+Les nouveaux modificateurs des **14 Caravanes Libres** et la migration prudente des fiches déjà générées sont livrés séparément par H0D Faction Builder v0.3.0. Le Creature Builder ne change pas.
 
 ## v1.7.0 — H0D — Attaques (macro universelle, sans risque sur l'ancienne)
 
