@@ -1,3 +1,22 @@
+# 1.6.0 — Améliorations d’équipement à 3 emplacements
+
+- **H0D_Arme v2.7** : ajout de 3 emplacements fixes d’amélioration.
+- **H0D_Armure v1.9** : même structure pour armures et boucliers.
+- Chaque emplacement contient :
+  - état **Installée** ;
+  - **Nom** ;
+  - **Rang** 1 / 2 / 3 ;
+  - **Effet / notes**.
+- Ces champs sont volontairement **descriptifs** : ils ne modifient pas encore automatiquement l’attaque, les dégâts ou la DEF.
+- La structure est pensée pour rester compatible avec une future gestion par **ItemContainer** ou module d’améliorations.
+- Le Template Manager reconnaît cette évolution comme une **migration additive sûre** :
+  - uniquement si les seuls champs manquants sont ceux des nouveaux emplacements ;
+  - uniquement après installation du template canonique 2.7 / 1.9 ;
+  - sauvegarde interne avant reload ;
+  - conservation de toutes les anciennes propriétés locales et dynamicTables.
+- Le triage d’audit distingue maintenant les **Ajouts additifs sûrs** des mixes réellement suspects.
+- Aucun changement des référentiels mécaniques d’armes ou d’armures.
+
 ## 1.5.3 — Lisibilité du résultat des jets
 - Le total principal affiché sur les cartes H0D passe en **orange Horizon** déjà utilisé dans les fiches (`#e18b3d`).
 - Le changement s'applique aux cartes standard `h0d-chat-summary` et à l'ancien bloc `h0d-chat-result`.
