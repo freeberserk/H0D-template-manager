@@ -1,4 +1,12 @@
-# H0D Template Manager — v1.6.8
+# H0D Template Manager — v1.7.0
+
+## v1.7.0 — H0D — Attaques (macro universelle, sans risque sur l'ancienne)
+
+Nouveau moteur séparé `scripts/h0d-attacks.js` dérivé **directement de la macro « H0D — Attaques ennemi » v1.1 exportée du monde Foundry**. À l'ouverture du monde, le Template Manager crée seulement si absente la macro **H0D — Attaques**, qui lance `game.h0dTemplateManager.openAttacks();`. **La macro « H0D — Attaques ennemi » existante est conservée, jamais renommée, effacée ou mise à jour**. Une éventuelle macro déjà nommée « H0D — Attaques » est elle aussi laissée intacte.
+
+Prise en charge : Machines (comme v1.1), Créatures et membres de factions/PNJ (comme v1.1), **PJ** (nouveau : attaque BBA + caractéristique + taille + encombrement + bonus équipement/dons/talents/arme, dégâts avec bonus propres au PJ selon le template PJ v3.67). La détection des PJ n'altère pas les deux branches historiques. Sélectionner **un token**, cibler éventuellement **un token**. Le lanceur utilise le même sélecteur d'armes, le modificateur situationnel, le chat public et le détail privé MJ.
+
+**Important :** comme l'ancienne macro v1.1, ce lanceur **n'applique pas automatiquement les dégâts aux cibles** et **ne consomme pas automatiquement les munitions**. Il ne remplace pas les boutons d'attaque de la fiche CSB ni leurs éventuelles fonctions de consommation/critique. Le fonctionnement des cooldowns est celui de v1.1. Seules les **armes embarquées** sont actuellement proposées, pas les capacités textuelles non converties en Items d'arme. Le résultat doit être testé dans un monde BAC (Machine, PNJ, Créature, PJ) avant de remplacer la macro de raccourci utilisée en séance.
 
 ## v1.6.8 — Carte d’attaque PJ corrigée
 
