@@ -1,3 +1,12 @@
+# 1.6.8 — Correction de la carte d’attaque PJ
+
+- Correction d’une régression d’affichage des cartes d’attaque dans le chat.
+- Un effet spécial très long pouvait laisser la seconde colonne du résumé prendre presque toute la largeur et écraser les libellés **Résultat / Verdict / Cible / Dégâts / Critique / Effet** lettre par lettre.
+- Le tableau de résumé utilise désormais une disposition fixe : **38 % pour les libellés**, **62 % pour les valeurs**.
+- Les textes longs se replient dans la colonne de droite sans casser les mots des libellés.
+- Aucun calcul d’attaque, de critique, de dégâts ou d’effet n’est modifié.
+- Aucun template n’est modifié dans cette version.
+
 # 1.6.7 — Correction de l’historique de progression PJ
 
 - **H0D_Actor-template-PJ v3.67** devient la fiche PJ canonique.
