@@ -300,6 +300,15 @@
   --h0d-chat-accent-soft: rgba(201,163,107,.12);
   --h0d-chat-border: rgba(201,163,107,.34);
 }
+
+/* Les attaques PNJ et Machine reprennent l'identité visuelle canonique
+   des cartes d'attaque PJ. Les autres cartes conservent leur couleur de famille. */
+.h0d-chat-card.h0d-chat-attack.h0d-chat-creature,
+.h0d-chat-card.h0d-chat-attack.h0d-chat-machine {
+  --h0d-chat-accent: #d99043;
+  --h0d-chat-accent-soft: rgba(217,144,67,.14);
+  --h0d-chat-border: rgba(217,144,67,.40);
+}
 .h0d-chat-head {
   display:flex;
   flex-direction:column;
