@@ -1,4 +1,11 @@
-# H0D Template Manager — v1.7.1
+# H0D Template Manager — v1.7.2
+
+## v1.7.2 — Scores de caractéristiques pour les Caravanes Libres
+Le template Créature **v1.20** ajoute un petit panneau **« SCORES SRD · CARAVANES LIBRES »**, visible uniquement sur ces membres de faction. Il affiche les valeurs brutes FOR/DEX/CON/INT/SAG/CHA, telles que **15/14/13/12/10/8** (réparties selon le métier), distinctes des modificateurs déjà éditables et des dés de jet livrés en v1.19. Les scores sont calculés/générés par **H0D Faction Builder v0.3.1**, qui synchronise aussi le modificateur quand un score est édité dans la fiche. La formule de modificateur est la même que sur les PJ : floor((score−10)/2).
+
+**Installation :** mettre à jour le Template Manager 1.7.2 et le Faction Builder 0.3.1 ; **exporter un snapshot du monde** puis **installer le template Créature v1.20 et synchroniser les Actors** dans le Template Manager. Lancer ensuite le Faction Builder et sélectionner **« Corriger vers les scores SRD »** pour convertir les Caravanes générées par v0.2.1 ou v0.3.0, si leurs valeurs ne sont pas personnalisées.
+
+Aucune modification aux six anciens champs numériques MOD, aux dés, aux créatures non Caravanes, à la fiche PJ ou au moteur H0D — Attaques.
 
 ## v1.7.1 — Jets de caractéristiques des Créatures et Factions
 
