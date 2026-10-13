@@ -1,4 +1,14 @@
-# H0D Template Manager — v1.6.2
+# H0D Template Manager — v1.6.3
+
+## v1.6.3 — Paramètres techniques réservés au MJ
+
+La fiche PJ canonique passe en **v3.65**.
+
+Les corrections manuelles visibles dans les onglets joueur deviennent des valeurs **en lecture seule**. Leur édition est centralisée dans **Technique → Paramètres MJ — Ajustements manuels** : Accès Focus, DEF divers, sauvegardes divers, bonus divers des compétences, ajustement des points de compétence et ajustement des PV max.
+
+Les champs de jeu et de progression normaux restent éditables par les joueurs : caractéristiques, rangs, classes, progression par niveau, PV actuels, points d’action, notes, raccourcis, inventaire et monture.
+
+Aucune formule de calcul ni règle de jeu n’est modifiée.
 
 ## v1.6.2 — Correction du bloc Focus PJ
 
