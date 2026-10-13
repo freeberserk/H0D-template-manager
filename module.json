@@ -1,8 +1,8 @@
 {
   "id": "h0d-template-manager",
   "title": "H0D Template Manager",
-  "description": "Gestionnaire centralisé H0D : audit, snapshots, migrations sûres, cartes harmonisées, Intégrité Machines v2 et ergonomie PJ améliorée.",
-  "version": "1.5.3",
+  "description": "Gestionnaire centralisé H0D : audit, snapshots, migrations sûres, Intégrité Machines v2 et emplacements d’amélioration pour armes/armures.",
+  "version": "1.6.0",
   "authors": [
     {
       "name": "JDR Zero Dawn"
