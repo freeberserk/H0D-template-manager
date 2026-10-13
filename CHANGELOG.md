@@ -1,3 +1,12 @@
+# 1.6.7 — Correction de l’historique de progression PJ
+
+- **H0D_Actor-template-PJ v3.67** devient la fiche PJ canonique.
+- L’historique de progression en lecture seule utilise désormais des **tables CSB natives à 8 colonnes** au lieu d’une grille CSS.
+- Correction de l’alignement des colonnes **Niv. / Classe / INT / Pts / DV / DV retenu / Gain PV / Notes**.
+- Les lignes sont filtrées avec une comparaison tolérante `==` afin de reconnaître les anciens numéros de niveau stockés comme texte ou comme nombre.
+- La table éditable reste exclusivement dans l’onglet **Technique**.
+- Aucun calcul de progression, PV ou points de compétence n’est modifié.
+
 # 1.6.6 — Correction d’ouverture des Actors de faction
 
 - **H0D_Actor-template-creature v1.18** devient le template Créature canonique.
