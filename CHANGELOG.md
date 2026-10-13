@@ -1,3 +1,8 @@
+## 1.7.3 — Niveau PNJ ordinaire distinct de la Menace
+- Créature v1.21 : libellé séparant niveau du PNJ ordinaire et Menace / CR sur les Caravanes Libres.
+- Aucun autre champ ni calcul des fiches Créature n'est modifié.
+- Prend en charge la correction d'équilibrage du Faction Builder 0.3.2 (CR = niveau − 1).
+
 ## 1.7.2 — Affichage des scores Modern SRD des Caravanes
 - Template Créature v1.20 : panneau supplémentaire avec six scores bruts éditables FOR/DEX/CON/INT/SAG/CHA, visible uniquement pour les Caravanes Libres.
 - Aucun changement aux modificateurs, aux dés de la v1.19, aux formules de combat ou au template PJ.
