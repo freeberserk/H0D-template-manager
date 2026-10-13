@@ -1,5 +1,5 @@
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.6.3";
+const MODULE_VERSION = "1.6.4";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
