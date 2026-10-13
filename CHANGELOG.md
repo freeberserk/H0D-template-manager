@@ -1,3 +1,11 @@
+## 1.7.0 — Macro universelle H0D — Attaques
+
+- Ajout du moteur `scripts/h0d-attacks.js` : reprise du code de la macro utilisateur v1.1, complétée par le support des PJ avec leurs calculs du template v3.67.
+- API : `game.h0dTemplateManager.openAttacks()` ; création automatique de la nouvelle macro « H0D — Attaques » uniquement si absente.
+- L'ancienne macro « H0D — Attaques ennemi » **n'est pas modifiée**, même si elle est utilisée très fréquemment.
+- Aucun template ni système de combat existant modifié ; aucune migration de fiches.
+- Validation syntaxique et essais en BAC recommandés avant remplacement du raccourci historique.
+
 # 1.6.8 — Correction de la carte d’attaque PJ
 
 - Correction d’une régression d’affichage des cartes d’attaque dans le chat.
