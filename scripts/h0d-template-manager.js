@@ -251,6 +251,29 @@ function componentKeySets(templateData) {
   return {labels,inputs,all};
 }
 
+function componentInputDefaults(templateData) {
+  const defaults=new Map();
+  function walk(node, insideTable=false) {
+    if (Array.isArray(node)) { for (const v of node) walk(v,insideTable); return; }
+    if (!node || typeof node!=="object") return;
+    const key=String(node.key || "");
+    const type=String(node.type || "");
+    const isInput=["numberField","textField","textArea","select","checkbox","dynamicTable","radioButton","meter"].includes(type);
+    if (key && isInput && (!insideTable || type==="dynamicTable")) {
+      let value;
+      if (type==="checkbox") value=has(node,"defaultChecked") ? bool(node.defaultChecked) : bool(node.defaultValue);
+      else if (has(node,"defaultValue")) value=clone(node.defaultValue);
+      else if (type==="dynamicTable") value={};
+      else value="";
+      defaults.set(key,clone(value));
+    }
+    const nextInside=insideTable || type==="dynamicTable";
+    for (const v of Object.values(node)) walk(v,nextInside);
+  }
+  walk(templateData?.system || {},false);
+  return defaults;
+}
+
 function tableEntries(v) {
   if (Array.isArray(v)) return v.map((row,i)=>[String(i),row]);
   if (v && typeof v === "object") return Object.entries(v);
@@ -416,11 +439,56 @@ async function safeVersionReload(entry, runId) {
   let doc=null;
   let originalProps={};
   let originalVersion=0;
+  let directAdditiveAttempt=false;
   try {
     doc=await resolveFreshDocument(entry);
     originalProps=clone(doc.system?.props || {});
     originalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
     await pushBackup(doc,runId,`Migration version sûre — ${entry.scope}`);
+
+    const wantedVersion=Number(entry.wantedVersion);
+    directAdditiveAttempt=entry.migrationKind==="additive-safe" && originalVersion===wantedVersion;
+
+    if (directAdditiveAttempt) {
+      // CSB 6 ne réinitialise pas les propriétés manquantes lorsqu'une fiche porte
+      // déjà la version canonique. Dans ce cas précis, on ajoute uniquement les clés
+      // explicitement allowlistées avec les valeurs par défaut du template canonique.
+      const allowed=SAFE_ADDITIVE_MISSING_KEYS[entry.templateEntry.key];
+      const source=await loadTemplate(entry.templateEntry);
+      const defaults=componentInputDefaults(source);
+      const next=clone(originalProps);
+      const addedKeys=[];
+
+      for (const key of entry.missingKeys || []) {
+        if (!allowed?.has(key)) throw new Error(`Ajout direct refusé pour une clé non allowlistée : ${key}`);
+        if (has(next,key)) continue;
+        if (!defaults.has(key)) throw new Error(`Valeur par défaut canonique introuvable pour : ${key}`);
+        next[key]=clone(defaults.get(key));
+        addedKeys.push(key);
+      }
+
+      if (!addedKeys.length) throw new Error("Aucun champ additif à créer après relecture de la fiche.");
+      await doc.update({"system.props":next});
+
+      doc=await resolveFreshDocument(entry);
+      const finalProps=doc.system?.props || {};
+      const changedLocal=Object.entries(originalProps)
+        .filter(([key,value])=>!jsonEqual(finalProps[key],value))
+        .map(([key])=>key);
+      const stillMissing=(entry.missingKeys || []).filter(key=>!has(finalProps,key));
+      const finalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
+
+      if (changedLocal.length) throw new Error(`Valeurs locales modifiées pendant l'ajout direct : ${changedLocal.join(", ")}`);
+      if (stillMissing.length) throw new Error(`Champs additifs toujours absents après ajout direct : ${stillMissing.join(", ")}`);
+      if (finalVersion!==wantedVersion) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${wantedVersion}).`);
+
+      return {
+        ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,
+        templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,
+        migrationKind:"additive-safe-direct",addedKeys
+      };
+    }
+
     if (!doc.templateSystem?.reloadTemplate) throw new Error("API CSB templateSystem.reloadTemplate() introuvable.");
     await doc.templateSystem.reloadTemplate();
 
@@ -439,18 +507,25 @@ async function safeVersionReload(entry, runId) {
     const finalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
     if (changedLocal.length) throw new Error(`Valeurs locales modifiées après reload : ${changedLocal.join(", ")}`);
     if (stillMissing.length) throw new Error(`Champs additifs toujours absents après reload : ${stillMissing.join(", ")}`);
-    if (finalVersion!==Number(entry.wantedVersion)) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${entry.wantedVersion}).`);
+    if (finalVersion!==wantedVersion) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${wantedVersion}).`);
     return {ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,migrationKind:entry.migrationKind,addedKeys:clone(entry.missingKeys || [])};
   } catch(err) {
     console.error(`H0D Template Manager — migration version sûre ${entry.name}`,err);
-    // Repose au minimum les propriétés locales capturées si le document existe encore.
     try {
       doc=await fromUuid(entry.uuid);
       if (doc && Object.keys(originalProps).length) {
-        const current=clone(doc.system?.props || {});
-        const restored=clone(current);
-        for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
-        await doc.update({"system.props":restored});
+        if (directAdditiveAttempt) {
+          // L'ajout direct est transactionnel : en cas d'échec, retour exact aux props
+          // capturées avant tentative.
+          await doc.update({"system.props":clone(originalProps)});
+        } else {
+          // Après reload de version, préserver d'éventuels champs structurels recréés
+          // tout en reposant les valeurs locales capturées.
+          const current=clone(doc.system?.props || {});
+          const restored=clone(current);
+          for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
+          await doc.update({"system.props":restored});
+        }
       }
     } catch(restoreErr) {
       console.error(`H0D Template Manager — restauration locale après erreur ${entry.name}`,restoreErr);
@@ -482,8 +557,8 @@ async function migrateSafeVersions() {
     `<p>Mettre à niveau <strong>${initialCandidates.length} fiche(s)</strong> :</p>
      <p>${detail}</p>
      <p><strong>${initialCandidates.length-additiveCount}</strong> candidat(s) « version seule » · <strong>${additiveCount}</strong> évolution(s) additive(s) sûre(s).</p>
-     <p>Les évolutions additives autorisées ici sont limitées aux nouveaux emplacements d'amélioration des armes et armures : le reload ajoute les nouveaux champs avec leurs valeurs par défaut, puis les anciennes propriétés locales sont réinjectées sans écrasement.</p>
-     <p>Le manager traite les candidats <strong>un par un en les recollectant après chaque reloadTemplate()</strong>. Les autres cas avec champs manquants ou warnings mixtes restent exclus. Les valeurs locales, dynamicTables et propriétés legacy sont conservées. Une sauvegarde interne est créée par fiche ; aucun snapshot JSON n'est téléchargé automatiquement.</p>`,
+     <p>Les évolutions additives autorisées ici sont limitées aux nouveaux emplacements d'amélioration des armes et armures. Si la fiche est déjà à la version canonique, seules les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template, sans reload. Une vraie migration de version conserve le mécanisme reloadTemplate().</p>
+     <p>Le manager traite les candidats <strong>un par un en les recollectant après chaque tentative</strong>. Les autres cas avec champs manquants ou warnings mixtes restent exclus. Les valeurs locales, dynamicTables et propriétés legacy sont conservées. Une sauvegarde interne est créée par fiche ; aucun snapshot JSON n'est téléchargé automatiquement.</p>`,
     "Migrer les versions sûres"
   );
   if (!ok) return [];
@@ -1225,9 +1300,10 @@ async function auditWorld() {
 }
 
 async function exportAudit() {
-  const report=H0DTemplateManagerState.lastAudit || await auditWorld();
+  ui.notifications.info("H0D : nouvel audit en cours avant export…");
+  const report=await auditWorld();
   foundry.utils.saveDataToFile(JSON.stringify(report,null,2),"application/json",`H0D-template-manager-audit-${nowStamp()}.json`);
-  ui.notifications.info("H0D : audit exporté.");
+  ui.notifications.info("H0D : audit frais exporté.");
 }
 
 const H0DTemplateManagerState={lastAudit:null,lastSafeMigration:null,app:null};
