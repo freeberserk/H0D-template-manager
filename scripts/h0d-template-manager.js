@@ -42,6 +42,11 @@ const SAFE_VERSION_LABELS = {
 
 const SAFE_ADDITIVE_MISSING_KEYS = {
   "item-arme": new Set([
+    // Champs neutres apparus sur les anciennes armes ordinaires. Catégorie et
+    // Origine restent volontairement exclues car elles demandent un vrai choix.
+    "H0D_Arme_Zone",
+    "H0D_Arme_Recharge",
+    "H0D_Arme_Cout",
     "H0D_Arme_Amelioration_1_Installee",
     "H0D_Arme_Amelioration_1_Nom",
     "H0D_Arme_Amelioration_1_Rang",
@@ -56,6 +61,8 @@ const SAFE_ADDITIVE_MISSING_KEYS = {
     "H0D_Arme_Amelioration_3_Effet"
   ]),
   "item-armure": new Set([
+    "H0D_Armure_Malus",
+    "H0D_Armure_Etat",
     "H0D_Armure_Amelioration_1_Installee",
     "H0D_Armure_Amelioration_1_Nom",
     "H0D_Armure_Amelioration_1_Rang",
@@ -68,6 +75,16 @@ const SAFE_ADDITIVE_MISSING_KEYS = {
     "H0D_Armure_Amelioration_3_Nom",
     "H0D_Armure_Amelioration_3_Rang",
     "H0D_Armure_Amelioration_3_Effet"
+  ]),
+  "item-don-talent": new Set([
+    "H0D_DT_Connaissance_Cible_Perso"
+  ]),
+  "item-objet": new Set([
+    "H0D_Objet_Sous_Type",
+    "H0D_Objet_Recharge",
+    "H0D_Objet_Origine",
+    "H0D_Objet_Compatibilite",
+    "H0D_Objet_Munition_Effet_Court"
   ])
 };
 
@@ -553,13 +570,13 @@ async function migrateSafeVersions() {
     .join(" · ");
   const additiveCount=initialCandidates.filter(c=>c.migrationKind==="additive-safe").length;
   const ok=await confirmDialog(
-    "H0D — Migrer les versions sûres",
+    "H0D — Migrer les données sûres",
     `<p>Mettre à niveau <strong>${initialCandidates.length} fiche(s)</strong> :</p>
      <p>${detail}</p>
      <p><strong>${initialCandidates.length-additiveCount}</strong> candidat(s) « version seule » · <strong>${additiveCount}</strong> évolution(s) additive(s) sûre(s).</p>
-     <p>Les évolutions additives autorisées ici sont limitées aux nouveaux emplacements d'amélioration des armes et armures. Si la fiche est déjà à la version canonique, seules les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template, sans reload. Une vraie migration de version conserve le mécanisme reloadTemplate().</p>
+     <p>Les évolutions additives autorisées couvrent uniquement des champs neutres dont la valeur canonique par défaut est sans effet : métadonnées vides d'objets, cible personnalisée vide des dons/talents, champs descriptifs vides d'armes/armures et emplacements d'amélioration. Les champs nécessitant un vrai choix mécanique, comme la catégorie d'arme, restent exclus.</p><p>Si la fiche est déjà à la version canonique, seules les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template, sans reload. Une vraie migration de version conserve le mécanisme reloadTemplate().</p>
      <p>Le manager traite les candidats <strong>un par un en les recollectant après chaque tentative</strong>. Les autres cas avec champs manquants ou warnings mixtes restent exclus. Les valeurs locales, dynamicTables et propriétés legacy sont conservées. Une sauvegarde interne est créée par fiche ; aucun snapshot JSON n'est téléchargé automatiquement.</p>`,
-    "Migrer les versions sûres"
+    "Migrer les données sûres"
   );
   if (!ok) return [];
   const runId=newRunId();
@@ -591,7 +608,7 @@ async function migrateSafeVersions() {
     results
   };
   const suffix=remaining.length ? `, ${remaining.length} candidat(s) restant(s)` : ", 0 candidat restant";
-  ui.notifications[(bad.length || remaining.length) ? "warn" : "info"](`H0D : migration versions sûres — ${good.length} OK${bad.length ? `, ${bad.length} erreur(s)` : ""}${suffix}.`);
+  ui.notifications[(bad.length || remaining.length) ? "warn" : "info"](`H0D : migration données sûres — ${good.length} OK${bad.length ? `, ${bad.length} erreur(s)` : ""}${suffix}.`);
   return results;
 }
 
