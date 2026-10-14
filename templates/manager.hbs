@@ -50,7 +50,7 @@
 
     {{#if warningTriage.available}}
     <section class="h0d-tm-section">
-      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-list-check"></i> TRIAGE DES AVERTISSEMENTS</h2><span>migration contrôlée · évolutions additives sûres 1.6.0</span></div>
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-list-check"></i> TRIAGE DES AVERTISSEMENTS</h2><span>migration contrôlée · évolutions additives allowlistées</span></div>
       <div class="h0d-tm-weapon-grid">
         <article><span>Fiches à examiner</span><strong>{{warningTriage.warningDocuments}}</strong></article>
         <article><span>Entrées warning</span><strong>{{warningTriage.warningEntries}}</strong></article>
@@ -73,8 +73,8 @@
         {{/each}}
       </div>
       <div class="h0d-tm-weapon-actions">
-        <p><strong>Migration sûre disponible : {{safeVersionCandidates}} candidat(s).</strong> Le manager traite les « versions seules » habituelles et les champs manquants explicitement autorisés des emplacements d'amélioration d'armes/armures, même lorsqu'une fiche porte déjà la version canonique. Les valeurs locales, dynamicTables et propriétés legacy sont conservées.</p>
-        <p>Les autres cas de champs manquants, les mixes non autorisés, les armes-machines et les compendiums restent exclus de cette action.</p>
+        <p><strong>Migration sûre disponible : {{safeVersionCandidates}} candidat(s).</strong> Le manager traite les « versions seules » habituelles et les champs manquants explicitement allowlistés dont la valeur canonique par défaut est neutre : objets, dons/talents, champs descriptifs d'armes/armures et emplacements d'amélioration. Les valeurs locales, dynamicTables et propriétés legacy sont conservées.</p>
+        <p>Les champs nécessitant un vrai choix mécanique (par exemple une catégorie d'arme), les mixes non autorisés, les armes-machines et les compendiums restent exclus de cette action.</p>
         {{#if warningTriage.topMissingProps.length}}<p>Les propriétés manquantes les plus fréquentes sont incluses dans l’export d’audit sous <code>warningTriage.topMissingProps</code>.</p>{{/if}}
       </div>
     </section>
