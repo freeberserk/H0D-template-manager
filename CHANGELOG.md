@@ -1,3 +1,11 @@
+## 1.7.6 — Bilan explicite de migration sûre
+- Après **Migrer données sûres**, un réaudit est exécuté automatiquement puis une fenêtre de bilan reste affichée jusqu'à fermeture.
+- Le bilan distingue explicitement **MIGRATION RÉUSSIE** et **MIGRATION À VÉRIFIER**.
+- Il affiche le nombre de fiches migrées, les erreurs, les candidats sûrs restants, les warnings du monde et les erreurs du monde après réaudit.
+- Le toast de fin est rendu plus explicite.
+- L'export d'audit continue d'inclure le détail complet sous `safeVersionMigration`.
+- Aucun template, calcul, référentiel mécanique ou périmètre de migration n'est modifié.
+
 ## 1.7.5 — Migration sûre des champs additifs déjà en version canonique
 - Le migrateur accepte désormais les `missing-props` explicitement allowlistés des armes et armures même lorsque `templateSystemUniqueVersion` correspond déjà à la version canonique.
 - Le triage d'audit classe ces cas en **Ajout sûr** au lieu de les laisser dans les `missingOnly` non migrables.
