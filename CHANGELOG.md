@@ -1,3 +1,9 @@
+## 1.7.7 — Correction du dialogue de fin de migration
+- Remplace le dialogue final basé sur `DialogV2.input()` par `DialogV2.prompt()`, adapté à une fenêtre informative sans champ de saisie.
+- Ajoute un fallback de notification si le dialogue final ne peut pas être rendu.
+- Si l'interface affiche encore un bouton de migration à partir d'un audit périmé mais qu'aucun candidat réel n'existe, une fenêtre **Aucune migration nécessaire** est désormais affichée et le monde est réaudité.
+- Aucun template, calcul, référentiel ni périmètre de migration n'est modifié.
+
 ## 1.7.6 — Bilan explicite de migration sûre
 - Après **Migrer données sûres**, un réaudit est exécuté automatiquement puis une fenêtre de bilan reste affichée jusqu'à fermeture.
 - Le bilan distingue explicitement **MIGRATION RÉUSSIE** et **MIGRATION À VÉRIFIER**.
