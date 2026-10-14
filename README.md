@@ -1,4 +1,12 @@
-# H0D Template Manager — v1.7.9
+# H0D Template Manager — v1.7.10
+
+## v1.7.10 — Dernière passe additive sûre du monde
+
+Le migrateur `additive-safe` étend son allowlist aux champs manquants dont la valeur canonique par défaut est neutre, validés sur l'audit BAC post-1.7.8 : métadonnées d'objets, cible personnalisée des dons/talents, champs descriptifs d'armes/armures et emplacements d'amélioration.
+
+Sur l'audit de référence, cette règle sélectionne exactement **50 fiches sur 52 warnings**. Les deux armes monde **Griffes** et **Morsure** restent volontairement exclues car leur catégorie et leur origine sont absentes et nécessitent un vrai choix de données.
+
+La migration continue d'ajouter uniquement les clés allowlistées absentes, avec les valeurs par défaut lues depuis le template canonique, sans écraser les propriétés existantes. Sauvegarde interne, vérification post-écriture et rollback restent actifs.
 
 ## v1.7.9 — Affichage SRD des Pillards Rouges
 
