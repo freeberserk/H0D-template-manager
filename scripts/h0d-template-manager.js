@@ -1293,6 +1293,18 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static async _retireTrait() { await retireLegacyTrait(); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
   static async _repairEquipment() { await repairEquipment(); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
   static async _migrateSafeVersions() {
+    const liveCandidates=await collectSafeVersionCandidates();
+    if (!liveCandidates.length) {
+      H0DTemplateManagerState.lastAudit=await auditWorld();
+      await infoDialog(
+        "H0D — Aucune migration nécessaire",
+        "<p><strong>✅ Aucun candidat sûr n'est actuellement détecté.</strong></p><p>Le bouton était probablement encore affiché à partir d'un audit précédent. Le monde vient d'être réaudité et l'interface va être actualisée.</p>",
+        "Fermer"
+      );
+      await this.render({force:true});
+      return;
+    }
+
     const previousRunId=H0DTemplateManagerState.lastSafeMigration?.runId || null;
     await migrateSafeVersions();
     const migration=H0DTemplateManagerState.lastSafeMigration;
