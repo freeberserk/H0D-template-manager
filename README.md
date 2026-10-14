@@ -1,4 +1,11 @@
-# H0D Template Manager — v1.7.7
+# H0D Template Manager — v1.7.8
+
+## v1.7.8 — Migration additive directe et audit frais
+Les migrations `additive-safe` sur une fiche déjà à la version canonique n'utilisent plus `reloadTemplate()`. CSB 6 ne recréant pas les propriétés absentes dans ce cas, le manager ajoute désormais directement et uniquement les clés allowlistées manquantes, avec les valeurs par défaut lues dans le template canonique.
+
+Chaque fiche reçoit toujours une sauvegarde interne avant tentative. Les propriétés existantes sont vérifiées après écriture et un échec déclenche un rollback exact des `system.props` capturées avant l'opération. Les vraies migrations de version continuent d'utiliser `reloadTemplate()`.
+
+**Exporter audit** exécute désormais systématiquement un nouvel audit avant de générer le JSON, au lieu de pouvoir réexporter un audit mémorisé.
 
 ## v1.7.7 — Correction du dialogue de fin de migration
 La fenêtre de bilan utilise désormais l'API Foundry v14 adaptée aux dialogues informatifs à bouton unique. Si le bouton **Migrer données sûres** est encore visible à partir d'un audit ancien alors qu'il n'existe plus de candidat réel, une fenêtre l'indique explicitement et force un réaudit de l'interface.
