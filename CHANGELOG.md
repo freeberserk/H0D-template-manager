@@ -1,3 +1,16 @@
+## 1.7.10 — Dernière passe additive sûre du monde
+
+- Étend l'allowlist `additive-safe` aux champs neutres validés sur l'audit BAC post-1.7.8.
+- Objets : `H0D_Objet_Sous_Type`, `H0D_Objet_Recharge`, `H0D_Objet_Origine`, `H0D_Objet_Compatibilite`, `H0D_Objet_Munition_Effet_Court`.
+- Dons/talents : `H0D_DT_Connaissance_Cible_Perso`.
+- Armes : `H0D_Arme_Zone`, `H0D_Arme_Recharge`, `H0D_Arme_Cout`, en plus des champs d'amélioration déjà autorisés.
+- Armures : `H0D_Armure_Malus`, `H0D_Armure_Etat`, en plus des champs d'amélioration déjà autorisés.
+- Sur l'audit BAC de référence : **50 candidats sûrs sur 52 warnings**.
+- **Griffes** et **Morsure** restent exclues : `H0D_Arme_Categorie` et `H0D_Arme_Origine` manquent et ne sont pas inventées automatiquement.
+- Aucun champ nécessitant un choix mécanique n'est ajouté par défaut ; les compendiums restent hors de cette migration.
+- Conserve toutes les sécurités de la 1.7.8 : valeur par défaut lue dans le template canonique, sauvegarde interne, contrôle des propriétés existantes et rollback sur erreur.
+- Inclut également les changements déjà publiés en 1.7.9 pour le template Créature v1.23 / Pillards Rouges.
+
 ## 1.7.9 — Fiches ordinaires Pillards Rouges
 
 - Créature v1.23 : scores SRD visibles pour la faction `PillardsRouges` (Caravanes Libres et PNJ héroïques restent couverts).
