@@ -1,4 +1,11 @@
-# H0D Template Manager — v1.7.4
+# H0D Template Manager — v1.7.5
+
+## v1.7.5 — Migration sûre des champs additifs déjà en version canonique
+Le bouton **Migrer données sûres** détecte désormais les armes et armures auxquelles il manque uniquement des champs d'amélioration explicitement autorisés, même lorsque leur `templateSystemUniqueVersion` est déjà canonique. Ce cas apparaissait dans les audits comme `missingOnly` et échappait auparavant à la migration.
+
+La migration conserve les propriétés locales existantes, les dynamicTables et les propriétés legacy, crée une sauvegarde interne avant chaque fiche, puis vérifie après `reloadTemplate()` que les champs attendus ont réellement été ajoutés. Un échec est isolé et n'est pas retenté en boucle. Le triage d'audit classe désormais correctement ces fiches en **Ajout sûr**.
+
+**BAC / production :** mettre à jour le module, lancer **Audit monde**, exporter un snapshot de sécurité, lancer **Migrer données sûres**, puis relancer l'audit. Les autres `missingOnly`, les mixes non autorisés, les armes-machines et les compendiums restent exclus. Aucun template, calcul d'attaque ou règle de jeu n'est modifié.
 
 ## v1.7.4 — Scores SRD visibles pour le Conseil héroïque
 Le template Créature **v1.22** étend uniquement le panneau des scores SRD aux **PNJ héroïques** (flag de données `H0D_Creature_Statut_PNJ = Héroïque`) en plus des Caravanes Libres ordinaires. Le libellé affiche **PNJ Héroïque · Niveau 4 · Menace / CR 4** au lieu de présenter le Conseil comme ordinaire.
@@ -115,7 +122,7 @@ Il s'agit d'une vraie application Foundry (`ApplicationV2`) : **aucune macro de 
 - Audit monde (lecture seule)
 - Exporter audit
 - Réparer équipements
-- Migrer versions sûres (après audit : PJ, armures/boucliers, dons/talents, armes, objets et pièces détachables en `staleOnly`)
+- Migrer données sûres (après audit : versions seules autorisées + ajouts d'amélioration explicitement allowlistés sur armes/armures, y compris si la version est déjà canonique)
 - Installer/mettre à jour
 - Synchroniser le monde (Actors / Items / les deux, compendiums Items en option)
 - Restaurer dernier cycle
