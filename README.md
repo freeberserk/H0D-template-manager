@@ -1,4 +1,9 @@
-# H0D Template Manager — v1.7.6
+# H0D Template Manager — v1.7.7
+
+## v1.7.7 — Correction du dialogue de fin de migration
+La fenêtre de bilan utilise désormais l'API Foundry v14 adaptée aux dialogues informatifs à bouton unique. Si le bouton **Migrer données sûres** est encore visible à partir d'un audit ancien alors qu'il n'existe plus de candidat réel, une fenêtre l'indique explicitement et force un réaudit de l'interface.
+
+Aucun périmètre de migration, template ou calcul n'est modifié.
 
 ## v1.7.6 — Bilan explicite de migration
 Après **Migrer données sûres**, le Template Manager exécute le réaudit puis ouvre une fenêtre de résultat persistante. Elle indique clairement si la migration a réussi ou demande une vérification, avec le nombre de fiches migrées, les erreurs, les candidats sûrs encore présents et les warnings du monde restants.
