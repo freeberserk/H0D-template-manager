@@ -166,6 +166,14 @@ async function confirmDialog(title, content, yes="Continuer") {
   });
 }
 
+async function infoDialog(title, content, ok="Fermer") {
+  return foundry.applications.api.DialogV2.input({
+    window:{title},
+    content,
+    ok:{label:ok, icon:"fa-solid fa-check"}
+  });
+}
+
 async function syncChoiceDialog() {
   const fd = await foundry.applications.api.DialogV2.input({
     window:{title:"H0D — Synchroniser le monde"},
@@ -1282,7 +1290,51 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static async _auditTemplate(event,target) { const key=target.dataset.key; const report=await auditWorld(); const entry=TEMPLATE_INDEX.find(e=>e.key===key); const docs=report.documents.filter(d=>d.templateId===entry?.id); const bad=docs.filter(d=>d.status!=="ok"); ui.notifications.info(`H0D : ${entry?.name || key} — ${docs.length} fiche(s), ${bad.length} à examiner.`); H0DTemplateManagerState.lastAudit=report; await this.render({force:true}); }
   static async _retireTrait() { await retireLegacyTrait(); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
   static async _repairEquipment() { await repairEquipment(); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
-  static async _migrateSafeVersions() { await migrateSafeVersions(); H0DTemplateManagerState.lastAudit=await auditWorld(); await this.render({force:true}); }
+  static async _migrateSafeVersions() {
+    const previousRunId=H0DTemplateManagerState.lastSafeMigration?.runId || null;
+    await migrateSafeVersions();
+    const migration=H0DTemplateManagerState.lastSafeMigration;
+
+    // Annulation ou absence de candidat : ne pas afficher un ancien bilan comme s'il
+    // venait d'être exécuté.
+    if (!migration || migration.runId === previousRunId) {
+      H0DTemplateManagerState.lastAudit=await auditWorld();
+      await this.render({force:true});
+      return;
+    }
+
+    const audit=await auditWorld();
+    H0DTemplateManagerState.lastAudit=audit;
+    const triage=audit.warningTriage || {};
+    const safeRemaining=Number(triage.versionOnlyCandidates || 0)+Number(triage.additiveSafeCandidates || 0);
+    const success=Number(migration.errors || 0)===0
+      && Number(migration.remaining || 0)===0
+      && safeRemaining===0;
+
+    const title=success
+      ? "H0D — Migration terminée avec succès"
+      : "H0D — Migration terminée avec anomalies";
+    const verdict=success
+      ? "<p><strong>✅ MIGRATION RÉUSSIE</strong></p>"
+      : "<p><strong>⚠️ MIGRATION À VÉRIFIER</strong></p>";
+    const content=`
+      ${verdict}
+      <p><strong>${migration.ok}</strong> fiche(s) migrée(s) avec succès sur <strong>${migration.initial}</strong> candidat(s) initiaux.</p>
+      <p>Erreurs pendant la migration : <strong>${migration.errors}</strong><br>
+      Candidats sûrs encore détectés : <strong>${safeRemaining}</strong><br>
+      Warnings monde restants après réaudit : <strong>${triage.warningDocuments ?? audit.counts?.documents?.warnings ?? "—"}</strong><br>
+      Erreurs monde après réaudit : <strong>${triage.errorDocuments ?? audit.counts?.documents?.errors ?? "—"}</strong></p>
+      <p class="notes">Le réaudit vient d'être exécuté automatiquement. Le détail de cette migration sera inclus dans « Exporter audit » sous <code>safeVersionMigration</code>.</p>
+    `;
+
+    ui.notifications[success ? "info" : "warn"](
+      success
+        ? `H0D : migration réussie — ${migration.ok}/${migration.initial} fiche(s), 0 candidat sûr restant.`
+        : `H0D : migration à vérifier — ${migration.ok}/${migration.initial} OK, ${migration.errors} erreur(s), ${safeRemaining} candidat(s) sûr(s) restant(s).`
+    );
+    await infoDialog(title,content,"Fermer");
+    await this.render({force:true});
+  }
 }
 
 
