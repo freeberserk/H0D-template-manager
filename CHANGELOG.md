@@ -1,3 +1,12 @@
+## 1.7.5 — Migration sûre des champs additifs déjà en version canonique
+- Le migrateur accepte désormais les `missing-props` explicitement allowlistés des armes et armures même lorsque `templateSystemUniqueVersion` correspond déjà à la version canonique.
+- Le triage d'audit classe ces cas en **Ajout sûr** au lieu de les laisser dans les `missingOnly` non migrables.
+- Après `reloadTemplate()`, le manager vérifie explicitement que tous les champs additifs attendus ont été créés ; sinon la fiche est signalée en erreur et n'est pas retentée en boucle.
+- Les valeurs locales existantes, dynamicTables et propriétés legacy restent prioritaires et sont restaurées après reload ; une sauvegarde interne est créée avant chaque fiche.
+- L'action est renommée **Migrer données sûres** pour refléter qu'elle ne traite plus seulement des changements de version.
+- Les autres champs manquants, les mixes non autorisés, les armes-machines et les compendiums restent exclus.
+- Aucun template, calcul d'attaque, règle de combat ou référentiel mécanique n'est modifié.
+
 ## 1.7.4 — Scores SRD des PNJ héroïques uniques
 - Créature v1.22 : panneau Scores SRD visible pour les membres du Conseil marqués Héroïque, ainsi que pour les Caravanes Libres.
 - Libellé de niveau distinguant Ordinaire / Héroïque, sans confusion avec la Menace/CR.
