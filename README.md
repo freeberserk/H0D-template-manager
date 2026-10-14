@@ -1,4 +1,10 @@
-# H0D Template Manager — v1.7.8
+# H0D Template Manager — v1.7.9
+
+## v1.7.9 — Affichage SRD des Pillards Rouges
+
+Le template Créature **v1.23** rend le panneau des six scores de caractéristiques `FOR/DEX/CON/INT/SAG/CHA` visible aussi sur les **Pillards Rouges ordinaires** (en plus des Caravanes Libres et des PNJ héroïques). Il affiche les scores enregistrés par **Faction Builder v0.6.0**. Aucun champ ou formule de combat n'est modifié : PV, DEF, attaques, jets, sauvegardes et équipements conservent leurs comportements.
+
+**Installation volontaire dans Foundry :** mettre à jour le Template Manager vers v1.7.9, installer le template Créature v1.23 puis **synchroniser les Actors** après snapshot de sécurité. Pas de migration automatique ; le nouveau catalogue Pillards Rouges est chargé séparément via Faction Builder v0.6.0.
 
 ## v1.7.8 — Migration additive directe et audit frais
 Les migrations `additive-safe` sur une fiche déjà à la version canonique n'utilisent plus `reloadTemplate()`. CSB 6 ne recréant pas les propriétés absentes dans ce cas, le manager ajoute désormais directement et uniquement les clés allowlistées manquantes, avec les valeurs par défaut lues dans le template canonique.
