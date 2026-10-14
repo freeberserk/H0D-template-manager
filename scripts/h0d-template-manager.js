@@ -167,9 +167,11 @@ async function confirmDialog(title, content, yes="Continuer") {
 }
 
 async function infoDialog(title, content, ok="Fermer") {
-  return foundry.applications.api.DialogV2.input({
+  return foundry.applications.api.DialogV2.prompt({
     window:{title},
     content,
+    modal:true,
+    rejectClose:false,
     ok:{label:ok, icon:"fa-solid fa-check"}
   });
 }
@@ -1332,7 +1334,12 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
         ? `H0D : migration réussie — ${migration.ok}/${migration.initial} fiche(s), 0 candidat sûr restant.`
         : `H0D : migration à vérifier — ${migration.ok}/${migration.initial} OK, ${migration.errors} erreur(s), ${safeRemaining} candidat(s) sûr(s) restant(s).`
     );
-    await infoDialog(title,content,"Fermer");
+    try {
+      await infoDialog(title,content,"Fermer");
+    } catch(err) {
+      console.error("H0D Template Manager — impossible d'afficher le bilan final de migration.",err);
+      ui.notifications.warn("H0D : migration terminée, mais la fenêtre de bilan n'a pas pu s'afficher. Lance « Exporter audit » pour consulter le détail.");
+    }
     await this.render({force:true});
   }
 }
