@@ -1,4 +1,9 @@
-# H0D Template Manager — v1.7.5
+# H0D Template Manager — v1.7.6
+
+## v1.7.6 — Bilan explicite de migration
+Après **Migrer données sûres**, le Template Manager exécute le réaudit puis ouvre une fenêtre de résultat persistante. Elle indique clairement si la migration a réussi ou demande une vérification, avec le nombre de fiches migrées, les erreurs, les candidats sûrs encore présents et les warnings du monde restants.
+
+Le toast de fin est également plus explicite. Aucun template, calcul, référentiel ou périmètre de migration n'est modifié par cette version.
 
 ## v1.7.5 — Migration sûre des champs additifs déjà en version canonique
 Le bouton **Migrer données sûres** détecte désormais les armes et armures auxquelles il manque uniquement des champs d'amélioration explicitement autorisés, même lorsque leur `templateSystemUniqueVersion` est déjà canonique. Ce cas apparaissait dans les audits comme `missingOnly` et échappait auparavant à la migration.
