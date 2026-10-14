@@ -1,3 +1,9 @@
+## 1.7.9 — Fiches ordinaires Pillards Rouges
+
+- Créature v1.23 : scores SRD visibles pour la faction `PillardsRouges` (Caravanes Libres et PNJ héroïques restent couverts).
+- Aucun changement aux formules ou champs numériques des fiches, ni aux autres templates.
+- Nouvelle version installable/synchronisable volontairement, avec même ID de template.
+
 ## 1.7.8 — Migration additive directe et audit frais
 - Corrige les migrations `additive-safe` lorsque la fiche porte déjà la version canonique du template : plus de `reloadTemplate()` dans ce cas.
 - Ajoute directement uniquement les clés manquantes explicitement allowlistées, avec leurs valeurs par défaut lues depuis le template canonique.
