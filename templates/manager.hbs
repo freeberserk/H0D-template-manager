@@ -11,7 +11,7 @@
     <button type="button" data-action="installAll" class="primary"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
     <button type="button" data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
     <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}}><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
-    <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}}><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer versions sûres</button>
+    <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}}><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer données sûres</button>
     <button type="button" data-action="audit"><i class="fa-solid fa-magnifying-glass-chart"></i> Audit monde</button>
     <button type="button" data-action="exportAudit"><i class="fa-solid fa-file-export"></i> Exporter audit</button>
     <button type="button" data-action="snapshot"><i class="fa-solid fa-floppy-disk"></i> Exporter snapshot</button>
@@ -73,8 +73,8 @@
         {{/each}}
       </div>
       <div class="h0d-tm-weapon-actions">
-        <p><strong>Migration sûre disponible : {{safeVersionCandidates}} candidat(s).</strong> Le manager traite les « versions seules » habituelles et, depuis la 1.6.0, les évolutions additives explicitement autorisées des emplacements d'amélioration d'armes/armures. Les valeurs locales, dynamicTables et propriétés legacy sont conservées.</p>
-        <p>Les autres cas « champs manquants seuls », les mixes non autorisés, les armes-machines et les compendiums restent exclus de cette action.</p>
+        <p><strong>Migration sûre disponible : {{safeVersionCandidates}} candidat(s).</strong> Le manager traite les « versions seules » habituelles et les champs manquants explicitement autorisés des emplacements d'amélioration d'armes/armures, même lorsqu'une fiche porte déjà la version canonique. Les valeurs locales, dynamicTables et propriétés legacy sont conservées.</p>
+        <p>Les autres cas de champs manquants, les mixes non autorisés, les armes-machines et les compendiums restent exclus de cette action.</p>
         {{#if warningTriage.topMissingProps.length}}<p>Les propriétés manquantes les plus fréquentes sont incluses dans l’export d’audit sous <code>warningTriage.topMissingProps</code>.</p>{{/if}}
       </div>
     </section>
