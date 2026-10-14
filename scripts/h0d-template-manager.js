@@ -373,7 +373,11 @@ async function collectSafeVersionCandidates() {
     const missing=[...inputs].filter(k=>!has(props,k));
     const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion;
     const additiveSafe=isSafeAdditiveMissing(tpl.key,missing);
-    if (stale && (missing.length===0 || additiveSafe)) {
+    const versionOnly=stale && missing.length===0;
+    // Les ajouts explicitement allowlistés sont sûrs même si le document porte
+    // déjà la version canonique : certaines anciennes fiches ont été marquées à
+    // jour sans avoir reçu les nouveaux champs du template.
+    if (versionOnly || additiveSafe) {
       // Ne pas conserver la référence Document : le reload d'un Actor peut recréer
       // ses Embedded Items et invalider les objets collectés au début du cycle.
       results.push({
@@ -421,10 +425,12 @@ async function safeVersionReload(entry, runId) {
     doc=await resolveFreshDocument(entry);
     const finalProps=doc.system?.props || {};
     const changedLocal=Object.entries(originalProps).filter(([key,value])=>!jsonEqual(finalProps[key],value)).map(([key])=>key);
+    const stillMissing=(entry.missingKeys || []).filter(key=>!has(finalProps,key));
     const finalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
     if (changedLocal.length) throw new Error(`Valeurs locales modifiées après reload : ${changedLocal.join(", ")}`);
+    if (stillMissing.length) throw new Error(`Champs additifs toujours absents après reload : ${stillMissing.join(", ")}`);
     if (finalVersion!==Number(entry.wantedVersion)) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${entry.wantedVersion}).`);
-    return {ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion};
+    return {ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,migrationKind:entry.migrationKind,addedKeys:clone(entry.missingKeys || [])};
   } catch(err) {
     console.error(`H0D Template Manager — migration version sûre ${entry.name}`,err);
     // Repose au minimum les propriétés locales capturées si le document existe encore.
@@ -450,7 +456,7 @@ function safeCandidateKey(c) {
 async function migrateSafeVersions() {
   const initialCandidates=await collectSafeVersionCandidates();
   if (!initialCandidates.length) {
-    ui.notifications.info("H0D : aucun candidat « version seule » dans les familles sûres.");
+    ui.notifications.info("H0D : aucun candidat à la migration sûre dans les familles autorisées.");
     return [];
   }
   const counts={};
@@ -480,7 +486,7 @@ async function migrateSafeVersions() {
   // Important pour les Embedded Items CSB : un reloadTemplate() peut reconstruire
   // la collection embarquée. On ne parcourt donc plus une liste figée. Après chaque
   // tentative, on recollecte les documents actuels depuis le monde et on reprend le
-  // prochain candidat encore réellement staleOnly.
+  // prochain candidat encore réellement éligible (version seule ou ajout allowlisté).
   for (let attempt=0; attempt<hardLimit; attempt++) {
     const current=await collectSafeVersionCandidates();
     const candidate=current.find(c=>!failed.has(safeCandidateKey(c)));
@@ -1099,12 +1105,11 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
   const hasCode=(doc,code)=>(doc.warnings || []).some(w=>w.code===code);
   const missingKeysOf=doc=>(doc.warnings || []).find(w=>w.code==="missing-props")?.keys || [];
   const templateKeyOf=doc=>TEMPLATE_INDEX.find(e=>e.id===doc.templateId)?.key || "";
-  const additiveSafeDoc=doc=>hasCode(doc,"stale-template-version")
-    && hasCode(doc,"missing-props")
+  const additiveSafeDoc=doc=>hasCode(doc,"missing-props")
     && isSafeAdditiveMissing(templateKeyOf(doc),missingKeysOf(doc));
   const staleOnly=warningDocs.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props"));
-  const missingOnly=warningDocs.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version"));
   const additiveSafe=warningDocs.filter(additiveSafeDoc);
+  const missingOnly=warningDocs.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
   const staleAndMissing=warningDocs.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
   const legacyInfoDocs=docs.filter(d=>(d.info || []).some(i=>i.code==="legacy-props"));
 
@@ -1120,7 +1125,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
       warnings:warnings.length,
       errors:errors.length,
       staleOnly:warnings.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props")).length,
-      missingOnly:warnings.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version")).length,
+      missingOnly:warnings.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
       additiveSafe:warnings.filter(additiveSafeDoc).length,
       mixed:warnings.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
       legacy:related.filter(d=>(d.info || []).some(i=>i.code==="legacy-props")).length
