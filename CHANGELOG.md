@@ -1,3 +1,12 @@
+## 1.7.8 — Migration additive directe et audit frais
+- Corrige les migrations `additive-safe` lorsque la fiche porte déjà la version canonique du template : plus de `reloadTemplate()` dans ce cas.
+- Ajoute directement uniquement les clés manquantes explicitement allowlistées, avec leurs valeurs par défaut lues depuis le template canonique.
+- Vérifie qu'aucune propriété locale existante n'a changé et que toutes les clés attendues ont bien été créées.
+- En cas d'échec d'un ajout direct, restaure exactement les `system.props` capturées avant tentative.
+- Les migrations impliquant une vraie différence de version conservent le chemin `reloadTemplate()`.
+- **Exporter audit** force désormais un nouvel audit avant l'export pour éviter les rapports mémorisés périmés.
+- Aucun template ni référentiel mécanique n'est modifié.
+
 ## 1.7.7 — Correction du dialogue de fin de migration
 - Remplace le dialogue final basé sur `DialogV2.input()` par `DialogV2.prompt()`, adapté à une fenêtre informative sans champ de saisie.
 - Ajoute un fallback de notification si le dialogue final ne peut pas être rendu.
