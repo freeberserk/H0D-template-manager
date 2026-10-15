@@ -1,4 +1,20 @@
-# H0D Template Manager — v1.7.10
+# H0D Template Manager — v1.7.11
+
+## v1.7.11 — Confort MJ et améliorations automatisées
+
+Cette version cible directement les besoins remontés en partie :
+
+- le **DD des capacités des PNJ/créatures** est visible dans le bloc Combat du template Créature v1.24 ; un rappel du DD conseillé par Menace est affiché à côté ;
+- la macro **H0D — Attaques** garde les attaques des PJ publiques, mais les attaques de Créatures/PNJ/Factions et de Machines deviennent **entièrement privées MJ** ;
+- les trois emplacements d'amélioration des **armes v2.8** et **armures v2.0** possèdent désormais un **Type** et une **Valeur** indépendants du Rang ;
+- les bonus numériques compatibles sont appliqués automatiquement par le **PJ v3.68**. Pour les armes : Attaque / Dégâts. Pour les armures actives : DEF, Initiative, sauvegardes, Vitesse, PV max et compétences ;
+- les champs numériques déjà présents sur les **Dons/Talents v2.5** étaient déjà agrégés par le PJ ; ils restent inchangés et sont maintenant couverts par un test de non-régression.
+
+**Important pour les données existantes :** le manager ne tente pas de deviner un bonus à partir du nom ou du texte d'une amélioration. Après migration, les nouveaux champs commencent à **Type = Aucun** et **Valeur = 0**. Il suffit ensuite de renseigner, par exemple, `Bobine de tension · Rang 1 · Attaque · +1` ou `Plaques renforcées · Rang 1 · Défense · +1`.
+
+Le migrateur corrige aussi le cas rencontré sur le serveur officiel : une fiche **ancienne + incomplète** est désormais traitée en **une seule passe** (reload de version, restauration des valeurs locales, puis ajout strictement allowlisté des nouveaux champs neutres).
+
+**Ordre conseillé sur le BAC :** mettre à jour le module → installer les templates → Audit monde → snapshot → Migrer données sûres → nouvel audit → tester une attaque PJ, une attaque PNJ/Machine et une arme/armure améliorée.
 
 ## v1.7.10 — Dernière passe additive sûre du monde
 
