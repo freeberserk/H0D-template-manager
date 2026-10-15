@@ -49,6 +49,16 @@ function itemProps(item) {
   return item?.system?.props ?? {};
 }
 
+function improvementTotal(props, prefix, type) {
+  let total = 0;
+  for (let i = 1; i <= 3; i++) {
+    if (!bool(props[`${prefix}_Amelioration_${i}_Installee`])) continue;
+    if (String(props[`${prefix}_Amelioration_${i}_Type`] || "Aucun") !== type) continue;
+    total += num(props[`${prefix}_Amelioration_${i}_Valeur`]);
+  }
+  return total;
+}
+
 /* --------------------------------------------------------- */
 /* ATTAQUANT                                                 */
 /* --------------------------------------------------------- */
@@ -356,6 +366,7 @@ function pjAttackBonus(item) {
     num(p.H0D_Arme_Trait_Lourd_FOR_Min_Calc) > num(ap.H0D_FOR) ? -2 : 0;
   return num(ap.H0D_BBA) + pjCategoryAbility(item) +
     num(ap.H0D_Taille_Mod_Calc) + num(p.H0D_Arme_Bonus_Attaque) +
+    improvementTotal(p, "H0D_Arme", "Attaque") +
     num(ap.H0D_Encombrement_Malus_Calc) +
     num(ap.H0D_DT_Bonus_Attaque_Global_Total) +
     (melee ? num(ap.H0D_DT_Bonus_Attaque_Melee_Total) :
@@ -369,6 +380,7 @@ function pjDamageFlat(item) {
   const stat=String(p.H0D_Arme_Carac_Degats || "");
   return (stat === "FOR" || stat === "DEX" ? pjMod(stat) : 0) +
     num(p.H0D_Arme_Bonus_Degats) +
+    improvementTotal(p, "H0D_Arme", "Degats") +
     num(ap.H0D_EQ_Trait_Degats_Global_Total) +
     num(ap.H0D_DT_Bonus_Degats_Global_Total) +
     (cat === "melee" ? num(ap.H0D_DT_Bonus_Degats_Melee_Total) :
@@ -430,6 +442,7 @@ function creatureAttackBonus(item) {
     num(ap.H0D_Creature_EQ_Attaque_Total) +
     ability +
     num(p.H0D_Arme_Bonus_Attaque) +
+    improvementTotal(p, "H0D_Arme", "Attaque") +
     num(p.H0D_Arme_Trait_Attaque_Total)
   );
 }
@@ -464,7 +477,8 @@ function creatureDamageFlat(item) {
     num(ap.H0D_Creature_Mod_Degats_Total) +
     num(ap.H0D_Creature_EQ_Degats_Total) +
     ability +
-    num(p.H0D_Arme_Bonus_Degats)
+    num(p.H0D_Arme_Bonus_Degats) +
+    improvementTotal(p, "H0D_Arme", "Degats")
   );
 }
 
@@ -942,14 +956,33 @@ async function attack(info, situational) {
     </div>
   `;
 
-  await ChatMessage.create({
-    speaker:
-      ChatMessage.getSpeaker({
-        actor,
-        token: token.document
-      }),
+  const speaker =
+    ChatMessage.getSpeaker({
+      actor,
+      token: token.document
+    });
+
+  const gmIds =
+    ChatMessage
+      .getWhisperRecipients("GM")
+      .map(u => u.id);
+
+  const messageData = {
+    speaker,
     content
-  });
+  };
+
+  if (!isPJ) {
+    if (!gmIds.length) {
+      ui.notifications.error(
+        "H0D : aucun destinataire MJ disponible ; attaque ennemie non publiée."
+      );
+      return;
+    }
+    messageData.whisper = gmIds;
+  }
+
+  await ChatMessage.create(messageData);
 
   /* DEF ET MARGE MJ UNIQUEMENT */
 
@@ -957,18 +990,9 @@ async function attack(info, situational) {
     const margin =
       total - defense;
 
-    const gmIds =
-      ChatMessage
-        .getWhisperRecipients("GM")
-        .map(u => u.id);
-
     if (gmIds.length) {
       await ChatMessage.create({
-        speaker:
-          ChatMessage.getSpeaker({
-            actor,
-            token: token.document
-          }),
+        speaker,
         whisper: gmIds,
 
         content: `
