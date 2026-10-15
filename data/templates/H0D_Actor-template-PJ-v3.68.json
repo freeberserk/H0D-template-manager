@@ -15404,7 +15404,7 @@
                                     "type": "label",
                                     "size": "auto",
                                     "icon": "",
-                                    "value": "${item.H0D_Armure_Active ? item.H0D_Armure_Bonus_Defense : 0}$",
+                                    "value": "${item.H0D_Armure_Active ? item.H0D_Armure_Bonus_Defense + item.H0D_Armure_Amelioration_Defense_Total : 0}$",
                                     "prefix": "",
                                     "suffix": "",
                                     "rollMessage": "",
