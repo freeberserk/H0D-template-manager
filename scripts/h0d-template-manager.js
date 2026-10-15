@@ -8,7 +8,7 @@ const MAX_BACKUPS = 5;
 const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
-  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.68", version:"3.68", file:"H0D_Actor-template-PJ-v3.68.json"},
+  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.69", version:"3.69", file:"H0D_Actor-template-PJ-v3.69.json"},
   {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.24", version:"1.24", file:"H0D_Actor-template-creature-v1.24.json"},
   {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.15", version:"3.15", file:"H0D_Actor-template-machine-v3.15.json"},
   {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.8", version:"2.8", file:"H0D_Arme-v2.8.json"},
@@ -306,6 +306,72 @@ function componentInputDefaults(templateData) {
   return defaults;
 }
 
+function editableInputSnapshot(templateData, props) {
+  const out={};
+  const simpleTypes=new Set(["numberField","textField","textArea","select","checkbox","radioButton","meter"]);
+
+  function collectRowKeys(node, keys) {
+    if (Array.isArray(node)) { for (const v of node) collectRowKeys(v,keys); return; }
+    if (!node || typeof node!=="object") return;
+    const key=String(node.key || "");
+    const type=String(node.type || "");
+    if (key && simpleTypes.has(type)) keys.add(key);
+    for (const v of Object.values(node)) collectRowKeys(v,keys);
+  }
+
+  function walk(node, insideDynamic=false) {
+    if (Array.isArray(node)) { for (const v of node) walk(v,insideDynamic); return; }
+    if (!node || typeof node!=="object") return;
+    const key=String(node.key || "");
+    const type=String(node.type || "");
+
+    if (!insideDynamic && key && simpleTypes.has(type) && has(props,key)) {
+      out[key]=clone(props[key]);
+    }
+
+    if (!insideDynamic && key && type==="dynamicTable" && has(props,key)) {
+      const rowKeys=new Set();
+      collectRowKeys(node.rowLayout || node.contents || [],rowKeys);
+      const original=props[key];
+      const kept=[];
+      for (const [rowId,rowRaw] of tableEntries(original)) {
+        const row=rowRaw && typeof rowRaw==="object" ? rowRaw : {};
+        const slim={};
+        if (has(row,"$deleted")) slim.$deleted=clone(row.$deleted);
+        for (const rowKey of rowKeys) if (has(row,rowKey)) slim[rowKey]=clone(row[rowKey]);
+        kept.push([rowId,slim]);
+      }
+      out[key]=tableBuildLike(original,kept);
+      return;
+    }
+
+    const nextInside=insideDynamic || type==="dynamicTable";
+    for (const v of Object.values(node)) walk(v,nextInside);
+  }
+
+  walk(templateData?.system || {},false);
+  return out;
+}
+
+function diffShape(before, after, prefix="") {
+  const diffs=[];
+  if (Array.isArray(before)) {
+    if (!Array.isArray(after)) return [prefix || "<racine>"];
+    for (let i=0;i<before.length;i++) diffs.push(...diffShape(before[i],after[i],prefix ? `${prefix}[${i}]` : `[${i}]`));
+    return diffs;
+  }
+  if (before && typeof before==="object") {
+    if (!after || typeof after!=="object") return [prefix || "<racine>"];
+    for (const key of Object.keys(before)) {
+      const p=prefix ? `${prefix}.${key}` : key;
+      diffs.push(...diffShape(before[key],after[key],p));
+    }
+    return diffs;
+  }
+  if (!jsonEqual(before,after)) diffs.push(prefix || "<valeur>");
+  return diffs;
+}
+
 function tableEntries(v) {
   if (Array.isArray(v)) return v.map((row,i)=>[String(i),row]);
   if (v && typeof v === "object") return Object.entries(v);
@@ -476,6 +542,8 @@ async function safeVersionReload(entry, runId) {
     doc=await resolveFreshDocument(entry);
     originalProps=clone(doc.system?.props || {});
     originalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
+    const validationTemplate=await loadTemplate(entry.templateEntry);
+    const originalEditable=editableInputSnapshot(validationTemplate,originalProps);
     await pushBackup(doc,runId,`Migration version sûre — ${entry.scope}`);
 
     const wantedVersion=Number(entry.wantedVersion);
@@ -522,9 +590,8 @@ async function safeVersionReload(entry, runId) {
     }
 
     const finalProps=doc.system?.props || {};
-    const changedLocal=Object.entries(originalProps)
-      .filter(([key,value])=>!jsonEqual(finalProps[key],value))
-      .map(([key])=>key);
+    const finalEditable=editableInputSnapshot(validationTemplate,finalProps);
+    const changedLocal=diffShape(originalEditable,finalEditable);
     const stillMissing=(entry.missingKeys || []).filter(key=>!has(finalProps,key));
     const finalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
 
