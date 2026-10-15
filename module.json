@@ -24,7 +24,8 @@
     ]
   },
   "esmodules": [
-    "scripts/h0d-template-manager.js"
+    "scripts/h0d-template-manager.js",
+    "scripts/h0d-level-up.js"
   ],
   "url": "https://github.com/freeberserk/h0d-template-manager",
   "manifest": "https://github.com/freeberserk/h0d-template-manager/releases/latest/download/module.json",
