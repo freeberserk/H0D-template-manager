@@ -1,3 +1,16 @@
+## 1.7.11 — Confort MJ et améliorations automatisées
+
+- **Attaques ennemies privées** : les attaques lancées par une Créature/PNJ/Faction ou une Machine via `H0D — Attaques` sont désormais envoyées uniquement aux MJ. Les attaques des PJ restent publiques.
+- **Créature v1.24** : ajoute un `DD capacités` très visible dans le bloc Combat, avec un DD conseillé issu du barème de Menace de la campagne et un DD utilisé qui prend la valeur saisie lorsqu'elle est non nulle.
+- **Arme v2.8** : chaque emplacement d'amélioration gagne `Type` + `Valeur`. Les types numériques `Attaque` et `Dégâts` sont automatiquement appliqués lorsque l'amélioration est installée. Le Rang reste indépendant de la valeur mécanique.
+- **Armure v2.0** : chaque emplacement d'amélioration gagne `Type` + `Valeur`. Les bonus compatibles sont automatisés tant que l'armure est active : DEF, Initiative, Vigueur, Réflexes, Volonté, Vitesse, PV max et compétences PJ.
+- **PJ v3.68** : intègre les bonus d'amélioration des armes/armures dans les totaux et jets correspondants.
+- **Dons/Talents** : aucun nouveau schéma n'est nécessaire ; les agrégats existants (DEF, sauvegardes, initiative, vitesse, PV, attaque/dégâts, mêlée/distance et compétences) sont conservés et couverts par le nouveau test de non-régression.
+- **Migration sûre en une passe** : corrige le cas observé sur le serveur officiel où une fiche à la fois ancienne et incomplète nécessitait deux exécutions. Le manager fait désormais le reload de version puis complète immédiatement les champs additifs allowlistés, sans modifier les valeurs locales.
+- Les nouveaux champs additifs neutres sont allowlistés : `H0D_Creature_DD_Capacites`, ainsi que `Type` / `Valeur` des trois améliorations d'armes et d'armures.
+- Les améliorations déjà présentes conservent `Installée / Nom / Rang / Effet`. Les nouveaux champs commencent volontairement à `Aucun / 0` : aucun bonus n'est inventé automatiquement à partir du texte libre.
+- Ajoute des tests CI pour la confidentialité des attaques ennemies, les bonus d'amélioration et la conservation des agrégats Dons/Talents.
+
 ## 1.7.10 — Dernière passe additive sûre du monde
 
 - Étend l'allowlist `additive-safe` aux champs neutres validés sur l'audit BAC post-1.7.8.
