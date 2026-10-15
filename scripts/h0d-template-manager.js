@@ -8,11 +8,11 @@ const MAX_BACKUPS = 5;
 const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
-  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.67", version:"3.67", file:"H0D_Actor-template-PJ-v3.67.json"},
-  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.23", version:"1.23", file:"H0D_Actor-template-creature-v1.23.json"},
+  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.68", version:"3.68", file:"H0D_Actor-template-PJ-v3.68.json"},
+  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.24", version:"1.24", file:"H0D_Actor-template-creature-v1.24.json"},
   {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.15", version:"3.15", file:"H0D_Actor-template-machine-v3.15.json"},
-  {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.7", version:"2.7", file:"H0D_Arme-v2.7.json"},
-  {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v1.9", version:"1.9", file:"H0D_Armure-v1.9.json"},
+  {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.8", version:"2.8", file:"H0D_Arme-v2.8.json"},
+  {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v2.0", version:"2.0", file:"H0D_Armure-v2.0.json"},
   {key:"item-don-talent", family:"Item", kind:"Item", id:"H0DDonTalent0001", name:"H0D_Don_Talent v2.5", version:"2.5", file:"H0D_Don_Talent-v2.5.json"},
   {key:"item-modificateur", family:"Item", kind:"Item", id:"H0DCreaMod000001", name:"H0D_Modificateur v1.3", version:"1.3", file:"H0D_Modificateur-v1.3.json"},
   {key:"item-objet", family:"Item", kind:"Item", id:"H0DObjTpl0000001", name:"H0D_Objet v2.9", version:"2.9", file:"H0D_Objet-v2.9.json"},
@@ -41,6 +41,9 @@ const SAFE_VERSION_LABELS = {
 };
 
 const SAFE_ADDITIVE_MISSING_KEYS = {
+  "actor-creature": new Set([
+    "H0D_Creature_DD_Capacites"
+  ]),
   "item-arme": new Set([
     // Champs neutres apparus sur les anciennes armes ordinaires. Catégorie et
     // Origine restent volontairement exclues car elles demandent un vrai choix.
@@ -50,14 +53,20 @@ const SAFE_ADDITIVE_MISSING_KEYS = {
     "H0D_Arme_Amelioration_1_Installee",
     "H0D_Arme_Amelioration_1_Nom",
     "H0D_Arme_Amelioration_1_Rang",
+    "H0D_Arme_Amelioration_1_Type",
+    "H0D_Arme_Amelioration_1_Valeur",
     "H0D_Arme_Amelioration_1_Effet",
     "H0D_Arme_Amelioration_2_Installee",
     "H0D_Arme_Amelioration_2_Nom",
     "H0D_Arme_Amelioration_2_Rang",
+    "H0D_Arme_Amelioration_2_Type",
+    "H0D_Arme_Amelioration_2_Valeur",
     "H0D_Arme_Amelioration_2_Effet",
     "H0D_Arme_Amelioration_3_Installee",
     "H0D_Arme_Amelioration_3_Nom",
     "H0D_Arme_Amelioration_3_Rang",
+    "H0D_Arme_Amelioration_3_Type",
+    "H0D_Arme_Amelioration_3_Valeur",
     "H0D_Arme_Amelioration_3_Effet"
   ]),
   "item-armure": new Set([
@@ -66,14 +75,20 @@ const SAFE_ADDITIVE_MISSING_KEYS = {
     "H0D_Armure_Amelioration_1_Installee",
     "H0D_Armure_Amelioration_1_Nom",
     "H0D_Armure_Amelioration_1_Rang",
+    "H0D_Armure_Amelioration_1_Type",
+    "H0D_Armure_Amelioration_1_Valeur",
     "H0D_Armure_Amelioration_1_Effet",
     "H0D_Armure_Amelioration_2_Installee",
     "H0D_Armure_Amelioration_2_Nom",
     "H0D_Armure_Amelioration_2_Rang",
+    "H0D_Armure_Amelioration_2_Type",
+    "H0D_Armure_Amelioration_2_Valeur",
     "H0D_Armure_Amelioration_2_Effet",
     "H0D_Armure_Amelioration_3_Installee",
     "H0D_Armure_Amelioration_3_Nom",
     "H0D_Armure_Amelioration_3_Rang",
+    "H0D_Armure_Amelioration_3_Type",
+    "H0D_Armure_Amelioration_3_Valeur",
     "H0D_Armure_Amelioration_3_Effet"
   ]),
   "item-don-talent": new Set([
@@ -456,7 +471,7 @@ async function safeVersionReload(entry, runId) {
   let doc=null;
   let originalProps={};
   let originalVersion=0;
-  let directAdditiveAttempt=false;
+  let reloadAttempted=false;
   try {
     doc=await resolveFreshDocument(entry);
     originalProps=clone(doc.system?.props || {});
@@ -464,17 +479,33 @@ async function safeVersionReload(entry, runId) {
     await pushBackup(doc,runId,`Migration version sûre — ${entry.scope}`);
 
     const wantedVersion=Number(entry.wantedVersion);
-    directAdditiveAttempt=entry.migrationKind==="additive-safe" && originalVersion===wantedVersion;
+    const needsReload=originalVersion!==wantedVersion;
+    const hasAdditive=(entry.missingKeys || []).length>0;
 
-    if (directAdditiveAttempt) {
-      // CSB 6 ne réinitialise pas les propriétés manquantes lorsqu'une fiche porte
-      // déjà la version canonique. Dans ce cas précis, on ajoute uniquement les clés
-      // explicitement allowlistées avec les valeurs par défaut du template canonique.
+    if (needsReload) {
+      if (!doc.templateSystem?.reloadTemplate) throw new Error("API CSB templateSystem.reloadTemplate() introuvable.");
+      reloadAttempted=true;
+      await doc.templateSystem.reloadTemplate();
+
+      // reloadTemplate peut remplacer l'Embedded Item lui-même. On résout donc
+      // à nouveau l'UUID puis on restaure strictement toutes les valeurs locales.
+      doc=await resolveFreshDocument(entry);
+      const fresh=clone(doc.system?.props || {});
+      const restored=clone(fresh);
+      for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
+      await doc.update({"system.props":restored});
+      doc=await resolveFreshDocument(entry);
+    }
+
+    const addedKeys=[];
+    if (hasAdditive) {
+      // CSB 6 peut mettre la version à jour sans matérialiser les nouveaux inputs.
+      // On complète donc, dans la même passe, uniquement les clés allowlistées,
+      // avec les valeurs par défaut du template canonique.
       const allowed=SAFE_ADDITIVE_MISSING_KEYS[entry.templateEntry.key];
       const source=await loadTemplate(entry.templateEntry);
       const defaults=componentInputDefaults(source);
-      const next=clone(originalProps);
-      const addedKeys=[];
+      const next=clone(doc.system?.props || {});
 
       for (const key of entry.missingKeys || []) {
         if (!allowed?.has(key)) throw new Error(`Ajout direct refusé pour une clé non allowlistée : ${key}`);
@@ -484,60 +515,43 @@ async function safeVersionReload(entry, runId) {
         addedKeys.push(key);
       }
 
-      if (!addedKeys.length) throw new Error("Aucun champ additif à créer après relecture de la fiche.");
-      await doc.update({"system.props":next});
-
-      doc=await resolveFreshDocument(entry);
-      const finalProps=doc.system?.props || {};
-      const changedLocal=Object.entries(originalProps)
-        .filter(([key,value])=>!jsonEqual(finalProps[key],value))
-        .map(([key])=>key);
-      const stillMissing=(entry.missingKeys || []).filter(key=>!has(finalProps,key));
-      const finalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
-
-      if (changedLocal.length) throw new Error(`Valeurs locales modifiées pendant l'ajout direct : ${changedLocal.join(", ")}`);
-      if (stillMissing.length) throw new Error(`Champs additifs toujours absents après ajout direct : ${stillMissing.join(", ")}`);
-      if (finalVersion!==wantedVersion) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${wantedVersion}).`);
-
-      return {
-        ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,
-        templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,
-        migrationKind:"additive-safe-direct",addedKeys
-      };
+      if (addedKeys.length) {
+        await doc.update({"system.props":next});
+        doc=await resolveFreshDocument(entry);
+      }
     }
 
-    if (!doc.templateSystem?.reloadTemplate) throw new Error("API CSB templateSystem.reloadTemplate() introuvable.");
-    await doc.templateSystem.reloadTemplate();
-
-    // reloadTemplate peut remplacer l'Embedded Item lui-même. On résout donc à
-    // nouveau l'UUID avant toute restauration / vérification.
-    doc=await resolveFreshDocument(entry);
-    const fresh=clone(doc.system?.props || {});
-    const restored=clone(fresh);
-    for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
-    await doc.update({"system.props":restored});
-
-    doc=await resolveFreshDocument(entry);
     const finalProps=doc.system?.props || {};
-    const changedLocal=Object.entries(originalProps).filter(([key,value])=>!jsonEqual(finalProps[key],value)).map(([key])=>key);
+    const changedLocal=Object.entries(originalProps)
+      .filter(([key,value])=>!jsonEqual(finalProps[key],value))
+      .map(([key])=>key);
     const stillMissing=(entry.missingKeys || []).filter(key=>!has(finalProps,key));
     const finalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
-    if (changedLocal.length) throw new Error(`Valeurs locales modifiées après reload : ${changedLocal.join(", ")}`);
-    if (stillMissing.length) throw new Error(`Champs additifs toujours absents après reload : ${stillMissing.join(", ")}`);
+
+    if (changedLocal.length) throw new Error(`Valeurs locales modifiées pendant la migration : ${changedLocal.join(", ")}`);
+    if (stillMissing.length) throw new Error(`Champs additifs toujours absents après migration : ${stillMissing.join(", ")}`);
     if (finalVersion!==wantedVersion) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${wantedVersion}).`);
-    return {ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,migrationKind:entry.migrationKind,addedKeys:clone(entry.missingKeys || [])};
+
+    let migrationKind="version-only";
+    if (hasAdditive && needsReload) migrationKind="version+additive-safe-direct";
+    else if (hasAdditive) migrationKind="additive-safe-direct";
+
+    return {
+      ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,
+      templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,
+      migrationKind,addedKeys
+    };
   } catch(err) {
     console.error(`H0D Template Manager — migration version sûre ${entry.name}`,err);
     try {
       doc=await fromUuid(entry.uuid);
       if (doc && Object.keys(originalProps).length) {
-        if (directAdditiveAttempt) {
-          // L'ajout direct est transactionnel : en cas d'échec, retour exact aux props
-          // capturées avant tentative.
+        if (!reloadAttempted) {
+          // Aucun reload : retour exact aux props capturées avant tentative.
           await doc.update({"system.props":clone(originalProps)});
         } else {
-          // Après reload de version, préserver d'éventuels champs structurels recréés
-          // tout en reposant les valeurs locales capturées.
+          // Après reload, conserver la structure recréée par CSB mais remettre
+          // toutes les valeurs locales capturées avant l'opération.
           const current=clone(doc.system?.props || {});
           const restored=clone(current);
           for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
@@ -574,7 +588,7 @@ async function migrateSafeVersions() {
     `<p>Mettre à niveau <strong>${initialCandidates.length} fiche(s)</strong> :</p>
      <p>${detail}</p>
      <p><strong>${initialCandidates.length-additiveCount}</strong> candidat(s) « version seule » · <strong>${additiveCount}</strong> évolution(s) additive(s) sûre(s).</p>
-     <p>Les évolutions additives autorisées couvrent uniquement des champs neutres dont la valeur canonique par défaut est sans effet : métadonnées vides d'objets, cible personnalisée vide des dons/talents, champs descriptifs vides d'armes/armures et emplacements d'amélioration. Les champs nécessitant un vrai choix mécanique, comme la catégorie d'arme, restent exclus.</p><p>Si la fiche est déjà à la version canonique, seules les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template, sans reload. Une vraie migration de version conserve le mécanisme reloadTemplate().</p>
+     <p>Les évolutions additives autorisées couvrent uniquement des champs neutres dont la valeur canonique par défaut est sans effet : métadonnées vides d'objets, cible personnalisée vide des dons/talents, champs descriptifs vides d'armes/armures et emplacements d'amélioration. Les champs nécessitant un vrai choix mécanique, comme la catégorie d'arme, restent exclus.</p><p>Les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template. Si une mise à jour de version est aussi nécessaire, reloadTemplate() est exécuté puis les champs additifs sont complétés dans la même passe, sans modifier les valeurs locales.</p>
      <p>Le manager traite les candidats <strong>un par un en les recollectant après chaque tentative</strong>. Les autres cas avec champs manquants ou warnings mixtes restent exclus. Les valeurs locales, dynamicTables et propriétés legacy sont conservées. Une sauvegarde interne est créée par fiche ; aucun snapshot JSON n'est téléchargé automatiquement.</p>`,
     "Migrer les données sûres"
   );
