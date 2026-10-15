@@ -2,14 +2,14 @@
   {
     "kind": "Actor",
     "id": "uympqkQiS6MHHmIx",
-    "name": "H0D_Actor-template-PJ v3.62",
-    "file": "H0D_Actor-template-PJ-v3.62.json"
+    "name": "H0D_Actor-template-PJ v3.68",
+    "file": "H0D_Actor-template-PJ-v3.68.json"
   },
   {
     "kind": "Actor",
     "id": "H0DCreatActor001",
-    "name": "H0D_Actor-template-creature v1.23",
-    "file": "H0D_Actor-template-creature-v1.23.json"
+    "name": "H0D_Actor-template-creature v1.24",
+    "file": "H0D_Actor-template-creature-v1.24.json"
   },
   {
     "kind": "Actor",
@@ -20,14 +20,14 @@
   {
     "kind": "Item",
     "id": "O6qwtv7ozECILPHV",
-    "name": "H0D_Arme v2.6",
-    "file": "H0D_Arme-v2.6.json"
+    "name": "H0D_Arme v2.8",
+    "file": "H0D_Arme-v2.8.json"
   },
   {
     "kind": "Item",
     "id": "dEeBbuthkI0CVMa3",
-    "name": "H0D_Armure v1.8",
-    "file": "H0D_Armure-v1.8.json"
+    "name": "H0D_Armure v2.0",
+    "file": "H0D_Armure-v2.0.json"
   },
   {
     "kind": "Item",
