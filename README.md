@@ -1,4 +1,10 @@
-# H0D Template Manager — v1.7.12
+# H0D Template Manager — v1.7.13
+
+## v1.7.13 — Correctif d’annulation de niveau
+
+**Annuler le dernier niveau** restaure maintenant la table de progression à l’identique. Le module supprime d’abord la dynamicTable actuelle puis réinjecte la sauvegarde, ce qui empêche la dernière ligne de survivre au rollback par fusion d’objet Foundry/CSB.
+
+Aucun template n’est modifié : après mise à jour du module sur le BAC, il suffit de refaire le test **niveau 2 → niveau 3 → Annuler le dernier niveau**. Le résultat attendu est exactement l’historique de deux lignes, sans suppression manuelle.
 
 ## v1.7.12 — Passage de niveau en un clic
 
