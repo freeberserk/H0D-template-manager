@@ -1,3 +1,26 @@
+## 1.7.14 — Refonte des compétences PJ : Artisanat séparé de Réparation
+
+- **PJ v3.70** : sépare définitivement **Réparation** et **Artisanat**.
+- Ajoute huit spécialités d’Artisanat à rangs indépendants : **Chimique, Électronique, Mécanique, Pharmaceutique, Structurel, Arts visuels, Écriture et Autre**.
+- Chaque spécialité possède ses propres rangs, son statut de compétence de classe, son bonus d’origine permanent, ses divers et son jet.
+- **Artisanat — Autre** reste volontairement manuel : aucune classe de héros de base ne l’accorde automatiquement.
+- Les compétences de classe automatiques sont alignées sur les décisions finales de campagne :
+  - Fort : Athlétisme, Réparation, Artisanat Structurel ;
+  - Rapide : Acrobaties, Discrétion, Artisanat Mécanique ;
+  - Robuste : Athlétisme, Perception, Survie, Artisanat Mécanique et Structurel ;
+  - Intelligent : Technologie, Réparation, toutes les Connaissances et les sept Artisanats standards ;
+  - Dévoué : Perception, Survie, Soins, toutes les Connaissances, Artisanat Pharmaceutique, Arts visuels et Écriture ;
+  - Charismatique : Diplomatie, Artisanat Arts visuels et Écriture.
+- **Technologie** n’est donc plus automatiquement compétence de classe du Héros Dévoué.
+- Le multiclassage conserve la règle simplifiée H0D : dès qu’une compétence est de classe via une classe possédée ou via l’acquisition manuelle, son coût est de 1 point par rang et son plafond est niveau + 3 ; sinon coût 2 et plafond hors-classe.
+- Ajoute un champ **Orig.** distinct et persistant (0/1) sur les compétences fixes, Focus et Artisanats ; les Connaissances disposent du même bonus au niveau de chaque ligne. Ce bonus représente le +1 d’occupation/origine déjà acquis et n’est jamais recalculé rétroactivement après multiclassage.
+- Les trois raccourcis de compétences peuvent sélectionner les huit Artisanats.
+- Le calcul **Rangs de compétences investis** inclut les huit nouvelles spécialités.
+- Le moteur de passage de niveau, les bases de points de compétence, les DV, les rangs de classe et l’historique de niveau restent inchangés.
+- **Migration sûre** : 43 nouveaux champs racine du PJ sont allowlistés avec valeurs neutres (0, faux ou vide). Aucun rang d’Artisanat, statut de classe ou bonus d’origine n’est deviné à partir des anciennes données.
+- Les lignes de Connaissances existantes sont conservées ; leur nouveau bonus d’origine commence neutre.
+- Ajoute un test de régression dédié aux mappings de classes, aux huit Artisanats, aux bonus d’origine, aux raccourcis et au budget de rangs.
+
 ## 1.7.13 — Rollback de niveau : remplacement exact de l’historique
 
 - Corrige **Annuler le dernier niveau** sur les PJ.
