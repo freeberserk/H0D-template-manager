@@ -1,3 +1,13 @@
+## 1.7.13 — Rollback de niveau : remplacement exact de l’historique
+
+- Corrige **Annuler le dernier niveau** sur les PJ.
+- En 1.7.12, les rangs de classe, PV, dégâts non létaux et PA étaient restaurés, mais la dynamicTable `H0D_Skill_Progression` était fusionnée par Foundry/CSB : la ligne du niveau annulé pouvait donc rester visible.
+- Le rollback supprime désormais explicitement `H0D_Skill_Progression` puis réinjecte la sauvegarde exacte.
+- Vérifie après restauration que le contenu de l’historique correspond exactement au snapshot ; sinon l’opération remonte une erreur au lieu de prétendre avoir réussi.
+- La sauvegarde `lastLevelUpBackup` est effacée après un rollback réussi afin d’éviter une seconde restauration involontaire du même état.
+- Ajoute un test de régression reproduisant précisément le cas « niveau 3 ajouté puis rollback vers un historique de deux lignes ».
+- Aucun template ni calcul de personnage n’est modifié ; aucune migration de données n’est nécessaire.
+
 ## 1.7.12 — Passage de niveau automatisé
 
 - **PJ v3.69** : simplifie fortement la montée de niveau côté joueur.
