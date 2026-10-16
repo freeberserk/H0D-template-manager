@@ -290,7 +290,7 @@ export async function runLevelUp(actor, cls) {
   }
 }
 
-async function replaceHistoryExactly(actor, history, options={}) {
+export async function replaceHistoryExactly(actor, history, options={}) {
   // Une dynamicTable CSB est stockée comme objet indexé. Un actor.update() direct
   // fusionne récursivement cet objet et ne supprime donc pas les lignes ajoutées
   // après le snapshot. Il faut supprimer la propriété avant de la réinjecter.
