@@ -24,6 +24,10 @@ function clone(v) {
   if (globalThis.foundry?.utils?.deepClone) return foundry.utils.deepClone(v);
   return v===undefined ? undefined : JSON.parse(JSON.stringify(v));
 }
+function jsonEqualForRestore(a,b) {
+  try { return JSON.stringify(a)===JSON.stringify(b); }
+  catch (_) { return false; }
+}
 function esc(v) {
   return String(v ?? "")
     .replaceAll("&","&amp;")
@@ -286,6 +290,23 @@ export async function runLevelUp(actor, cls) {
   }
 }
 
+async function replaceHistoryExactly(actor, history, options={}) {
+  // Une dynamicTable CSB est stockée comme objet indexé. Un actor.update() direct
+  // fusionne récursivement cet objet et ne supprime donc pas les lignes ajoutées
+  // après le snapshot. Il faut supprimer la propriété avant de la réinjecter.
+  await actor.update(
+    {[`system.props.-=${HISTORY_KEY}`]: null},
+    {...options,h0dLevelHistorySync:true}
+  );
+
+  if (history !== undefined) {
+    await actor.update(
+      {[`system.props.${HISTORY_KEY}`]: clone(history)},
+      {...options,h0dLevelHistorySync:true}
+    );
+  }
+}
+
 async function restoreLastLevelUp(actor) {
   if (!game.user?.isGM) {
     ui.notifications.warn("H0D : restauration réservée au MJ.");
@@ -303,10 +324,30 @@ async function restoreLastLevelUp(actor) {
     no:{label:"Annuler",icon:"fa-solid fa-xmark"}
   });
   if (!ok) return false;
+  // Restaurer l'historique séparément : une écriture directe fusionnerait
+  // la dynamicTable et laisserait survivre la dernière ligne ajoutée.
+  await replaceHistoryExactly(
+    actor,
+    backup.props[HISTORY_KEY],
+    {h0dLevelRestore:true}
+  );
+
   const updates={};
-  for (const [key,value] of Object.entries(backup.props)) updates[`system.props.${key}`]=clone(value);
+  for (const [key,value] of Object.entries(backup.props)) {
+    if (key===HISTORY_KEY) continue;
+    updates[`system.props.${key}`]=clone(value);
+  }
   await actor.update(updates,{h0dLevelRestore:true,h0dLevelHistorySync:true});
-  ui.notifications.info("H0D : dernier passage de niveau restauré.");
+
+  // Vérification forte : le rollback doit retrouver exactement le nombre
+  // et le contenu des lignes sauvegardées.
+  const restored=actor.system?.props?.[HISTORY_KEY];
+  if (!jsonEqualForRestore(restored,backup.props[HISTORY_KEY])) {
+    throw new Error("L’historique n’a pas été restauré exactement. Aucune suppression manuelle ne doit être nécessaire.");
+  }
+
+  await actor.unsetFlag(MODULE_ID,"lastLevelUpBackup");
+  ui.notifications.info("H0D : dernier passage de niveau restauré, historique inclus.");
   return true;
 }
 
