@@ -1,4 +1,22 @@
-# H0D Template Manager — v1.7.11
+# H0D Template Manager — v1.7.12
+
+## v1.7.12 — Passage de niveau en un clic
+
+Le **PJ v3.69** remplace le passage de niveau manuel par un flux court :
+
+1. choisir la classe de héros du nouveau niveau ;
+2. cliquer sur **VALIDER LE NIVEAU** ;
+3. confirmer.
+
+La fiche lance ensuite le DV et écrit automatiquement la nouvelle ligne dans `H0D_Skill_Progression`, en mémorisant le modificateur d’INT de ce niveau. Elle resynchronise les rangs de classe, renouvelle les points d’action, remet les dégâts non létaux à zéro et restaure les PV au maximum.
+
+L’onglet **Technique** conserve l’historique détaillé et permet au MJ de corriger une ligne. Les compteurs de classes sont maintenant une synthèse technique, plus une saisie joueur. Un bouton permet de resynchroniser les rangs depuis l’historique et un autre de restaurer la sauvegarde précédant le dernier passage de niveau.
+
+Les blessures graves et notes narratives ne sont pas supprimées par le soin complet.
+
+**Test BAC conseillé :** utiliser une copie d’un PJ niveau 2, choisir une autre classe pour le niveau 3, valider, puis vérifier la ligne d’historique, les rangs de classe, le DV, les points de compétence, les PV, les PA et les calculs dérivés. Tester ensuite **Annuler le dernier niveau** sur cette copie.
+
+La validation des migrations a aussi été affinée : les recalculs automatiques de CSB ne déclenchent plus de faux messages « valeurs locales modifiées ».
 
 ## v1.7.11 — Confort MJ et améliorations automatisées
 
