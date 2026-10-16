@@ -1,8 +1,8 @@
 {
   "id": "h0d-template-manager",
   "title": "H0D Template Manager",
-  "description": "Gestionnaire centralisé H0D : templates, audits, migrations sûres, attaques privées, améliorations d’équipement et passage de niveau automatisé.",
-  "version": "1.7.13",
+  "description": "Gestionnaire centralisé H0D : templates, compétences PJ, audits, migrations sûres, attaques privées, améliorations d’équipement et passage de niveau automatisé.",
+  "version": "1.7.14",
   "authors": [
     {
       "name": "JDR Zero Dawn"
