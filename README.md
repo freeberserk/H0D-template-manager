@@ -1,4 +1,16 @@
-# H0D Template Manager — v1.7.13
+# H0D Template Manager — v1.7.14
+
+## v1.7.14 — Compétences PJ : Artisanat et Réparation séparés
+
+Le **PJ v3.70** introduit la refonte validée des compétences. **Réparation** reste une compétence autonome ; **Artisanat** possède désormais huit spécialités indépendantes : Chimique, Électronique, Mécanique, Pharmaceutique, Structurel, Arts visuels, Écriture et Autre.
+
+Les statuts de compétence de classe sont calculés depuis les classes possédées selon le mapping validé. Le Héros Dévoué ne reçoit plus Technologie automatiquement. « Artisanat — Autre » n’est jamais automatique.
+
+La colonne **Orig.** stocke séparément le +1 permanent éventuellement acquis via occupation/origine. Elle est volontairement indépendante du statut de classe actuel : un multiclassage ultérieur ne crée donc jamais de +1 rétroactif. La case **M** continue de représenter une acquisition permanente du statut de compétence de classe.
+
+La migration vers v3.70 ajoute uniquement les nouveaux champs manquants avec des valeurs neutres. Elle **ne transforme pas** les anciens rangs de Réparation en rangs d’Artisanat et **ne déduit pas** les bonus d’origine des prétirés ou des occupations : ces choix restent explicites.
+
+**Test BAC conseillé :** installer le template v3.70 → Audit monde → snapshot → Migrer données sûres → nouvel audit. Vérifier ensuite un PJ de chaque classe, les plafonds/coûts de rangs, les huit Artisanats, les trois raccourcis de compétence et le passage de niveau/rollback.
 
 ## v1.7.13 — Correctif d’annulation de niveau
 

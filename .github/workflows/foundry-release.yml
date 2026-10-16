@@ -2,6 +2,8 @@ name: Build and publish Foundry module
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: write
@@ -19,12 +21,14 @@ jobs:
           node tests/h0d-attacks-smoke.mjs
           node tests/gameplay-automation.mjs
           node tests/h0d-level-up.mjs
+          node tests/pj-skills-craft.mjs
           node tests/creature-ability-rolls.mjs
           node tests/creature-faction-scores.mjs
           node tests/creature-ordinary-npc-level.mjs
           node tests/creature-heroic-scores.mjs
           python3 -m json.tool module.json > /dev/null
       - name: Package and publish release
+        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

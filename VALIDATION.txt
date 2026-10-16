@@ -1,3 +1,26 @@
+H0D Template Manager v1.7.14 — BAC — refonte compétences PJ v3.70
+
+Contrôles à effectuer avant production :
+- Installer H0D_Actor-template-PJ v3.70 avec le même ID stable uympqkQiS6MHHmIx.
+- Audit monde -> snapshot -> Migrer données sûres -> nouvel audit.
+- Vérifier qu’aucun rang, bonus d’origine ou statut de classe existant n’a été écrasé.
+- Vérifier que Réparation est une ligne autonome et qu’aucun libellé « Réparation / Artisanat » ne subsiste.
+- Vérifier les 8 Artisanats : Chimique, Électronique, Mécanique, Pharmaceutique, Structurel, Arts visuels, Écriture, Autre.
+- Vérifier les mappings de classe : Fort/Structurel ; Rapide/Mécanique ; Robuste/Mécanique+Structurel ; Intelligent/7 standards ; Dévoué/Pharmaceutique+Arts visuels+Écriture ; Charismatique/Arts visuels+Écriture.
+- Vérifier que Technologie est automatique uniquement pour Intelligent.
+- Vérifier qu’Artisanat — Autre n’est jamais automatique.
+- Vérifier le coût/plafond simplifié du multiclassage : compétence de classe = 1 point/rang et niveau+3 ; hors-classe = 2 points/rang et plafond hors-classe.
+- Vérifier que « Orig. » reste stable après ajout d’une nouvelle classe et n’apparaît jamais rétroactivement.
+- Vérifier les trois raccourcis de compétence avec chaque Artisanat.
+- Vérifier le calcul « Rangs de compétences investis » après dépense de rangs d’Artisanat.
+- Vérifier une ligne de Connaissance existante après migration et le nouveau bonus d’origine à 0.
+- Vérifier passage de niveau niveau 2 -> 3 puis Annuler le dernier niveau : historique, rangs de classe, PV, dégâts non létaux et PA inchangés par cette refonte.
+
+Contrôles automatisés :
+- tests/pj-skills-craft.mjs : mappings, Artisanats, Orig., raccourcis, coût des rangs.
+- tests/h0d-level-up.mjs : passage de niveau + rollback.
+- tests/gameplay-automation.mjs : intégrations équipement et agrégats existants.
+
 H0D Template Manager v1.2.2 — BAC — détails de jets compacts
 
 Contrôles statiques effectués :

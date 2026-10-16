@@ -1,14 +1,14 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.13";
+const MODULE_VERSION = "1.7.14";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
 const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
-  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.69", version:"3.69", file:"H0D_Actor-template-PJ-v3.69.json"},
+  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.70", version:"3.70", file:"H0D_Actor-template-PJ-v3.70.json"},
   {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.24", version:"1.24", file:"H0D_Actor-template-creature-v1.24.json"},
   {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.15", version:"3.15", file:"H0D_Actor-template-machine-v3.15.json"},
   {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.8", version:"2.8", file:"H0D_Arme-v2.8.json"},
@@ -41,6 +41,51 @@ const SAFE_VERSION_LABELS = {
 };
 
 const SAFE_ADDITIVE_MISSING_KEYS = {
+  "actor-pj": new Set([
+    "H0D_Artisanat_Arts_Visuels_Bonus_Origine",
+    "H0D_Artisanat_Arts_Visuels_Classe",
+    "H0D_Artisanat_Arts_Visuels_Divers",
+    "H0D_Artisanat_Arts_Visuels_Rangs",
+    "H0D_Artisanat_Autre_Bonus_Origine",
+    "H0D_Artisanat_Autre_Classe",
+    "H0D_Artisanat_Autre_Divers",
+    "H0D_Artisanat_Autre_Nom",
+    "H0D_Artisanat_Autre_Rangs",
+    "H0D_Artisanat_Chimique_Bonus_Origine",
+    "H0D_Artisanat_Chimique_Classe",
+    "H0D_Artisanat_Chimique_Divers",
+    "H0D_Artisanat_Chimique_Rangs",
+    "H0D_Artisanat_Ecriture_Bonus_Origine",
+    "H0D_Artisanat_Ecriture_Classe",
+    "H0D_Artisanat_Ecriture_Divers",
+    "H0D_Artisanat_Ecriture_Rangs",
+    "H0D_Artisanat_Electronique_Bonus_Origine",
+    "H0D_Artisanat_Electronique_Classe",
+    "H0D_Artisanat_Electronique_Divers",
+    "H0D_Artisanat_Electronique_Rangs",
+    "H0D_Artisanat_Mecanique_Bonus_Origine",
+    "H0D_Artisanat_Mecanique_Classe",
+    "H0D_Artisanat_Mecanique_Divers",
+    "H0D_Artisanat_Mecanique_Rangs",
+    "H0D_Artisanat_Pharmaceutique_Bonus_Origine",
+    "H0D_Artisanat_Pharmaceutique_Classe",
+    "H0D_Artisanat_Pharmaceutique_Divers",
+    "H0D_Artisanat_Pharmaceutique_Rangs",
+    "H0D_Artisanat_Structurel_Bonus_Origine",
+    "H0D_Artisanat_Structurel_Classe",
+    "H0D_Artisanat_Structurel_Divers",
+    "H0D_Artisanat_Structurel_Rangs",
+    "H0D_Focus_Bonus_Origine",
+    "H0D_Skill_Acrobaties_Bonus_Origine",
+    "H0D_Skill_Athletisme_Bonus_Origine",
+    "H0D_Skill_Diplomatie_Bonus_Origine",
+    "H0D_Skill_Discretion_Bonus_Origine",
+    "H0D_Skill_Perception_Bonus_Origine",
+    "H0D_Skill_Reparation_Bonus_Origine",
+    "H0D_Skill_Soins_Bonus_Origine",
+    "H0D_Skill_Survie_Bonus_Origine",
+    "H0D_Skill_Technologie_Bonus_Origine"
+  ]),
   "actor-creature": new Set([
     "H0D_Creature_DD_Capacites"
   ]),
@@ -655,7 +700,7 @@ async function migrateSafeVersions() {
     `<p>Mettre à niveau <strong>${initialCandidates.length} fiche(s)</strong> :</p>
      <p>${detail}</p>
      <p><strong>${initialCandidates.length-additiveCount}</strong> candidat(s) « version seule » · <strong>${additiveCount}</strong> évolution(s) additive(s) sûre(s).</p>
-     <p>Les évolutions additives autorisées couvrent uniquement des champs neutres dont la valeur canonique par défaut est sans effet : métadonnées vides d'objets, cible personnalisée vide des dons/talents, champs descriptifs vides d'armes/armures et emplacements d'amélioration. Les champs nécessitant un vrai choix mécanique, comme la catégorie d'arme, restent exclus.</p><p>Les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template. Si une mise à jour de version est aussi nécessaire, reloadTemplate() est exécuté puis les champs additifs sont complétés dans la même passe, sans modifier les valeurs locales.</p>
+     <p>Les évolutions additives autorisées couvrent uniquement des champs neutres dont la valeur canonique par défaut est sans effet : nouveaux champs de compétences PJ initialisés à 0/faux/vide, métadonnées vides d'objets, cible personnalisée vide des dons/talents, champs descriptifs vides d'armes/armures et emplacements d'amélioration. Aucun rang, statut de classe ou bonus d'origine n'est inventé pendant la migration. Les champs nécessitant un vrai choix mécanique, comme la catégorie d'arme, restent exclus.</p><p>Les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template. Si une mise à jour de version est aussi nécessaire, reloadTemplate() est exécuté puis les champs additifs sont complétés dans la même passe, sans modifier les valeurs locales.</p>
      <p>Le manager traite les candidats <strong>un par un en les recollectant après chaque tentative</strong>. Les autres cas avec champs manquants ou warnings mixtes restent exclus. Les valeurs locales, dynamicTables et propriétés legacy sont conservées. Une sauvegarde interne est créée par fiche ; aucun snapshot JSON n'est téléchargé automatiquement.</p>`,
     "Migrer les données sûres"
   );
