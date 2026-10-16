@@ -1,3 +1,29 @@
+## 1.7.12 — Passage de niveau automatisé
+
+- **PJ v3.69** : simplifie fortement la montée de niveau côté joueur.
+- Le joueur choisit uniquement la **classe du nouveau niveau** puis clique sur **VALIDER LE NIVEAU**.
+- Le moteur :
+  - vérifie la continuité de l’historique et la cohérence des rangs de classe ;
+  - lance automatiquement le bon DV (d10 Robuste, d8 Fort/Rapide, d6 Intelligent/Dévoué/Charismatique) ;
+  - mémorise le **modificateur d’INT du niveau** dans l’historique ;
+  - calcule et enregistre les points de compétence ;
+  - ajoute la ligne de progression ;
+  - resynchronise les six rangs de classes ;
+  - renouvelle les points d’action à `5 + floor(niveau/2)` ;
+  - remet les dégâts non létaux à 0 ;
+  - restaure les PV actuels au nouveau maximum, le passage de niveau étant effectué en refuge sûr.
+- Les **blessures graves et notes narratives ne sont jamais supprimées**.
+- Les six compteurs de classes quittent le flux joueur et sont déplacés dans **Technique**, en lecture seule, comme synthèse calculée de l’historique.
+- La table **PROGRESSION PAR NIVEAU — ÉDITION MJ** reste la source de vérité et peut être corrigée manuellement.
+- Ajoute en Technique :
+  - **Synchroniser les rangs** depuis l’historique ;
+  - **Annuler le dernier niveau**, basé sur une sauvegarde créée juste avant la validation automatique ;
+  - un indicateur de cohérence historique / rangs.
+- Le gros historique 1–20 et le détail purement technique sont retirés de la vue joueur pour alléger la fiche.
+- Limites intégrées : niveau de campagne 15 et rang 10 maximum par classe de héros de base.
+- **Migration sûre** : corrige les faux positifs vus en 1.7.11. Les contrôles de préservation comparent désormais les champs réellement éditables ; les recalculs CSB (totaux, itemContainers, labels calculés) ne sont plus signalés comme des valeurs locales altérées.
+- Ajoute des tests CI dédiés au moteur de passage de niveau et maintient les tests d’automatisation équipement sur le PJ canonique 3.69.
+
 ## 1.7.11 — Confort MJ et améliorations automatisées
 
 - **Attaques ennemies privées** : les attaques lancées par une Créature/PNJ/Faction ou une Machine via `H0D — Attaques` sont désormais envoyées uniquement aux MJ. Les attaques des PJ restent publiques.
