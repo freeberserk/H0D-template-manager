@@ -5,7 +5,8 @@ import {
   H0D_CAMPAIGN_MAX_LEVEL,
   analyzeHistory,
   buildLevelUpPreview,
-  classRankUpdatesFromHistory
+  classRankUpdatesFromHistory,
+  replaceHistoryExactly
 } from "../scripts/h0d-level-up.js";
 
 const history={
@@ -86,6 +87,43 @@ assert.equal(buildLevelUpPreview(rank10Props,"Fort").ok,false,"Une classe de bas
 
 assert.equal(H0D_CAMPAIGN_MAX_LEVEL,15);
 assert.equal(H0D_LEVEL_CLASSES.Robuste.dieLabel,"d10");
+
+// Regression 1.7.12 : une dynamicTable restaurée par actor.update() simple
+// conservait la ligne du niveau annulé à cause du merge récursif.
+const backupHistory=structuredClone(history);
+const actorMock={
+  system:{props:{H0D_Skill_Progression:{
+    ...structuredClone(history),
+    "2":{
+      $deleted:false,
+      H0D_Skill_Level_Niveau:"3",
+      H0D_Skill_Level_Classe:"Devoue",
+      H0D_Skill_Level_INT_Mod:"2",
+      H0D_PV_Level_Jet:"4"
+    }
+  }}},
+  async update(update){
+    for(const [key,value] of Object.entries(update)){
+      if(key==="system.props.-=H0D_Skill_Progression"){
+        delete this.system.props.H0D_Skill_Progression;
+      } else if(key==="system.props.H0D_Skill_Progression"){
+        this.system.props.H0D_Skill_Progression=structuredClone(value);
+      }
+    }
+  }
+};
+await replaceHistoryExactly(actorMock,backupHistory,{h0dLevelRestore:true});
+assert.deepEqual(
+  actorMock.system.props.H0D_Skill_Progression,
+  backupHistory,
+  "Le rollback doit supprimer réellement la ligne du niveau annulé"
+);
+assert.equal(
+  Object.prototype.hasOwnProperty.call(actorMock.system.props.H0D_Skill_Progression,"2"),
+  false,
+  "La ligne du niveau 3 ne doit pas survivre au rollback"
+);
+
 
 // Template structure checks.
 const pj=JSON.parse(await readFile(new URL("../data/templates/H0D_Actor-template-PJ-v3.69.json",import.meta.url),"utf8"));
