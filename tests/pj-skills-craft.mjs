@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
 
-const pj=JSON.parse(await readFile(new URL("../data/templates/H0D_Actor-template-PJ-v3.70.json",import.meta.url),"utf8"));
+const pj=JSON.parse(await readFile(new URL("../data/templates/H0D_Actor-template-PJ-v3.71.json",import.meta.url),"utf8"));
 
 function walk(root,fn){
   if(Array.isArray(root)){root.forEach(v=>walk(v,fn));return;}
