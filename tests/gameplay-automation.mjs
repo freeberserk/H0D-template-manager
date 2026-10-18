@@ -16,7 +16,7 @@ const findKey = (root, key) => {
 
 const weapon=await load("data/templates/H0D_Arme-v2.8.json");
 const armor=await load("data/templates/H0D_Armure-v2.0.json");
-const pj=await load("data/templates/H0D_Actor-template-PJ-v3.70.json");
+const pj=await load("data/templates/H0D_Actor-template-PJ-v3.71.json");
 const creature=await load("data/templates/H0D_Actor-template-creature-v1.24.json");
 
 for (let i=1;i<=3;i++) {
