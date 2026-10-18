@@ -1,4 +1,14 @@
-# H0D Template Manager — v1.7.14
+# H0D Template Manager — v1.7.15
+
+## v1.7.15 — Faire 10 / Faire 20
+
+Le **PJ v3.71** ajoute deux commandes compactes à côté des compétences : **10** et **20**. Elles sont disponibles dans le tableau détaillé, pour les huit Artisanats, les Connaissances et les raccourcis de compétence de l’onglet Personnage.
+
+Ces commandes ne lancent aucun dé : elles publient directement dans le chat **10 + bonus** ou **20 + bonus**. Le jet normal reste inchangé.
+
+La fiche ne bloque pas artificiellement l’action : elle rappelle les conditions de d20 Modern et laisse le MJ confirmer si la situation permet réellement de faire 10 ou 20. Faire 20 indique aussi qu’il ne s’agit pas d’un 20 naturel.
+
+Aucun nouveau champ de données n’est introduit. Après installation du template v3.71, les PJ existants sont des candidats **version seule** pour la migration sûre ; aucune valeur locale n’a à être reconstruite.
 
 ## v1.7.14 — Compétences PJ : Artisanat et Réparation séparés
 

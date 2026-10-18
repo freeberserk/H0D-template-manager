@@ -225,7 +225,42 @@
 .h0d-pj-sheet .h0d-ammo-subpanel { margin-top: 8px; }
 
 .h0d-pj-sheet .h0d-skills-detailed { overflow-x: auto; }
-.h0d-pj-sheet .h0d-skills-detailed table { min-width: 780px; }
+.h0d-pj-sheet .h0d-skills-detailed table { min-width: 920px; }
+.h0d-pj-sheet .h0d-skill-take-note {
+  display: block;
+  margin: 0 0 7px;
+  padding: 5px 7px;
+  border: 1px solid rgba(225,139,61,.30);
+  border-radius: 5px;
+  background: rgba(225,139,61,.07);
+  color: var(--h0d-pj-muted);
+  font-size: 10px;
+}
+.h0d-pj-sheet .h0d-take-skill {
+  display: inline-block;
+  min-width: 2.1em;
+  padding: 2px 5px;
+  border: 1px solid rgba(119,214,220,.35);
+  border-radius: 4px;
+  background: rgba(119,214,220,.07);
+  color: var(--h0d-pj-cyan-soft);
+  cursor: pointer;
+  font-weight: 800;
+  text-align: center;
+}
+.h0d-pj-sheet .h0d-take-skill:hover {
+  color: #fff;
+  border-color: var(--h0d-pj-cyan);
+  box-shadow: 0 0 0 1px rgba(119,214,220,.12);
+}
+.h0d-pj-sheet .h0d-take-20 {
+  border-color: rgba(225,139,61,.42);
+  background: rgba(225,139,61,.08);
+  color: var(--h0d-pj-amber-soft);
+}
+.h0d-pj-sheet .h0d-take-20:hover {
+  border-color: var(--h0d-pj-amber);
+}
 .h0d-pj-sheet .h0d-progression-card,
 .h0d-pj-sheet .h0d-level-card,
 .h0d-pj-sheet .h0d-dons-stack { margin-top: 8px; }

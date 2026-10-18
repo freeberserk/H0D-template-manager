@@ -1,3 +1,21 @@
+H0D Template Manager v1.7.15 — BAC — Faire 10 / Faire 20
+
+Contrôles à effectuer :
+- Installer H0D_Actor-template-PJ v3.71 avec l’ID stable uympqkQiS6MHHmIx.
+- Audit monde -> snapshot -> Migrer données sûres -> nouvel audit.
+- Vérifier que les PJ v3.70 apparaissent comme migration « version seule », sans nouveaux champs manquants.
+- Vérifier un jet normal de compétence : le d20 doit rester inchangé.
+- Vérifier Faire 10 : aucun dé lancé, résultat = 10 + bonus total.
+- Vérifier Faire 20 : aucun dé lancé, résultat = 20 + bonus total.
+- Vérifier les cartes de chat et leurs rappels de conditions.
+- Vérifier que Faire 20 mentionne explicitement « pas un 20 naturel ».
+- Tester une compétence fixe, Focus, un Artisanat, une Connaissance et chacun des trois raccourcis.
+- Vérifier que les rangs, bonus d’origine, statuts de classe et historiques restent identiques avant/après migration.
+- Vérifier passage de niveau puis rollback pour confirmer l’absence de régression.
+
+Contrôle automatisé :
+- tests/pj-skill-take-10-20.mjs compare le schéma v3.70/v3.71 et vérifie les 23 paires de commandes.
+
 H0D Template Manager v1.7.14 — BAC — refonte compétences PJ v3.70
 
 Contrôles à effectuer avant production :

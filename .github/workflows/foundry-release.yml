@@ -22,6 +22,7 @@ jobs:
           node tests/gameplay-automation.mjs
           node tests/h0d-level-up.mjs
           node tests/pj-skills-craft.mjs
+          node tests/pj-skill-take-10-20.mjs
           node tests/creature-ability-rolls.mjs
           node tests/creature-faction-scores.mjs
           node tests/creature-ordinary-npc-level.mjs
