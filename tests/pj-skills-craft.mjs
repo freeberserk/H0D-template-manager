@@ -15,7 +15,7 @@ function findKey(key){
   return hit;
 }
 
-assert.equal(pj.name,"H0D_Actor-template-PJ v3.70");
+assert.equal(pj.name,"H0D_Actor-template-PJ v3.71");
 const raw=JSON.stringify(pj);
 assert.equal(raw.includes("Réparation / Artisanat"),false,"Réparation doit être séparée d’Artisanat");
 
