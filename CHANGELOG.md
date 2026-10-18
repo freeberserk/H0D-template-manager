@@ -1,3 +1,18 @@
+## 1.7.15 — Faire 10 / Faire 20 sur les compétences PJ
+
+- **PJ v3.71** : ajoute des commandes **10** et **20** directement sur les compétences.
+- Couverture : compétences fixes, Focus, huit Artisanats, Connaissances dynamiques, Perception rapide et trois raccourcis de compétence.
+- **Faire 10** calcule simplement `10 + bonus total de compétence` sans lancer de dé.
+- **Faire 20** calcule simplement `20 + bonus total de compétence` sans lancer de dé.
+- Les cartes de chat rappellent les conditions d’usage d20 Modern au lieu de les imposer mécaniquement :
+  - Faire 10 : hors menace/distraction ; normalement pas avec une compétence utilisée sans entraînement, sauf exception MJ ;
+  - Faire 20 : temps suffisant, hors menace/distraction, aucune conséquence en cas d’échec, vingt fois le temps normal.
+- Le message **Faire 20** précise explicitement qu’il ne s’agit pas d’un **20 naturel**, afin de ne pas déclencher les effets maison liés aux 20 naturels.
+- Aucun champ de données PJ n’est ajouté ou supprimé : la structure des inputs v3.70 et v3.71 est identique.
+- La mise à niveau des PJ existants est donc une **migration de version uniquement** ; rangs, bonus d’origine, compétences de classe, historiques et données locales sont conservés.
+- Les jets normaux au d20 restent inchangés.
+- Ajoute un test de régression dédié vérifiant les 23 commandes Faire 10 / Faire 20 et l’absence de modification du schéma de données PJ.
+
 ## 1.7.14 — Refonte des compétences PJ : Artisanat séparé de Réparation
 
 - **PJ v3.70** : sépare définitivement **Réparation** et **Artisanat**.
