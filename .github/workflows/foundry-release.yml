@@ -20,6 +20,7 @@ jobs:
           node --check scripts/h0d-attacks.js
           node tests/h0d-attacks-smoke.mjs
           node tests/gameplay-automation.mjs
+          node tests/perception-detection.mjs
           node tests/h0d-level-up.mjs
           node tests/pj-skills-craft.mjs
           node tests/pj-skill-take-10-20.mjs

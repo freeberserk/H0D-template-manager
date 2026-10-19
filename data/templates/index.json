@@ -8,14 +8,14 @@
   {
     "kind": "Actor",
     "id": "H0DCreatActor001",
-    "name": "H0D_Actor-template-creature v1.24",
-    "file": "H0D_Actor-template-creature-v1.24.json"
+    "name": "H0D_Actor-template-creature v1.25",
+    "file": "H0D_Actor-template-creature-v1.25.json"
   },
   {
     "kind": "Actor",
     "id": "wRHfQ4gZbHTaYOsR",
-    "name": "H0D_Actor-template-machine v3.15",
-    "file": "H0D_Actor-template-machine-v3.15.json"
+    "name": "H0D_Actor-template-machine v3.16",
+    "file": "H0D_Actor-template-machine-v3.16.json"
   },
   {
     "kind": "Item",
@@ -62,7 +62,7 @@
   {
     "kind": "Item",
     "id": "H0DCompMach00001",
-    "name": "H0D_Pièce_Détachable v2.6",
-    "file": "H0D_Piece_Detachable-v2.6.json"
+    "name": "H0D_Pièce_Détachable v2.7",
+    "file": "H0D_Piece_Detachable-v2.7.json"
   }
 ]
