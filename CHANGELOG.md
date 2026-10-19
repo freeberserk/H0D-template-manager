@@ -1,3 +1,14 @@
+## 1.7.16 — Perception, détection passive et capteurs spécialisés
+
+- **Créature / PNJ v1.25** : Perception devient une statistique de combat dédiée, avec jet actif, **DET = 10 + PER**, portée normale et sens spécial optionnel.
+- **Machine v3.16** : ajoute Perception de base, modificateur temporaire, PER effective, DET et portée normale.
+- L'état **Aveuglée** applique automatiquement **-4 à la Perception machine**.
+- Les composants actifs peuvent contribuer à la Perception générale ; leur destruction ou détachement retire automatiquement ce bonus.
+- **Pièce détachable v2.7** : ajoute les capteurs spécialisés (mode, cible, portée, bonus éventuel de PER générale).
+- Le radar spécialisé n'est pas traité comme un bonus universel : une pièce peut par exemple cibler « machines au sol » ou « humains » sans améliorer la détection générale.
+- Migration additive sûre des nouveaux champs sur les acteurs et pièces existants.
+- Le template PJ reste en **v3.71** : sa compétence Perception existante suffit ; la DET et la portée humaine standard sont consommées par les outils d'affichage sans migration de fiche PJ.
+
 ## 1.7.15 — Faire 10 / Faire 20 sur les compétences PJ
 
 - **PJ v3.71** : ajoute des commandes **10** et **20** directement sur les compétences.
