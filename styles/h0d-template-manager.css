@@ -7,7 +7,9 @@
 .h0d-tm-actionbar { display:flex; flex-wrap:wrap; gap:6px; padding:9px 12px; border-bottom:1px solid var(--h0d-line); background:rgba(0,0,0,.28); }
 .h0d-tm-actionbar button,.h0d-tm-row button,.h0d-tm-weapon-actions button,.h0d-tm-legacy-line button { width:auto; min-height:32px; border:1px solid #675761; border-radius:5px; background:#231b25; color:#f2ece7; padding:5px 9px; }
 .h0d-tm-actionbar button:hover,.h0d-tm-row button:hover,.h0d-tm-weapon-actions button:hover,.h0d-tm-legacy-line button:hover { border-color:var(--h0d-orange); box-shadow:0 0 0 1px rgba(231,130,45,.25); }
-.h0d-tm-actionbar button.primary{background:#4a2b1b;border-color:var(--h0d-orange)} .h0d-tm-actionbar i{margin-right:5px}
+.h0d-tm-actionbar button.primary{background:#4a2b1b;border-color:var(--h0d-orange)}
+.h0d-tm-actionbar button.audit-dirty{background:#4b3213;border-color:var(--h0d-warn);color:#fff2c7;box-shadow:0 0 0 1px rgba(232,176,76,.18)}
+.h0d-tm-actionbar i{margin-right:5px}
 .h0d-tm-scroll { overflow:auto; padding:12px 14px 18px; }
 .h0d-tm-summary-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; margin-bottom:14px; }
 .h0d-tm-card { background:linear-gradient(180deg,#1e171f,#151116); border:1px solid var(--h0d-line); border-radius:7px; padding:10px 12px; display:flex; flex-direction:column; min-height:78px; }

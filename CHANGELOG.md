@@ -1,3 +1,15 @@
+## 1.7.17 — Cycle de maintenance et audit final
+
+- Réorganise la barre autour du flux **Audit → Snapshot → maintenance → Audit final**.
+- Retire les boutons **Exporter audit** et **Fermer** de la barre supérieure.
+- L'audit propose désormais directement l'export JSON du rapport calculé, sans relancer un deuxième audit.
+- Conserve l'API `exportAudit` : sans rapport fourni, elle continue à produire un audit frais avant export.
+- Toute écriture effective (installation/mise à jour, synchronisation, réparation, migration, restauration ou retrait legacy) invalide l'audit courant et affiche **Audit final recommandé**.
+- Les diagnostics armes/armures ne sont plus relancés silencieusement à l'ouverture du manager ; les actions de réparation/migration dépendent du dernier audit courant.
+- Renomme **Exporter snapshot** en **Snapshot de sécurité** et **Restaurer dernier cycle** en **Restaurer données**.
+- Le réaudit interne de migration reste utilisé pour son bilan, mais n'empêche pas l'audit final explicite du MJ.
+- Ajoute un test statique de non-régression du workflow de maintenance.
+
 ## 1.7.16 — Perception, détection passive et capteurs spécialisés
 
 - **Créature / PNJ v1.25** : Perception devient une statistique de combat dédiée, avec jet actif, **DET = 10 + PER**, portée normale et sens spécial optionnel.

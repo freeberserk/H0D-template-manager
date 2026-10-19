@@ -8,15 +8,13 @@
   </header>
 
   <nav class="h0d-tm-actionbar">
-    <button type="button" data-action="installAll" class="primary"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
+    <button type="button" data-action="audit" class="{{#if auditState.dirty}}audit-dirty{{else}}primary{{/if}}" title="{{auditState.hint}}"><i class="fa-solid fa-magnifying-glass-chart"></i> {{auditState.label}}</button>
+    <button type="button" data-action="snapshot" title="Exporter une sauvegarde JSON complète avant une opération de maintenance."><i class="fa-solid fa-floppy-disk"></i> Snapshot de sécurité</button>
+    <button type="button" data-action="installAll"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
     <button type="button" data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
-    <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}}><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
-    <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}}><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer données sûres</button>
-    <button type="button" data-action="audit"><i class="fa-solid fa-magnifying-glass-chart"></i> Audit monde</button>
-    <button type="button" data-action="exportAudit"><i class="fa-solid fa-file-export"></i> Exporter audit</button>
-    <button type="button" data-action="snapshot"><i class="fa-solid fa-floppy-disk"></i> Exporter snapshot</button>
-    <button type="button" data-action="restore"><i class="fa-solid fa-clock-rotate-left"></i> Restaurer dernier cycle</button>
-    <button type="button" data-action="closeApp"><i class="fa-solid fa-xmark"></i> Fermer</button>
+    <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}} title="Disponible après audit lorsqu'un équipement référencé présente un écart mécanique."><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
+    <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}} title="Disponible après audit pour les migrations explicitement considérées comme sûres."><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer données sûres</button>
+    <button type="button" data-action="restore" title="Restaure les system.props sauvegardées lors du dernier cycle de maintenance."><i class="fa-solid fa-clock-rotate-left"></i> Restaurer données</button>
   </nav>
 
   <div class="h0d-tm-scroll">
@@ -166,7 +164,7 @@
 
     <section class="h0d-tm-note">
       <i class="fa-solid fa-circle-info"></i>
-      <div><strong>Aucune modification automatique au démarrage.</strong><br>Audit = lecture seule. Aucun snapshot JSON n’est exporté automatiquement. Le bouton « Exporter snapshot » reste manuel ; synchronisation et réparation conservent leurs sauvegardes internes par fiche.</div>
+      <div><strong>Cycle conseillé : Audit monde → Snapshot de sécurité → maintenance → Audit final.</strong><br>L’audit reste en lecture seule et propose son export JSON à la fin sans relancer un second audit. Toute opération qui modifie réellement le monde fait passer le bouton principal à « Audit final recommandé ». Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
     </section>
   </div>
 </section>

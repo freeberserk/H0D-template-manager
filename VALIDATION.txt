@@ -1,3 +1,20 @@
+H0D Template Manager v1.7.17 — BAC — cycle de maintenance / audit final
+
+Contrôles à effectuer :
+- Ouvrir le manager : le bouton principal doit afficher « Audit monde » et Réparer/Migrer doivent être désactivés tant qu'aucun audit courant n'existe.
+- Lancer Audit monde : vérifier le bilan puis choisir une fois « Fermer » et une fois « Exporter le rapport JSON ».
+- Vérifier que l'export ne déclenche pas un second toast « nouvel audit en cours » et correspond au rapport affiché.
+- Exporter un Snapshot de sécurité : le bouton d'audit ne doit pas devenir obsolète.
+- Effectuer une modification réelle (installation, synchronisation, réparation ou migration) : le bouton doit devenir « Audit final recommandé ».
+- Annuler une action avant écriture : le bouton ne doit pas devenir « Audit final recommandé ».
+- Lancer l'audit final : vérifier que le bouton revient ensuite à « Refaire l'audit » et que l'export final est proposé.
+- Vérifier que « Restaurer données » restaure les system.props du dernier cycle et invalide l'audit si au moins un document a été restauré.
+- Vérifier que les boutons « Exporter audit » et « Fermer » ne sont plus présents dans la barre.
+- Vérifier que la fermeture native de la fenêtre Foundry reste fonctionnelle.
+
+Contrôle automatisé :
+- tests/template-manager-audit-workflow.mjs vérifie la version, la barre, l'état auditDirty, l'export sans second audit et l'invalidation après opérations.
+
 H0D Template Manager v1.7.15 — BAC — Faire 10 / Faire 20
 
 Contrôles à effectuer :
