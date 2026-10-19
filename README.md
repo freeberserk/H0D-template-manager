@@ -1,4 +1,26 @@
-# H0D Template Manager — v1.7.15
+# H0D Template Manager — v1.7.17
+
+## v1.7.17 — Cycle de maintenance et audit final
+
+Le gestionnaire suit désormais un flux explicite : **Audit monde → Snapshot de sécurité → maintenance → Audit final**.
+
+- **Audit monde** devient l'entrée principale. Une fois terminé, il propose immédiatement d'exporter le rapport JSON déjà calculé ; aucun second audit n'est relancé pour cet export.
+- Le bouton séparé **Exporter audit** est retiré de la barre. L'API `exportAudit` reste disponible pour compatibilité ; appelée seule, elle effectue toujours un audit frais avant export.
+- Toute opération qui modifie réellement le monde invalide le dernier audit visible et transforme le bouton principal en **Audit final recommandé**.
+- **Réparer équipements** et **Migrer données sûres** ne sont proposés qu'à partir d'un audit courant.
+- **Exporter snapshot** devient **Snapshot de sécurité**. Il reste manuel et ne rend pas l'audit obsolète.
+- **Restaurer dernier cycle** devient **Restaurer données** pour refléter précisément la restauration des `system.props` sauvegardées.
+- Le bouton **Fermer** est retiré : la fermeture native de la fenêtre Foundry suffit.
+- Le réaudit interne effectué après une migration reste un contrôle technique ; le manager conserve ensuite la possibilité d'exécuter un **audit final explicite**.
+
+## v1.7.16 — Perception, détection passive et capteurs spécialisés
+
+- Créature / PNJ v1.25 : Perception dédiée, jet actif, DET = 10 + PER, portée normale et sens spécial optionnel.
+- Machine v3.16 : Perception de base, modificateur temporaire, PER effective, DET et portée normale.
+- L'état Aveuglée applique -4 à la Perception machine.
+- Les composants actifs peuvent contribuer à la Perception générale ; leur destruction ou détachement retire ce bonus.
+- Pièce détachable v2.7 : capteurs spécialisés avec mode, cible, portée et bonus éventuel de PER générale.
+- Le PJ reste volontairement en v3.71 : sa compétence Perception existante suffit.
 
 ## v1.7.15 — Faire 10 / Faire 20
 
@@ -212,19 +234,23 @@ Il s'agit d'une vraie application Foundry (`ApplicationV2`) : **aucune macro de 
 
 ## Barre d'actions
 
-- Audit monde (lecture seule)
-- Exporter audit
-- Réparer équipements
-- Migrer données sûres (après audit : versions seules autorisées + ajouts d'amélioration explicitement allowlistés sur armes/armures, y compris si la version est déjà canonique)
-- Installer/mettre à jour
-- Synchroniser le monde (Actors / Items / les deux, compendiums Items en option)
-- Restaurer dernier cycle
-- Exporter snapshot
-- Fermer
+Le menu suit le cycle de maintenance recommandé :
+
+- **Audit monde** / **Refaire l'audit** / **Audit final recommandé** selon l'état du monde ;
+- **Snapshot de sécurité** ;
+- **Installer/mettre à jour** ;
+- **Synchroniser le monde** ;
+- **Réparer équipements** — activé après audit lorsqu'un écart mécanique réparable est détecté ;
+- **Migrer données sûres** — activé après audit pour les candidats autorisés ;
+- **Restaurer données** — restauration des propriétés sauvegardées lors du dernier cycle.
+
+L'export du rapport n'est plus une action permanente de la barre : il est proposé à la fin de chaque audit et utilise exactement le rapport qui vient d'être calculé.
 
 ## Sécurité
 
-Aucune migration au démarrage. Les snapshots JSON sont désormais **manuels uniquement** via le bouton « Exporter snapshot » : aucun clic d’installation, audit, synchronisation ou réparation ne déclenche d’export automatique. Les documents synchronisés/réparés conservent jusqu'à 5 sauvegardes internes par fiche.
+Aucune migration au démarrage. Les snapshots JSON restent **manuels uniquement** via **Snapshot de sécurité** : aucun clic d’installation, audit, synchronisation ou réparation ne déclenche de sauvegarde externe automatique. Les documents synchronisés/réparés conservent jusqu'à 5 sauvegardes internes par fiche.
+
+Un audit est toujours en lecture seule. Lorsqu'une opération écrit réellement dans le monde, le rapport courant est invalidé et le bouton principal devient **Audit final recommandé**. L'export proposé à la fin d'un audit ne relance pas le diagnostic.
 
 
 ## Migration contrôlée v1.2.0 stable
