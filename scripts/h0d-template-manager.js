@@ -1,7 +1,7 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.15";
+const MODULE_VERSION = "1.7.16";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -9,8 +9,8 @@ const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
   {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.71", version:"3.71", file:"H0D_Actor-template-PJ-v3.71.json"},
-  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.24", version:"1.24", file:"H0D_Actor-template-creature-v1.24.json"},
-  {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.15", version:"3.15", file:"H0D_Actor-template-machine-v3.15.json"},
+  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.25", version:"1.25", file:"H0D_Actor-template-creature-v1.25.json"},
+  {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.16", version:"3.16", file:"H0D_Actor-template-machine-v3.16.json"},
   {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.8", version:"2.8", file:"H0D_Arme-v2.8.json"},
   {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v2.0", version:"2.0", file:"H0D_Armure-v2.0.json"},
   {key:"item-don-talent", family:"Item", kind:"Item", id:"H0DDonTalent0001", name:"H0D_Don_Talent v2.5", version:"2.5", file:"H0D_Don_Talent-v2.5.json"},
@@ -18,7 +18,7 @@ const TEMPLATE_INDEX = [
   {key:"item-objet", family:"Item", kind:"Item", id:"H0DObjTpl0000001", name:"H0D_Objet v2.9", version:"2.9", file:"H0D_Objet-v2.9.json"},
   {key:"item-ressource", family:"Item", kind:"Item", id:"H0DResTpl0000001", name:"H0D_Ressource v2.5", version:"2.5", file:"H0D_Ressource-v2.5.json"},
   {key:"item-arme-machine", family:"Item", kind:"Item", id:"H0DWeaponMach001", name:"H0D_arme_Machine v3.9", version:"3.9", file:"H0D_arme_Machine-v3.9.json"},
-  {key:"item-piece", family:"Item", kind:"Item", id:"H0DCompMach00001", name:"H0D_Pièce_Détachable v2.6", version:"2.6", file:"H0D_Piece_Detachable-v2.6.json"}
+  {key:"item-piece", family:"Item", kind:"Item", id:"H0DCompMach00001", name:"H0D_Pièce_Détachable v2.7", version:"2.7", file:"H0D_Piece_Detachable-v2.7.json"}
 ];
 
 const MANAGED_IDS = new Set(TEMPLATE_INDEX.map(e => e.id));
@@ -87,7 +87,16 @@ const SAFE_ADDITIVE_MISSING_KEYS = {
     "H0D_Skill_Technologie_Bonus_Origine"
   ]),
   "actor-creature": new Set([
-    "H0D_Creature_DD_Capacites"
+    "H0D_Creature_DD_Capacites",
+    "H0D_Creature_Perception",
+    "H0D_Creature_Perception_Portee",
+    "H0D_Creature_Sens_Speciaux",
+    "H0D_Creature_Sens_Portee"
+  ]),
+  "actor-machine": new Set([
+    "H0D_Machine_Perception_Base",
+    "H0D_Machine_Mod_Perception_Temp",
+    "H0D_Machine_Perception_Portee_Base"
   ]),
   "item-arme": new Set([
     // Champs neutres apparus sur les anciennes armes ordinaires. Catégorie et
@@ -113,6 +122,13 @@ const SAFE_ADDITIVE_MISSING_KEYS = {
     "H0D_Arme_Amelioration_3_Type",
     "H0D_Arme_Amelioration_3_Valeur",
     "H0D_Arme_Amelioration_3_Effet"
+  ]),
+  "item-piece": new Set([
+    "H0D_Composant_Capteur_Specialise",
+    "H0D_Composant_Capteur_Mode",
+    "H0D_Composant_Capteur_Cible",
+    "H0D_Composant_Capteur_Portee",
+    "H0D_Composant_Capteur_Bonus_Perception"
   ]),
   "item-armure": new Set([
     "H0D_Armure_Malus",
