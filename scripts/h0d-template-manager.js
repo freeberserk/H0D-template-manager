@@ -1,7 +1,7 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.16";
+const MODULE_VERSION = "1.7.17";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -267,6 +267,32 @@ async function infoDialog(title, content, ok="Fermer") {
     rejectClose:false,
     ok:{label:ok, icon:"fa-solid fa-check"}
   });
+}
+
+async function promptAuditExport(report,{final=false}={}) {
+  if (!report) return;
+  const templates=report.counts?.templates || {};
+  const documents=report.counts?.documents || {};
+  const triage=report.warningTriage || {};
+  const exportNow=await foundry.applications.api.DialogV2.confirm({
+    window:{title:final ? "H0D — Audit final terminé" : "H0D — Audit terminé"},
+    content:`
+      <p><strong>${final ? "✅ Vérification finale terminée." : "✅ Audit terminé en lecture seule."}</strong></p>
+      <p>Templates : <strong>${templates.ok ?? 0} OK</strong> · ${templates.update ?? 0} mise(s) à jour · ${templates.absent ?? 0} absent(s)<br>
+      Fiches : <strong>${documents.ok ?? 0} saines</strong> · ${documents.warnings ?? 0} avertissement(s) · ${documents.errors ?? 0} erreur(s)<br>
+      Candidats à migration sûre : <strong>${Number(triage.versionOnlyCandidates || 0)+Number(triage.additiveSafeCandidates || 0)}</strong></p>
+      <p class="notes">Le fichier proposé contient exactement ce rapport : aucun second audit ne sera relancé pour l'export.</p>
+    `,
+    yes:{label:"Exporter le rapport JSON",icon:"fa-solid fa-file-export"},
+    no:{label:"Fermer",icon:"fa-solid fa-xmark"}
+  });
+  if (exportNow) await exportAudit(report);
+}
+
+function invalidateAudit(reason="Modification du monde") {
+  H0DTemplateManagerState.lastAudit=null;
+  H0DTemplateManagerState.auditDirty=true;
+  H0DTemplateManagerState.lastMutation=reason;
 }
 
 async function syncChoiceDialog() {
@@ -901,6 +927,7 @@ async function restoreLastCycle() {
     } catch(err) { errors++; console.error(`H0D Template Manager — restauration ${entry.doc.name}`,err); }
   }
   ui.notifications[errors ? "warn" : "info"](`H0D : ${restored} document(s) restauré(s)${errors ? `, ${errors} erreur(s)` : ""}.`);
+  return {restored,errors};
 }
 
 async function legacyTraitUsages() {
@@ -923,6 +950,7 @@ async function retireLegacyTrait() {
   if (!ok) return;
   await legacy.delete();
   ui.notifications.info("H0D : template H0D_Trait v2.6 retiré.");
+  return true;
 }
 
 function cleanTraitTable(v) {
@@ -1340,6 +1368,7 @@ async function repairEquipment() {
     } catch(err) { errors++; console.error("H0D Template Manager — réparation armure/bouclier",rec,err); }
   }
   ui.notifications[errors ? "warn" : "info"](`H0D : ${weaponsDone} arme(s) et ${armorsDone} armure(s)/bouclier(s) réparé(s)${errors ? `, ${errors} erreur(s)` : ""}.`);
+  return {weaponsDone,armorsDone,errors};
 }
 
 
@@ -1458,14 +1487,20 @@ async function auditWorld() {
   return report;
 }
 
-async function exportAudit() {
-  ui.notifications.info("H0D : nouvel audit en cours avant export…");
-  const report=await auditWorld();
-  foundry.utils.saveDataToFile(JSON.stringify(report,null,2),"application/json",`H0D-template-manager-audit-${nowStamp()}.json`);
-  ui.notifications.info("H0D : audit frais exporté.");
+async function exportAudit(report=null) {
+  let current=report;
+  if (!current) {
+    ui.notifications.info("H0D : nouvel audit en cours avant export…");
+    current=await auditWorld();
+    H0DTemplateManagerState.auditDirty=false;
+    H0DTemplateManagerState.lastMutation="";
+  }
+  foundry.utils.saveDataToFile(JSON.stringify(current,null,2),"application/json",`H0D-template-manager-audit-${nowStamp()}.json`);
+  ui.notifications.info("H0D : rapport d'audit exporté.");
+  return current;
 }
 
-const H0DTemplateManagerState={lastAudit:null,lastSafeMigration:null,app:null};
+const H0DTemplateManagerState={lastAudit:null,lastSafeMigration:null,app:null,auditDirty:false,lastMutation:""};
 
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
 class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
@@ -1477,12 +1512,10 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     position:{width:1180,height:780},
     actions:{
       audit:H0DTemplateManagerApp._audit,
-      exportAudit:H0DTemplateManagerApp._exportAudit,
       installAll:H0DTemplateManagerApp._installAll,
       synchronize:H0DTemplateManagerApp._synchronize,
       restore:H0DTemplateManagerApp._restore,
       snapshot:H0DTemplateManagerApp._snapshot,
-      closeApp:H0DTemplateManagerApp._closeApp,
       openTemplate:H0DTemplateManagerApp._openTemplate,
       updateTemplate:H0DTemplateManagerApp._updateTemplate,
       auditTemplate:H0DTemplateManagerApp._auditTemplate,
@@ -1499,34 +1532,74 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const legacy=game.items.get(LEGACY_TRAIT_ID);
     const legacyUsages=legacy ? await legacyTraitUsages() : [];
     const audit=H0DTemplateManagerState.lastAudit;
-    const weapon=audit?.weaponReference || await auditWeapons();
-    const armor=audit?.armorReference || await auditArmors();
+    const auditDirty=H0DTemplateManagerState.auditDirty;
+    const weaponSummary=audit?.weaponReference?.summary || {
+      referenceWeapons:"—",referenceFound:"—",referenceMissing:"—",pjEmbeddedWeapons:"—",aloyEmbeddedWeapons:"—",
+      mechanicalDiffs:"—",repairableWeapons:0,unreferenced:"—"
+    };
+    const armorSummary=audit?.armorReference?.summary || {
+      referenceItems:"—",embeddedItems:"—",armors:"—",shields:"—",ok:"—",matched:"—",
+      mechanicalDiffs:"—",mismatch:0,unreferenced:"—",sourceWarnings:"—"
+    };
+    const safeVersionCandidates=(!auditDirty && audit?.warningTriage)
+      ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
+      : 0;
     return foundry.utils.mergeObject(context,{
       moduleVersion:MODULE_VERSION,
       actorTemplates:templates.filter(e=>e.kind==="Actor"),
       itemTemplates:templates.filter(e=>e.kind==="Item"),
       legacy:{installed:!!legacy,name:legacy?.name || "H0D_Trait v2.6",usages:legacyUsages.length,canRemove:!!legacy && legacyUsages.length===0},
       auditSummary:audit ? {available:true,createdAt:audit.createdAt,...audit.counts} : {available:false},
+      auditState:{
+        available:!!audit,
+        dirty:auditDirty,
+        label:auditDirty ? "Audit final recommandé" : (audit ? "Refaire l’audit" : "Audit monde"),
+        hint:auditDirty
+          ? `Le monde a été modifié${H0DTemplateManagerState.lastMutation ? ` : ${H0DTemplateManagerState.lastMutation}` : ""}. Relancer un audit global est recommandé.`
+          : (audit ? "Relancer un audit global en lecture seule." : "Lancer l’audit global en lecture seule.")
+      },
       warningTriage:audit?.warningTriage ? {available:true,...audit.warningTriage} : {available:false},
-      safeVersionCandidates:audit?.warningTriage ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0) : 0,
-      weaponSummary:weapon.summary,
-      armorSummary:armor.summary,
-      hasEquipmentRepair:(weapon.summary.repairableWeapons+armor.summary.mismatch)>0,
+      safeVersionCandidates,
+      weaponSummary,
+      armorSummary,
+      hasEquipmentRepair:!!audit && !auditDirty && (Number(weaponSummary.repairableWeapons||0)+Number(armorSummary.mismatch||0))>0,
       lastCycle:game.settings.get(MODULE_ID,LAST_CYCLE_SETTING) || "—"
     },{inplace:false});
   }
-  static async _audit() { ui.notifications.info("H0D : audit en cours…"); H0DTemplateManagerState.lastAudit=await auditWorld(); ui.notifications.info("H0D : audit terminé (lecture seule)."); await this.render({force:true}); }
-  static async _exportAudit() { await exportAudit(); }
-  static async _installAll() { await installAllTemplates(); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
-  static async _synchronize() { const choice=await syncChoiceDialog(); if (!choice) return; await synchronize(choice.mode,choice.packs); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
-  static async _restore() { await restoreLastCycle(); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
+  static async _audit() {
+    const final=H0DTemplateManagerState.auditDirty;
+    ui.notifications.info(final ? "H0D : audit final en cours…" : "H0D : audit en cours…");
+    const report=await auditWorld();
+    H0DTemplateManagerState.lastAudit=report;
+    H0DTemplateManagerState.auditDirty=false;
+    H0DTemplateManagerState.lastMutation="";
+    ui.notifications.info(final ? "H0D : audit final terminé." : "H0D : audit terminé (lecture seule).");
+    await this.render({force:true});
+    await promptAuditExport(report,{final});
+  }
+  static async _installAll() {
+    const results=await installAllTemplates();
+    if (results) invalidateAudit("installation / mise à jour des templates");
+    await this.render({force:true});
+  }
+  static async _synchronize() {
+    const choice=await syncChoiceDialog();
+    if (!choice) return;
+    const results=await synchronize(choice.mode,choice.packs);
+    if (results?.some(r=>r.ok)) invalidateAudit("synchronisation du monde");
+    await this.render({force:true});
+  }
+  static async _restore() {
+    const result=await restoreLastCycle();
+    if (result?.restored>0) invalidateAudit("restauration des données");
+    await this.render({force:true});
+  }
   static async _snapshot() { await createSnapshot("manuel"); }
-  static async _closeApp() { await this.close(); }
   static async _openTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); const doc=entry&&installedTemplate(entry); if (!doc) return ui.notifications.warn("H0D : template absent."); doc.sheet?.render(true); }
-  static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Aucun snapshot JSON n’est exporté automatiquement.</p>`,"Mettre à jour"); if (!ok) return; await updateTemplate(entry); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
+  static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Aucun snapshot JSON n’est exporté automatiquement.</p>`,"Mettre à jour"); if (!ok) return; await updateTemplate(entry); invalidateAudit(`mise à jour de ${entry.name}`); await this.render({force:true}); }
   static async _auditTemplate(event,target) { const key=target.dataset.key; const report=await auditWorld(); const entry=TEMPLATE_INDEX.find(e=>e.key===key); const docs=report.documents.filter(d=>d.templateId===entry?.id); const bad=docs.filter(d=>d.status!=="ok"); ui.notifications.info(`H0D : ${entry?.name || key} — ${docs.length} fiche(s), ${bad.length} à examiner.`); H0DTemplateManagerState.lastAudit=report; await this.render({force:true}); }
-  static async _retireTrait() { await retireLegacyTrait(); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
-  static async _repairEquipment() { await repairEquipment(); H0DTemplateManagerState.lastAudit=null; await this.render({force:true}); }
+  static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) invalidateAudit("retrait du template legacy"); await this.render({force:true}); }
+  static async _repairEquipment() { const result=await repairEquipment(); if (result && (result.weaponsDone+result.armorsDone)>0) invalidateAudit("réparation des équipements"); await this.render({force:true}); }
   static async _migrateSafeVersions() {
     const liveCandidates=await collectSafeVersionCandidates();
     if (!liveCandidates.length) {
@@ -1573,7 +1646,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       Candidats sûrs encore détectés : <strong>${safeRemaining}</strong><br>
       Warnings monde restants après réaudit : <strong>${triage.warningDocuments ?? audit.counts?.documents?.warnings ?? "—"}</strong><br>
       Erreurs monde après réaudit : <strong>${triage.errorDocuments ?? audit.counts?.documents?.errors ?? "—"}</strong></p>
-      <p class="notes">Le réaudit vient d'être exécuté automatiquement. Le détail de cette migration sera inclus dans « Exporter audit » sous <code>safeVersionMigration</code>.</p>
+      <p class="notes">Un réaudit de contrôle vient d'être exécuté automatiquement pour ce bilan. Le bouton principal restera toutefois sur « Audit final recommandé » afin de permettre une vérification globale explicite après toutes les opérations.</p>
     `;
 
     ui.notifications[success ? "info" : "warn"](
@@ -1585,8 +1658,9 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       await infoDialog(title,content,"Fermer");
     } catch(err) {
       console.error("H0D Template Manager — impossible d'afficher le bilan final de migration.",err);
-      ui.notifications.warn("H0D : migration terminée, mais la fenêtre de bilan n'a pas pu s'afficher. Lance « Exporter audit » pour consulter le détail.");
+      ui.notifications.warn("H0D : migration terminée, mais la fenêtre de bilan n'a pas pu s'afficher. Lance l'audit final pour vérifier l'état global.");
     }
+    invalidateAudit("migration des données sûres");
     await this.render({force:true});
   }
 }
