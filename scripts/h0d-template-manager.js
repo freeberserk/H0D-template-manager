@@ -1,7 +1,14 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
+import {
+  registerAmmoRecoverySettings,
+  registerAmmoRecoveryHooks,
+  openPendingAmmoRecovery,
+  promptPendingAmmoRecoveryOnReady,
+  ammoRecoveryRates
+} from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.22";
+const MODULE_VERSION = "1.7.23";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -1858,7 +1865,10 @@ async function ensureAttacksMacro() {
 
 Hooks.once("init",()=>{
   game.settings.register(MODULE_ID,LAST_CYCLE_SETTING,{scope:"world",config:false,type:String,default:""});
+  registerAmmoRecoverySettings();
 });
+
+registerAmmoRecoveryHooks();
 
 Hooks.on("getSceneControlButtons",controls=>{
   if (!game.user?.isGM || !controls.tokens?.tools) return;
@@ -1885,6 +1895,8 @@ Hooks.once("ready",async()=>{
     auditArmors,
     repairEquipment,
     retireLegacyTrait,
+    recoverAmmo:openPendingAmmoRecovery,
+    ammoRecoveryRates,
     getTemplate:getManagedTemplate,
     registry:()=>clone(TEMPLATE_INDEX)
   };
@@ -1892,5 +1904,6 @@ Hooks.once("ready",async()=>{
   if (mod) mod.api=api;
   game.h0dTemplateManager=api;
   await ensureAttacksMacro();
+  await promptPendingAmmoRecoveryOnReady();
   console.log(`H0D Template Manager v${MODULE_VERSION} prêt — interface ApplicationV2, API builders active.`);
 });
