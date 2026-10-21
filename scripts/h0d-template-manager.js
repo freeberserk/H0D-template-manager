@@ -694,11 +694,13 @@ async function safeVersionReload(entry, runId) {
   let doc=null;
   let originalProps={};
   let originalVersion=0;
+  let originalPrototypeBar1=null;
   let reloadAttempted=false;
   try {
     doc=await resolveFreshDocument(entry);
     originalProps=clone(doc.system?.props || {});
     originalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
+    originalPrototypeBar1=clone(doc.prototypeToken?.bar1 || null);
     const validationTemplate=await loadTemplate(entry.templateEntry);
     const originalEditable=editableInputSnapshot(validationTemplate,originalProps);
     await pushBackup(doc,runId,`Migration version sûre — ${entry.scope}`);
@@ -724,6 +726,7 @@ async function safeVersionReload(entry, runId) {
 
     const addedKeys=[];
     const recoveredKeys=[];
+    let prototypeBarChanged=false;
     if (hasAdditive) {
       // Les clés neutres explicitement allowlistées reçoivent leur valeur par défaut
       // canonique. Une clé non allowlistée n'est restaurée que si le backup sûr
@@ -756,6 +759,14 @@ async function safeVersionReload(entry, runId) {
       }
     }
 
+    if (entry.prototypeBarMismatch && entry.wantedPrototypeBar && doc.documentName==="Actor") {
+      if (prototypeBarAttribute(doc)!==entry.wantedPrototypeBar) {
+        await doc.update({"prototypeToken.bar1.attribute":entry.wantedPrototypeBar});
+        doc=await resolveFreshDocument(entry);
+      }
+      prototypeBarChanged=true;
+    }
+
     const finalProps=doc.system?.props || {};
     const finalEditable=editableInputSnapshot(validationTemplate,finalProps);
     const changedLocal=diffShape(originalEditable,finalEditable);
@@ -769,6 +780,9 @@ async function safeVersionReload(entry, runId) {
         throw new Error(`Valeur récupérée depuis le backup non préservée : ${key}`);
       }
     }
+    if (entry.prototypeBarMismatch && prototypeBarAttribute(doc)!==entry.wantedPrototypeBar) {
+      throw new Error(`Barre prototype finale inattendue (${prototypeBarAttribute(doc)}, attendu ${entry.wantedPrototypeBar}).`);
+    }
     if (finalVersion!==wantedVersion) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${wantedVersion}).`);
 
     let migrationKind="version-only";
@@ -776,28 +790,35 @@ async function safeVersionReload(entry, runId) {
     else if (recoveredKeys.length) migrationKind="backup-recovery";
     else if (hasAdditive && needsReload) migrationKind="version+additive-safe-direct";
     else if (hasAdditive) migrationKind="additive-safe-direct";
+    else if (prototypeBarChanged && needsReload) migrationKind="version+prototype-bar";
+    else if (prototypeBarChanged) migrationKind="prototype-bar";
 
     return {
       ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,
       templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,
-      migrationKind,addedKeys,recoveredKeys
+      migrationKind,addedKeys,recoveredKeys,prototypeBarChanged
     };
   } catch(err) {
     console.error(`H0D Template Manager — migration version sûre ${entry.name}`,err);
     try {
       doc=await fromUuid(entry.uuid);
       if (doc && Object.keys(originalProps).length) {
+        const restoreUpdate={};
         if (!reloadAttempted) {
           // Aucun reload : retour exact aux props capturées avant tentative.
-          await doc.update({"system.props":clone(originalProps)});
+          restoreUpdate["system.props"]=clone(originalProps);
         } else {
           // Après reload, conserver la structure recréée par CSB mais remettre
           // toutes les valeurs locales capturées avant l'opération.
           const current=clone(doc.system?.props || {});
           const restored=clone(current);
           for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
-          await doc.update({"system.props":restored});
+          restoreUpdate["system.props"]=restored;
         }
+        if (originalPrototypeBar1 && doc.documentName==="Actor") {
+          restoreUpdate["prototypeToken.bar1"]=clone(originalPrototypeBar1);
+        }
+        await doc.update(restoreUpdate);
       }
     } catch(restoreErr) {
       console.error(`H0D Template Manager — restauration locale après erreur ${entry.name}`,restoreErr);
