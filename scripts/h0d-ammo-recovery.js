@@ -9,6 +9,8 @@ const RECOVERY_RATES = Object.freeze({
   Machines:   {standard:25, reinforced:60}
 });
 
+const ACTIVE_PROMPTS = new Set();
+
 function clone(v) {
   return foundry.utils.deepClone(v);
 }
@@ -60,14 +62,15 @@ function itemProps(item) {
   return item?.system?.props ?? {};
 }
 
-function recoverableWeaponEntry(actor,item) {
+function recoverableAmmoEntry(actor,item) {
   const p=itemProps(item);
-  if (String(p.H0D_Arme_Mode_Munition || "")!=="Chargeur") return null;
+  const isAmmo=p.H0D_Objet_Munition_Active===true || String(p.H0D_Objet_Type || "")==="Munition";
+  if (!isAmmo) return null;
 
-  const ammoType=String(p.H0D_Arme_Type_Munition || "");
+  const ammoType=String(p.H0D_Objet_Munition_Famille || "");
   if (!RECOVERABLE_AMMO_TYPES.has(ammoType)) return null;
 
-  const current=Math.max(0,Math.floor(num(p.H0D_Arme_Munitions)));
+  const current=Math.max(0,Math.floor(num(p.H0D_Objet_Quantite)));
   return {
     actorUuid:actor.uuid,
     actorId:actor.id,
@@ -95,7 +98,7 @@ async function captureCombatAmmo(combat) {
     seenActors.add(actor.id);
 
     for (const item of actor.items ?? []) {
-      const entry=recoverableWeaponEntry(actor,item);
+      const entry=recoverableAmmoEntry(actor,item);
       if (entry) entries.push(entry);
     }
   }
@@ -116,7 +119,7 @@ async function spentEntriesForRecord(record) {
   for (const entry of record?.entries ?? []) {
     const item=await fromUuid(entry.itemUuid);
     if (!item) continue;
-    const current=Math.max(0,Math.floor(num(itemProps(item).H0D_Arme_Munitions)));
+    const current=Math.max(0,Math.floor(num(itemProps(item).H0D_Objet_Quantite)));
     const spent=Math.max(0,Number(entry.start || 0)-current);
     if (!spent) continue;
     rows.push({...entry,current,spent});
@@ -169,7 +172,7 @@ function recoveryDialogContent(record,rows) {
         <thead>
           <tr>
             <th>PJ</th>
-            <th>Arme</th>
+            <th>Lot de munitions</th>
             <th>Munition</th>
             <th>Dépensées</th>
             <th>Dont renforcées</th>
@@ -214,10 +217,10 @@ async function applyRecovery(record,rows,formData) {
 
     const item=await fromUuid(row.itemUuid);
     if (item && recovered>0) {
-      const current=Math.max(0,Math.floor(num(itemProps(item).H0D_Arme_Munitions)));
+      const current=Math.max(0,Math.floor(num(itemProps(item).H0D_Objet_Quantite)));
       const cap=Math.max(current,Number(row.start || 0));
       await item.update({
-        "system.props.H0D_Arme_Munitions":Math.min(cap,current+recovered)
+        "system.props.H0D_Objet_Quantite":Math.min(cap,current+recovered)
       });
     }
 
@@ -258,7 +261,7 @@ async function postRecoverySummary(record,outcomes) {
         <h3 style="margin:0 0 6px">H0D — Récupération des munitions</h3>
         <p><strong>${esc(record.combatName || "Combat")}</strong> · contexte : <strong>${esc(context)}</strong></p>
         <table style="width:100%">
-          <thead><tr><th>PJ</th><th>Arme</th><th>Dépensées</th><th>Récupérées</th><th>Perdues</th></tr></thead>
+          <thead><tr><th>PJ</th><th>Lot</th><th>Dépensées</th><th>Récupérées</th><th>Perdues</th></tr></thead>
           <tbody>${lines}</tbody>
         </table>
         <p><strong>Total :</strong> ${totalRecovered}/${totalSpent} munition(s) récupérée(s).</p>
@@ -268,7 +271,7 @@ async function postRecoverySummary(record,outcomes) {
 }
 
 async function resolveAmmoRecovery(combatId,{automatic=false}={}) {
-  if (!isResponsibleGM()) return false;
+  if (!isResponsibleGM() || ACTIVE_PROMPTS.has(combatId)) return false;
 
   const state=readState();
   const record=state[combatId];
@@ -281,34 +284,39 @@ async function resolveAmmoRecovery(combatId,{automatic=false}={}) {
     return false;
   }
 
-  const fd=await foundry.applications.api.DialogV2.input({
-    window:{title:"H0D — Récupérer les munitions"},
-    content:recoveryDialogContent(record,rows),
-    ok:{label:"Rendre les munitions",icon:"fa-solid fa-arrows-rotate"},
-    rejectClose:false
-  });
+  ACTIVE_PROMPTS.add(combatId);
+  try {
+    const fd=await foundry.applications.api.DialogV2.input({
+      window:{title:"H0D — Récupérer les munitions"},
+      content:recoveryDialogContent(record,rows),
+      ok:{label:"Rendre les munitions",icon:"fa-solid fa-arrows-rotate"},
+      rejectClose:false
+    });
 
-  if (!fd) {
-    if (automatic) {
-      ui.notifications.warn("H0D : récupération de munitions laissée en attente.");
+    if (!fd) {
+      if (automatic) {
+        ui.notifications.warn("H0D : récupération de munitions laissée en attente.");
+      }
+      return false;
     }
-    return false;
+
+    const outcomes=await applyRecovery(record,rows,fd);
+    record.endedAt ||= new Date().toISOString();
+    record.resolvedAt=new Date().toISOString();
+    record.context=String(fd.context || "");
+    record.outcomes=outcomes.map(x=>({
+      actorName:x.actorName,itemName:x.itemName,ammoType:x.ammoType,
+      spent:x.spent,standard:x.standard,reinforced:x.reinforced,recovered:x.recovered
+    }));
+    state[combatId]=record;
+    await writeState(state);
+
+    await postRecoverySummary(record,outcomes);
+    ui.notifications.info("H0D : récupération des munitions résolue.");
+    return true;
+  } finally {
+    ACTIVE_PROMPTS.delete(combatId);
   }
-
-  const outcomes=await applyRecovery(record,rows,fd);
-  record.endedAt ||= new Date().toISOString();
-  record.resolvedAt=new Date().toISOString();
-  record.context=String(fd.context || "");
-  record.outcomes=outcomes.map(x=>({
-    actorName:x.actorName,itemName:x.itemName,ammoType:x.ammoType,
-    spent:x.spent,standard:x.standard,reinforced:x.reinforced,recovered:x.recovered
-  }));
-  state[combatId]=record;
-  await writeState(state);
-
-  await postRecoverySummary(record,outcomes);
-  ui.notifications.info("H0D : récupération des munitions résolue.");
-  return true;
 }
 
 async function finishCombatAmmo(combat) {
