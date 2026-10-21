@@ -1,5 +1,34 @@
-# H0D Template Manager — v1.7.22
+# H0D Template Manager — v1.7.23
 
+## v1.7.23 — Récupération simple des munitions après combat
+
+Cette version ajoute une première automatisation volontairement simple de récupération des munitions physiques des PJ.
+
+### Fonctionnement
+
+- Au début d'un combat, le module mémorise silencieusement la quantité des Items Objet de munition possédés par les PJ engagés.
+- Sont suivies en V1 les familles **Flèche**, **Carreau** et **Projectile / arme de jet**.
+- À la fin du combat, si une quantité a diminué, le MJ reçoit automatiquement la fenêtre **Récupérer les munitions**.
+- Le MJ choisit un seul contexte principal : **Faune**, **Faction** ou **Machines**.
+- Pour chaque lot dépensé, le MJ indique combien étaient des munitions **renforcées** ; le reste est considéré standard.
+- Chaque munition dépensée effectue individuellement un jet de récupération au d100.
+- Les réussites sont directement remises dans `H0D_Objet_Quantite`, sans pouvoir dépasser le stock de début de combat.
+
+| Contexte | Standard | Renforcée |
+| --- | ---: | ---: |
+| Faune | 75 % | 90 % |
+| Faction | 60 % | 80 % |
+| Machines | 25 % | 60 % |
+
+Les bombes, cartouches, cellules et autres consommables non physiques ne sont pas concernés par cette V1.
+
+### Anti-oubli
+
+Si la fenêtre est fermée sans résoudre la récupération, l'opération reste enregistrée comme **en attente**. Elle est reproposée au prochain chargement du monde par le MJ responsable ou au démarrage du combat suivant.
+
+API de secours : `game.h0dTemplateManager.recoverAmmo()`.
+
+Cette première version suit les **Items Objet de munition** réellement utilisés dans le monde (`H0D_Objet_Munition_Active`, famille et `H0D_Objet_Quantite`) ; elle ne dépend pas du mode `Chargeur` des armes.
 ## v1.7.22 — Taille physique des Créatures / PNJ
 
 Le template **Créature / PNJ v1.27** ajoute le champ `H0D_Creature_Taille` dans l'en-tête de fiche, indépendamment du niveau de Menace.
