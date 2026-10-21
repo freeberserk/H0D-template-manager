@@ -1,3 +1,22 @@
+H0D Template Manager v1.7.19 — BAC — récupération sûre des derniers champs manquants
+
+Cas de référence : Griffes + Morsure, Item monde, template Arme v2.8.
+
+Contrôles à effectuer :
+- Avant migration, Audit monde doit détecter 2 warnings monde et rendre « Migrer données sûres » disponible.
+- Vérifier dans l'export que chaque document expose safeRecovery.safe=true.
+- Les clés récupérées doivent être H0D_Arme_Categorie et H0D_Arme_Origine ; la catégorie attendue vient du backup sûr (melee), pas d'une valeur inventée.
+- Les neuf autres clés manquantes doivent être ajoutées avec les valeurs neutres du template canonique.
+- Lancer Migrer données sûres : 2/2 réussies, 0 erreur, 0 candidat restant.
+- Vérifier le résultat de migration : migrationKind=backup-recovery et recoveredKeys renseigné.
+- Lancer Audit final recommandé : 0 warning monde, 0 erreur monde attendu.
+- Vérifier que les warnings de compendiums partagés ne sont pas modifiés par cette migration.
+- Tester un document artificiel sans backup sûr : il doit rester non éligible si une clé non allowlistée manque.
+- Tester un backup avec UUID ou template différent : il doit être refusé.
+
+Contrôle automatisé :
+- tests/template-manager-audit-workflow.mjs vérifie la présence des gardes UUID/template, le triage safeRecovery et le traçage recoveredKeys.
+
 H0D Template Manager v1.7.18 — BAC — réaudit silencieux de maintenance
 
 Contrôles à effectuer :
