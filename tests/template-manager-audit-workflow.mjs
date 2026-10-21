@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.17","Le manifest doit être en 1.7.17");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.17";'),"MODULE_VERSION doit être en 1.7.17");
+assert.equal(manifest.version,"1.7.18","Le manifest doit être en 1.7.18");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.18";'),"MODULE_VERSION doit être en 1.7.18");
 
 assert.ok(hbs.includes('data-action="audit"'),"Le bouton Audit doit rester présent");
 assert.ok(hbs.includes("{{auditState.label}}"),"Le libellé d'audit doit être contextuel");
@@ -27,10 +27,14 @@ assert.ok(script.includes("async function exportAudit(report=null)"),"L'API expo
 assert.ok(script.includes("if (!current) {"),"L'API exportAudit seule doit pouvoir relancer un audit frais");
 assert.ok(script.includes("auditDirty:false"),"L'état auditDirty doit être initialisé");
 assert.ok(script.includes('label:auditDirty ? "Audit final recommandé"'),"Le libellé final recommandé doit dépendre de l'état sale");
-assert.ok(script.includes('invalidateAudit("synchronisation du monde")'),"La synchronisation doit invalider l'audit");
-assert.ok(script.includes('invalidateAudit("réparation des équipements")'),"La réparation doit invalider l'audit");
-assert.ok(script.includes('invalidateAudit("migration des données sûres")'),"La migration doit invalider l'audit");
-assert.ok(script.includes('invalidateAudit("restauration des données")'),"La restauration doit invalider l'audit");
+assert.ok(script.includes("async function refreshAuditSilently"),"Le réaudit silencieux de maintenance doit exister");
+assert.ok(script.includes('await refreshAuditSilently("synchronisation du monde")'),"La synchronisation doit relancer un audit silencieux");
+assert.ok(script.includes('await refreshAuditSilently("réparation des équipements")'),"La réparation doit rafraîchir l'audit silencieusement");
+assert.ok(script.includes('markAuditFinalRecommended("migration des données sûres",{preserveReport:true})'),"La migration doit conserver son réaudit interne tout en recommandant l'audit final");
+assert.ok(script.includes('markAuditFinalRecommended("restauration des données")'),"La restauration doit recommander l'audit final");
+assert.ok(script.includes("const safeVersionCandidates=audit?.warningTriage"),"Les candidats de migration doivent rester disponibles sur un audit silencieux");
+assert.ok(script.includes("hasEquipmentRepair:!!audit && ("),"La réparation doit rester disponible sur un audit silencieux");
+assert.equal(script.includes("safeVersionCandidates=(!auditDirty && audit?.warningTriage)"),false,"auditDirty ne doit plus désactiver les migrations si un rapport courant existe");
 assert.ok(script.includes("H0DTemplateManagerState.auditDirty=false;"),"Un audit explicite doit remettre l'état à jour");
 
 const auditButton=hbs.indexOf('data-action="audit"');
@@ -39,7 +43,7 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(auditButton>=0 && snapshotButton>auditButton && installButton>snapshotButton,
   "La barre doit commencer par Audit puis Snapshot puis Installation");
 
-assert.ok(readme.startsWith("# H0D Template Manager — v1.7.17"),"README non aligné sur la version");
+assert.ok(readme.startsWith("# H0D Template Manager — v1.7.18"),"README non aligné sur la version");
 assert.ok(readme.includes("Audit final recommandé"),"README doit documenter l'audit final");
 
-console.log("Template Manager audit workflow 1.7.17 OK");
+console.log("Template Manager audit workflow 1.7.18 OK");
