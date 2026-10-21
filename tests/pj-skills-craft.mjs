@@ -90,4 +90,4 @@ for(let n=1;n<=3;n++){
   }
 }
 
-console.log("PJ skills / Artisanat v3.70 OK");
+console.log("PJ skills / Artisanat v3.72 OK");
