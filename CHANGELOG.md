@@ -1,3 +1,13 @@
+## 1.7.18 — Réaudit silencieux après maintenance
+
+- Après **Synchroniser le monde**, relance automatiquement un audit complet en arrière-plan sans dialogue ni export.
+- **Réparer équipements** fait de même après une réparation effective afin de recalculer immédiatement les écarts restants.
+- Les boutons **Réparer équipements** et **Migrer données sûres** restent disponibles à partir du rapport silencieux, même si l'état global reste marqué **Audit final recommandé**.
+- La migration sûre conserve son réaudit interne et préserve désormais ce rapport pour les actions suivantes.
+- Le réaudit silencieux ne remplace jamais l'audit final explicite du MJ : le bouton principal reste **Audit final recommandé** jusqu'à son lancement manuel.
+- Une action annulée ou sans écriture ne déclenche aucun réaudit.
+- Tests de non-régression adaptés au nouveau workflow.
+
 ## 1.7.17 — Cycle de maintenance et audit final
 
 - Réorganise la barre autour du flux **Audit → Snapshot → maintenance → Audit final**.
