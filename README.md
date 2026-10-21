@@ -1,4 +1,14 @@
-# H0D Template Manager — v1.7.18
+# H0D Template Manager — v1.7.19
+
+## v1.7.19 — Récupération sûre depuis backup pré-reload
+
+Le dernier reliquat du BAC est désormais traitable sans deviner de données. Lorsqu'une fiche possède des champs manquants normalement exclus de l'allowlist, le manager peut les considérer comme sûrs uniquement si le backup historique `h0dSafeReloadBackupV2` appartient au **même UUID** et au **même template** et contient leur valeur exacte.
+
+Les autres champs manquants restent soumis à l'allowlist additive habituelle et reçoivent uniquement leur valeur neutre canonique. La migration vérifie ensuite que toutes les valeurs récupérées ont été conservées.
+
+Sur le snapshot BAC du 21/10, cela rend réparables les deux derniers warnings monde, **Griffes** et **Morsure** : leur catégorie `melee` et leur origine vide sont récupérées depuis le backup sûr ; les neuf autres champs manquants sont neutres et déjà allowlistés.
+
+Les compendiums partagés restent volontairement hors migration automatique.
 
 ## v1.7.18 — Réaudit silencieux après maintenance
 
