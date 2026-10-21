@@ -1,3 +1,12 @@
+## 1.7.22 — Taille physique des Créatures / PNJ
+
+- Ajoute `H0D_Creature_Taille` au template Créature / PNJ **v1.27**.
+- Valeurs disponibles : Infime, Minuscule, Très petite, Petite, Moyenne, Grande, Très grande, Gigantesque, Colossale.
+- Valeur par défaut : **Moyenne**.
+- Le champ est indépendant de la Menace et n'altère aucune formule de combat.
+- `H0D_Creature_Taille` est ajouté à l'allowlist des migrations additives sûres.
+- Prépare l'intégration avec H0D Creature Builder 0.3.0 pour le redimensionnement automatique des tokens.
+- Ajoute un test CI dédié au champ de taille.
 ## 1.7.21 — Propagation sûre de la barre prototype H0D_Health
 
 - Corrige l'installation des templates Actor déjà présents : `prototypeToken.bar1` est désormais synchronisé avec le JSON canonique.
