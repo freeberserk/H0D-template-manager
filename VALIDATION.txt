@@ -1,3 +1,22 @@
+H0D Template Manager v1.7.21 — BAC — propagation prototype H0D_Health
+
+Cas de référence : monde BAC déjà passé en 1.7.20, 36 Actors migrés vers les versions canoniques mais prototypeToken.bar1 encore ancien.
+
+Contrôles à effectuer :
+- Mettre à jour le module en 1.7.21.
+- Avant installation, ouvrir le manager : les trois templates Actor peuvent être signalés « Prototype Token à mettre à jour » malgré leurs versions 3.72 / 1.26 / 3.17 correctes.
+- Lancer Installer/mettre à jour : les trois templates doivent conserver H0D_Health et leur prototypeToken.bar1 doit devenir attributeBar.H0D_Health.
+- Relancer l'audit : les Actors existants ayant encore une ancienne barre doivent être signalés par prototype-bar-mismatch et comptés comme candidats sûrs.
+- Lancer Migrer données sûres : aucune propriété system.props ne doit être ajoutée ni supprimée pour ces cas ; seule la barre prototype doit changer.
+- Vérifier le bilan de migration : migrationKind=prototype-bar pour les fiches déjà à la bonne version et prototypeBarChanged=true.
+- Lancer l'audit final : 0 warning monde et 0 erreur monde attendus sur le BAC.
+- Exporter un nouveau snapshot et vérifier sur un PJ, un PNJ et une Machine que system.attributeBar.H0D_Health et prototypeToken.bar1.attribute=attributeBar.H0D_Health coexistent.
+- Tester Restaurer dernier cycle sur un clone BAC : la barre prototype précédente doit être restaurée avec les props sauvegardées.
+- Les 37 warnings de compendiums partagés observés au BAC ne doivent pas être modifiés par cette correction.
+
+Contrôle automatisé :
+- tests/common-health-bar.mjs continue de valider les trois JSON canoniques.
+- tests/template-manager-audit-workflow.mjs vérifie la détection prototype-bar-mismatch, le triage, les sauvegardes et la migration dédiée.
 H0D Template Manager v1.7.20 — BAC — barre de santé commune CSB
 
 Contrôles à effectuer :

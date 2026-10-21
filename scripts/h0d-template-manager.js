@@ -1,7 +1,7 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.20";
+const MODULE_VERSION = "1.7.21";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -310,7 +310,7 @@ async function promptAuditExport(report,{final=false}={}) {
       <p><strong>${final ? "✅ Vérification finale terminée." : "✅ Audit terminé en lecture seule."}</strong></p>
       <p>Templates : <strong>${templates.ok ?? 0} OK</strong> · ${templates.update ?? 0} mise(s) à jour · ${templates.absent ?? 0} absent(s)<br>
       Fiches : <strong>${documents.ok ?? 0} saines</strong> · ${documents.warnings ?? 0} avertissement(s) · ${documents.errors ?? 0} erreur(s)<br>
-      Candidats à migration sûre : <strong>${Number(triage.versionOnlyCandidates || 0)+Number(triage.additiveSafeCandidates || 0)}</strong></p>
+      Candidats à migration sûre : <strong>${Number(triage.versionOnlyCandidates || 0)+Number(triage.prototypeBarCandidates || 0)+Number(triage.additiveSafeCandidates || 0)}</strong></p>
       <p class="notes">Le fichier proposé contient exactement ce rapport : aucun second audit ne sera relancé pour l'export.</p>
     `,
     yes:{label:"Exporter le rapport JSON",icon:"fa-solid fa-file-export"},
@@ -371,14 +371,31 @@ function installedTemplate(entry) {
   return null;
 }
 
+function prototypeBarAttribute(doc) {
+  return String(doc?.prototypeToken?.bar1?.attribute || "");
+}
+
+function prototypeBarMatches(doc, source) {
+  const wanted=prototypeBarAttribute(source);
+  return !wanted || prototypeBarAttribute(doc)===wanted;
+}
+
 async function templateStatus(entry) {
   const doc = installedTemplate(entry);
   const source = await loadTemplate(entry);
   const wantedUnique = Number(source.system?.templateSystemUniqueVersion ?? 0);
   if (!doc) return {code:"absent", label:"Absent", icon:"fa-solid fa-circle-plus", installed:"—", wanted:entry.version, doc:null};
   const installedUnique = Number(doc.system?.templateSystemUniqueVersion ?? 0);
-  if (doc.name === entry.name && installedUnique === wantedUnique) {
+  const prototypeOk=entry.kind!=="Actor" || prototypeBarMatches(doc,source);
+  if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk) {
     return {code:"ok", label:"Canonique", icon:"fa-solid fa-circle-check", installed:entry.version, wanted:entry.version, doc};
+  }
+  if (doc.name === entry.name && installedUnique === wantedUnique && !prototypeOk) {
+    return {
+      code:"update", label:"Prototype Token à mettre à jour", icon:"fa-solid fa-arrows-rotate",
+      installed:entry.version, wanted:entry.version, doc,
+      prototypeBarCurrent:prototypeBarAttribute(doc),prototypeBarWanted:prototypeBarAttribute(source)
+    };
   }
   const m = String(doc.name || "").match(/v([0-9.]+)\s*$/i);
   return {code:"update", label:"Mise à jour disponible", icon:"fa-solid fa-arrows-rotate", installed:m?.[1] || doc.name, wanted:entry.version, doc};
@@ -581,6 +598,7 @@ async function pushBackup(doc, runId, scope) {
     runId, createdAt:new Date().toISOString(), uuid:doc.uuid, name:doc.name, img:doc.img,
     documentName:doc.documentName, scope, templateId:templateId(doc),
     templateSystemUniqueVersion:Number(doc.system?.templateSystemUniqueVersion ?? 0),
+    prototypeBar1:clone(doc.prototypeToken?.bar1 || null),
     props:clone(doc.system?.props || {})
   });
   while (old.length > MAX_BACKUPS) old.shift();
@@ -621,21 +639,30 @@ async function collectSafeVersionCandidates() {
     const wantedVersion=Number(source.system?.templateSystemUniqueVersion ?? 0);
     const installed=installedTemplate(tpl);
     // Une fiche ne peut être migrée sûrement que si le template canonique installé
-    // est déjà celui livré par le module. Sinon reloadTemplate() rechargerait l'ancienne structure.
+    // est déjà celui livré par le module, y compris son prototype Token pour les Actors.
     if (!installed || Number(installed.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion) continue;
+    if (tpl.kind==="Actor" && !prototypeBarMatches(installed,source)) continue;
     const {inputs}=componentKeySets(source);
     const props=entry.doc.system?.props || {};
     const missing=[...inputs].filter(k=>!has(props,k));
     const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion;
+    const wantedPrototypeBar=tpl.kind==="Actor" ? prototypeBarAttribute(source) : "";
+    const currentPrototypeBar=tpl.kind==="Actor" ? prototypeBarAttribute(entry.doc) : "";
+    const prototypeBarMismatch=!!wantedPrototypeBar && currentPrototypeBar!==wantedPrototypeBar;
     const recovery=safeMissingRecoveryPlan(entry.doc,tpl.key,missing);
     const additiveSafe=recovery.safe;
     const versionOnly=stale && missing.length===0;
+    const prototypeBarOnly=prototypeBarMismatch && missing.length===0;
     // Les ajouts explicitement allowlistés sont sûrs même si le document porte
-    // déjà la version canonique : certaines anciennes fiches ont été marquées à
-    // jour sans avoir reçu les nouveaux champs du template.
-    if (versionOnly || additiveSafe) {
+    // déjà la version canonique. Le prototype Token peut lui aussi être réparé
+    // sans toucher aux données de jeu lorsque seule sa barre 1 est obsolète.
+    if (versionOnly || additiveSafe || prototypeBarOnly) {
       // Ne pas conserver la référence Document : le reload d'un Actor peut recréer
       // ses Embedded Items et invalider les objets collectés au début du cycle.
+      let migrationKind="version-only";
+      if (additiveSafe) migrationKind=Object.keys(recovery.recoveredValues).length ? "backup-recovery" : "additive-safe";
+      else if (!stale && prototypeBarOnly) migrationKind="prototype-bar";
+      else if (stale && prototypeBarMismatch) migrationKind="version+prototype-bar";
       results.push({
         uuid:entry.doc.uuid,
         name:entry.doc.name,
@@ -643,12 +670,13 @@ async function collectSafeVersionCandidates() {
         scope:entry.scope,
         templateEntry:tpl,
         wantedVersion,
-        migrationKind:additiveSafe
-          ? (Object.keys(recovery.recoveredValues).length ? "backup-recovery" : "additive-safe")
-          : "version-only",
+        migrationKind,
         missingKeys:clone(missing),
         recoveredValues:clone(recovery.recoveredValues),
-        defaultKeys:clone(recovery.defaultKeys)
+        defaultKeys:clone(recovery.defaultKeys),
+        prototypeBarMismatch,
+        currentPrototypeBar,
+        wantedPrototypeBar
       });
     }
   }
@@ -666,11 +694,13 @@ async function safeVersionReload(entry, runId) {
   let doc=null;
   let originalProps={};
   let originalVersion=0;
+  let originalPrototypeBar1=null;
   let reloadAttempted=false;
   try {
     doc=await resolveFreshDocument(entry);
     originalProps=clone(doc.system?.props || {});
     originalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
+    originalPrototypeBar1=clone(doc.prototypeToken?.bar1 || null);
     const validationTemplate=await loadTemplate(entry.templateEntry);
     const originalEditable=editableInputSnapshot(validationTemplate,originalProps);
     await pushBackup(doc,runId,`Migration version sûre — ${entry.scope}`);
@@ -696,6 +726,7 @@ async function safeVersionReload(entry, runId) {
 
     const addedKeys=[];
     const recoveredKeys=[];
+    let prototypeBarChanged=false;
     if (hasAdditive) {
       // Les clés neutres explicitement allowlistées reçoivent leur valeur par défaut
       // canonique. Une clé non allowlistée n'est restaurée que si le backup sûr
@@ -728,6 +759,14 @@ async function safeVersionReload(entry, runId) {
       }
     }
 
+    if (entry.prototypeBarMismatch && entry.wantedPrototypeBar && doc.documentName==="Actor") {
+      if (prototypeBarAttribute(doc)!==entry.wantedPrototypeBar) {
+        await doc.update({"prototypeToken.bar1.attribute":entry.wantedPrototypeBar});
+        doc=await resolveFreshDocument(entry);
+      }
+      prototypeBarChanged=true;
+    }
+
     const finalProps=doc.system?.props || {};
     const finalEditable=editableInputSnapshot(validationTemplate,finalProps);
     const changedLocal=diffShape(originalEditable,finalEditable);
@@ -741,6 +780,9 @@ async function safeVersionReload(entry, runId) {
         throw new Error(`Valeur récupérée depuis le backup non préservée : ${key}`);
       }
     }
+    if (entry.prototypeBarMismatch && prototypeBarAttribute(doc)!==entry.wantedPrototypeBar) {
+      throw new Error(`Barre prototype finale inattendue (${prototypeBarAttribute(doc)}, attendu ${entry.wantedPrototypeBar}).`);
+    }
     if (finalVersion!==wantedVersion) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${wantedVersion}).`);
 
     let migrationKind="version-only";
@@ -748,28 +790,35 @@ async function safeVersionReload(entry, runId) {
     else if (recoveredKeys.length) migrationKind="backup-recovery";
     else if (hasAdditive && needsReload) migrationKind="version+additive-safe-direct";
     else if (hasAdditive) migrationKind="additive-safe-direct";
+    else if (prototypeBarChanged && needsReload) migrationKind="version+prototype-bar";
+    else if (prototypeBarChanged) migrationKind="prototype-bar";
 
     return {
       ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,
       templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,
-      migrationKind,addedKeys,recoveredKeys
+      migrationKind,addedKeys,recoveredKeys,prototypeBarChanged
     };
   } catch(err) {
     console.error(`H0D Template Manager — migration version sûre ${entry.name}`,err);
     try {
       doc=await fromUuid(entry.uuid);
       if (doc && Object.keys(originalProps).length) {
+        const restoreUpdate={};
         if (!reloadAttempted) {
           // Aucun reload : retour exact aux props capturées avant tentative.
-          await doc.update({"system.props":clone(originalProps)});
+          restoreUpdate["system.props"]=clone(originalProps);
         } else {
           // Après reload, conserver la structure recréée par CSB mais remettre
           // toutes les valeurs locales capturées avant l'opération.
           const current=clone(doc.system?.props || {});
           const restored=clone(current);
           for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
-          await doc.update({"system.props":restored});
+          restoreUpdate["system.props"]=restored;
         }
+        if (originalPrototypeBar1 && doc.documentName==="Actor") {
+          restoreUpdate["prototypeToken.bar1"]=clone(originalPrototypeBar1);
+        }
+        await doc.update(restoreUpdate);
       }
     } catch(restoreErr) {
       console.error(`H0D Template Manager — restauration locale après erreur ${entry.name}`,restoreErr);
@@ -896,7 +945,11 @@ async function updateTemplate(entry) {
   if (doc) {
     if (doc.id !== entry.id) throw new Error(`${entry.name} existe avec un ID différent (${doc.id}). Mise à jour refusée.`);
     const sourceData=clone(source);
-    await doc.update({name:sourceData.name, system:sourceData.system});
+    const update={name:sourceData.name, system:sourceData.system};
+    if (entry.kind==="Actor" && sourceData.prototypeToken?.bar1) {
+      update["prototypeToken.bar1"]=clone(sourceData.prototypeToken.bar1);
+    }
+    await doc.update(update);
     return {state:"updated",name:entry.name};
   }
   const createData=clone(source);
@@ -942,8 +995,17 @@ async function safeReload(entry, runId) {
       if (has(fresh,key) && !labels.has(key)) { restored[key]=clone(value); kept++; }
       else if (!has(fresh,key)) removed++;
     }
-    await doc.update({"system.props":restored});
-    return {ok:true,kind:entry.kind,name:doc.name,scope:entry.scope,template:templateEntry.name,kept,added:Object.keys(fresh).filter(k=>!has(working,k)).length,removed};
+    const update={"system.props":restored};
+    let prototypeBarUpdated=false;
+    if (entry.kind==="Actor") {
+      const wantedPrototypeBar=prototypeBarAttribute(templateData);
+      if (wantedPrototypeBar && prototypeBarAttribute(doc)!==wantedPrototypeBar) {
+        update["prototypeToken.bar1.attribute"]=wantedPrototypeBar;
+        prototypeBarUpdated=true;
+      }
+    }
+    await doc.update(update);
+    return {ok:true,kind:entry.kind,name:doc.name,scope:entry.scope,template:templateEntry.name,kept,added:Object.keys(fresh).filter(k=>!has(working,k)).length,removed,prototypeBarUpdated};
   } catch(err) {
     console.error(`H0D Template Manager — synchro ${doc.name}`,err);
     return {ok:false,kind:entry.kind,name:doc.name,scope:entry.scope,error:String(err?.message || err)};
@@ -981,7 +1043,11 @@ async function restoreLastCycle() {
     const backup=[...backups].reverse().find(b=>b.runId === runId);
     if (!backup?.props) continue;
     try {
-      await entry.doc.update({"system.props":clone(backup.props)});
+      const update={"system.props":clone(backup.props)};
+      if (backup.prototypeBar1 && entry.doc.documentName==="Actor") {
+        update["prototypeToken.bar1"]=clone(backup.prototypeBar1);
+      }
+      await entry.doc.update(update);
       restored++;
     } catch(err) { errors++; console.error(`H0D Template Manager — restauration ${entry.doc.name}`,err); }
   }
@@ -1440,6 +1506,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
   const additiveSafeDoc=doc=>hasCode(doc,"missing-props")
     && (isSafeAdditiveMissing(templateKeyOf(doc),missingKeysOf(doc)) || doc.safeRecovery?.safe===true);
   const staleOnly=warningDocs.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props"));
+  const prototypeBarOnly=warningDocs.filter(d=>hasCode(d,"prototype-bar-mismatch") && !hasCode(d,"missing-props") && !hasCode(d,"stale-template-version"));
   const additiveSafe=warningDocs.filter(additiveSafeDoc);
   const missingOnly=warningDocs.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
   const staleAndMissing=warningDocs.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
@@ -1457,6 +1524,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
       warnings:warnings.length,
       errors:errors.length,
       staleOnly:warnings.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props")).length,
+      prototypeBar:warnings.filter(d=>hasCode(d,"prototype-bar-mismatch") && !hasCode(d,"missing-props") && !hasCode(d,"stale-template-version")).length,
       missingOnly:warnings.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
       additiveSafe:warnings.filter(additiveSafeDoc).length,
       mixed:warnings.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
@@ -1488,6 +1556,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
     errorDocuments:errorDocs.length,
     warningEntries:warningDocs.reduce((sum,d)=>sum+(d.warnings || []).length,0),
     versionOnlyCandidates:staleOnly.length,
+    prototypeBarCandidates:prototypeBarOnly.length,
     additiveSafeCandidates:additiveSafe.length,
     missingOnlyCandidates:missingOnly.length,
     mixedCandidates:staleAndMissing.length,
@@ -1515,10 +1584,14 @@ async function auditWorld() {
     const missing=[...inputs].filter(k=>!has(props,k));
     const legacyProps=Object.keys(props).filter(k=>k.startsWith("H0D_") && !all.has(k));
     const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0) !== Number(source.system?.templateSystemUniqueVersion ?? 0);
+    const wantedPrototypeBar=entry.kind==="Actor" ? prototypeBarAttribute(source) : "";
+    const currentPrototypeBar=entry.kind==="Actor" ? prototypeBarAttribute(entry.doc) : "";
+    const prototypeBarStale=!!wantedPrototypeBar && currentPrototypeBar!==wantedPrototypeBar;
     const recovery=safeMissingRecoveryPlan(entry.doc,tplEntry.key,missing);
     const errors=[]; const warnings=[]; const info=[];
     if (missing.length) warnings.push({code:"missing-props",count:missing.length,keys:missing});
     if (stale) warnings.push({code:"stale-template-version",current:entry.doc.system?.templateSystemUniqueVersion,wanted:source.system?.templateSystemUniqueVersion});
+    if (prototypeBarStale) warnings.push({code:"prototype-bar-mismatch",current:currentPrototypeBar,wanted:wantedPrototypeBar});
     if (legacyProps.length) info.push({code:"legacy-props",count:legacyProps.length,keys:legacyProps});
     docs.push({
       uuid:entry.doc.uuid,name:entry.doc.name,documentName:entry.doc.documentName,scope:entry.scope,
@@ -1551,7 +1624,7 @@ async function auditWorld() {
   const armorReference=await auditArmors();
   const warningTriage=buildWarningTriage(docs,shared);
   const counts={templates:{ok:templateRows.filter(r=>r.status.code==="ok").length,update:templateRows.filter(r=>r.status.code==="update").length,absent:templateRows.filter(r=>r.status.code==="absent").length},documents:{ok:docs.filter(d=>d.status==="ok").length,warnings:docs.filter(d=>d.status==="warning").length,errors:docs.filter(d=>d.status==="error").length},legacyTraitUsages:legacyUsages.length};
-  const report={format:"H0D_TEMPLATE_MANAGER_INTEGRITY_REPORT",formatVersion:2,moduleVersion:MODULE_VERSION,createdAt:new Date().toISOString(),world:{id:game.world?.id,title:game.world?.title,system:game.system?.id,systemVersion:game.system?.version},registry:TEMPLATE_INDEX,templates:templateRows.map(r=>({key:r.key,id:r.id,name:r.name,version:r.version,status:r.status.code,label:r.status.label,installed:r.status.installed,wanted:r.status.wanted})),documents:docs,sharedCompendiums:shared,legacyTrait:{installed:!!legacy,usages:legacyUsages},weaponReference,armorReference,warningTriage,safeVersionMigration:H0DTemplateManagerState.lastSafeMigration,counts};
+  const report={format:"H0D_TEMPLATE_MANAGER_INTEGRITY_REPORT",formatVersion:2,moduleVersion:MODULE_VERSION,createdAt:new Date().toISOString(),world:{id:game.world?.id,title:game.world?.title,system:game.system?.id,systemVersion:game.system?.version},registry:TEMPLATE_INDEX,templates:templateRows.map(r=>({key:r.key,id:r.id,name:r.name,version:r.version,status:r.status.code,label:r.status.label,installed:r.status.installed,wanted:r.status.wanted,prototypeBarCurrent:r.status.prototypeBarCurrent ?? null,prototypeBarWanted:r.status.prototypeBarWanted ?? null})),documents:docs,sharedCompendiums:shared,legacyTrait:{installed:!!legacy,usages:legacyUsages},weaponReference,armorReference,warningTriage,safeVersionMigration:H0DTemplateManagerState.lastSafeMigration,counts};
   H0DTemplateManagerState.lastAudit=report;
   return report;
 }
@@ -1611,7 +1684,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       mechanicalDiffs:"—",mismatch:0,unreferenced:"—",sourceWarnings:"—"
     };
     const safeVersionCandidates=audit?.warningTriage
-      ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
+      ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.prototypeBarCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
       : 0;
     return foundry.utils.mergeObject(context,{
       moduleVersion:MODULE_VERSION,
@@ -1701,7 +1774,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const audit=await auditWorld();
     H0DTemplateManagerState.lastAudit=audit;
     const triage=audit.warningTriage || {};
-    const safeRemaining=Number(triage.versionOnlyCandidates || 0)+Number(triage.additiveSafeCandidates || 0);
+    const safeRemaining=Number(triage.versionOnlyCandidates || 0)+Number(triage.prototypeBarCandidates || 0)+Number(triage.additiveSafeCandidates || 0);
     const success=Number(migration.errors || 0)===0
       && Number(migration.remaining || 0)===0
       && safeRemaining===0;
