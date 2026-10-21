@@ -1,4 +1,12 @@
-# H0D Template Manager — v1.7.17
+# H0D Template Manager — v1.7.18
+
+## v1.7.18 — Réaudit silencieux après maintenance
+
+Après une synchronisation ou une réparation effective, le manager relance désormais automatiquement un **audit silencieux** : aucun dialogue, aucun export proposé, mais les cartes de synthèse et les boutons **Réparer équipements** / **Migrer données sûres** sont recalculés immédiatement.
+
+Le bouton principal reste volontairement sur **Audit final recommandé** tant que le MJ n'a pas lancé lui-même le contrôle final. On sépare ainsi le réaudit technique utilisé par le moteur du véritable audit de fin de maintenance.
+
+La migration sûre conserve son réaudit interne existant et son rapport reste utilisable immédiatement. Les actions annulées ou sans modification ne déclenchent aucun réaudit.
 
 ## v1.7.17 — Cycle de maintenance et audit final
 
@@ -250,7 +258,7 @@ L'export du rapport n'est plus une action permanente de la barre : il est propos
 
 Aucune migration au démarrage. Les snapshots JSON restent **manuels uniquement** via **Snapshot de sécurité** : aucun clic d’installation, audit, synchronisation ou réparation ne déclenche de sauvegarde externe automatique. Les documents synchronisés/réparés conservent jusqu'à 5 sauvegardes internes par fiche.
 
-Un audit est toujours en lecture seule. Lorsqu'une opération écrit réellement dans le monde, le rapport courant est invalidé et le bouton principal devient **Audit final recommandé**. L'export proposé à la fin d'un audit ne relance pas le diagnostic.
+Un audit est toujours en lecture seule. Lorsqu'une opération écrit réellement dans le monde, le bouton principal devient **Audit final recommandé**. Après synchronisation ou réparation, un réaudit silencieux remet immédiatement à jour les diagnostics nécessaires aux actions suivantes sans afficher de dialogue ni proposer d'export. L'export proposé à la fin d'un audit explicite ne relance pas le diagnostic.
 
 
 ## Migration contrôlée v1.2.0 stable

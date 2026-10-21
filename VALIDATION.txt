@@ -1,3 +1,19 @@
+H0D Template Manager v1.7.18 — BAC — réaudit silencieux de maintenance
+
+Contrôles à effectuer :
+- Lancer un Audit monde pour rendre disponibles Réparer/Migrer si nécessaire.
+- Lancer Synchroniser le monde : aucun dialogue d'audit ni proposition d'export ne doit apparaître après la synchronisation.
+- Vérifier que les cartes Fiches monde / Armes / Armures sont immédiatement recalculées.
+- Vérifier que Réparer équipements et/ou Migrer données sûres sont activés selon ce nouveau rapport.
+- Vérifier que le bouton principal reste « Audit final recommandé » malgré le réaudit silencieux.
+- Lancer Réparer équipements sur un cas réparable : même comportement silencieux et recalcul immédiat.
+- Lancer Migrer données sûres : conserver son bilan interne, puis vérifier que les éventuelles actions restantes sont toujours calculées.
+- Annuler Synchroniser avant validation : aucun changement d'état.
+- Lancer enfin Audit final recommandé : le dialogue et la proposition d'export doivent apparaître normalement.
+
+Contrôle automatisé :
+- tests/template-manager-audit-workflow.mjs vérifie le réaudit silencieux après synchronisation/réparation, la conservation de l'état final recommandé et l'activation des actions depuis le rapport silencieux.
+
 H0D Template Manager v1.7.17 — BAC — cycle de maintenance / audit final
 
 Contrôles à effectuer :

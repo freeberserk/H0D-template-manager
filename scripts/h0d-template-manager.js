@@ -1,7 +1,7 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.17";
+const MODULE_VERSION = "1.7.18";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -289,10 +289,17 @@ async function promptAuditExport(report,{final=false}={}) {
   if (exportNow) await exportAudit(report);
 }
 
-function invalidateAudit(reason="Modification du monde") {
-  H0DTemplateManagerState.lastAudit=null;
+function markAuditFinalRecommended(reason="Modification du monde",{preserveReport=false}={}) {
+  if (!preserveReport) H0DTemplateManagerState.lastAudit=null;
   H0DTemplateManagerState.auditDirty=true;
   H0DTemplateManagerState.lastMutation=reason;
+}
+
+async function refreshAuditSilently(reason="Maintenance du monde") {
+  const report=await auditWorld();
+  H0DTemplateManagerState.lastAudit=report;
+  markAuditFinalRecommended(reason,{preserveReport:true});
+  return report;
 }
 
 async function syncChoiceDialog() {
@@ -1541,7 +1548,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       referenceItems:"—",embeddedItems:"—",armors:"—",shields:"—",ok:"—",matched:"—",
       mechanicalDiffs:"—",mismatch:0,unreferenced:"—",sourceWarnings:"—"
     };
-    const safeVersionCandidates=(!auditDirty && audit?.warningTriage)
+    const safeVersionCandidates=audit?.warningTriage
       ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
       : 0;
     return foundry.utils.mergeObject(context,{
@@ -1562,7 +1569,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       safeVersionCandidates,
       weaponSummary,
       armorSummary,
-      hasEquipmentRepair:!!audit && !auditDirty && (Number(weaponSummary.repairableWeapons||0)+Number(armorSummary.mismatch||0))>0,
+      hasEquipmentRepair:!!audit && (Number(weaponSummary.repairableWeapons||0)+Number(armorSummary.mismatch||0))>0,
       lastCycle:game.settings.get(MODULE_ID,LAST_CYCLE_SETTING) || "—"
     },{inplace:false});
   }
@@ -1579,27 +1586,31 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
   static async _installAll() {
     const results=await installAllTemplates();
-    if (results) invalidateAudit("installation / mise à jour des templates");
+    if (results) markAuditFinalRecommended("installation / mise à jour des templates");
     await this.render({force:true});
   }
   static async _synchronize() {
     const choice=await syncChoiceDialog();
     if (!choice) return;
     const results=await synchronize(choice.mode,choice.packs);
-    if (results?.some(r=>r.ok)) invalidateAudit("synchronisation du monde");
+    if (results?.some(r=>r.ok)) await refreshAuditSilently("synchronisation du monde");
     await this.render({force:true});
   }
   static async _restore() {
     const result=await restoreLastCycle();
-    if (result?.restored>0) invalidateAudit("restauration des données");
+    if (result?.restored>0) markAuditFinalRecommended("restauration des données");
     await this.render({force:true});
   }
   static async _snapshot() { await createSnapshot("manuel"); }
   static async _openTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); const doc=entry&&installedTemplate(entry); if (!doc) return ui.notifications.warn("H0D : template absent."); doc.sheet?.render(true); }
-  static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Aucun snapshot JSON n’est exporté automatiquement.</p>`,"Mettre à jour"); if (!ok) return; await updateTemplate(entry); invalidateAudit(`mise à jour de ${entry.name}`); await this.render({force:true}); }
+  static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Aucun snapshot JSON n’est exporté automatiquement.</p>`,"Mettre à jour"); if (!ok) return; await updateTemplate(entry); markAuditFinalRecommended(`mise à jour de ${entry.name}`); await this.render({force:true}); }
   static async _auditTemplate(event,target) { const key=target.dataset.key; const report=await auditWorld(); const entry=TEMPLATE_INDEX.find(e=>e.key===key); const docs=report.documents.filter(d=>d.templateId===entry?.id); const bad=docs.filter(d=>d.status!=="ok"); ui.notifications.info(`H0D : ${entry?.name || key} — ${docs.length} fiche(s), ${bad.length} à examiner.`); H0DTemplateManagerState.lastAudit=report; await this.render({force:true}); }
-  static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) invalidateAudit("retrait du template legacy"); await this.render({force:true}); }
-  static async _repairEquipment() { const result=await repairEquipment(); if (result && (result.weaponsDone+result.armorsDone)>0) invalidateAudit("réparation des équipements"); await this.render({force:true}); }
+  static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) markAuditFinalRecommended("retrait du template legacy"); await this.render({force:true}); }
+  static async _repairEquipment() {
+    const result=await repairEquipment();
+    if (result && (result.weaponsDone+result.armorsDone)>0) await refreshAuditSilently("réparation des équipements");
+    await this.render({force:true});
+  }
   static async _migrateSafeVersions() {
     const liveCandidates=await collectSafeVersionCandidates();
     if (!liveCandidates.length) {
@@ -1660,7 +1671,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       console.error("H0D Template Manager — impossible d'afficher le bilan final de migration.",err);
       ui.notifications.warn("H0D : migration terminée, mais la fenêtre de bilan n'a pas pu s'afficher. Lance l'audit final pour vérifier l'état global.");
     }
-    invalidateAudit("migration des données sûres");
+    markAuditFinalRecommended("migration des données sûres",{preserveReport:true});
     await this.render({force:true});
   }
 }
