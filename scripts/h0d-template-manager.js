@@ -310,7 +310,7 @@ async function promptAuditExport(report,{final=false}={}) {
       <p><strong>${final ? "✅ Vérification finale terminée." : "✅ Audit terminé en lecture seule."}</strong></p>
       <p>Templates : <strong>${templates.ok ?? 0} OK</strong> · ${templates.update ?? 0} mise(s) à jour · ${templates.absent ?? 0} absent(s)<br>
       Fiches : <strong>${documents.ok ?? 0} saines</strong> · ${documents.warnings ?? 0} avertissement(s) · ${documents.errors ?? 0} erreur(s)<br>
-      Candidats à migration sûre : <strong>${Number(triage.versionOnlyCandidates || 0)+Number(triage.additiveSafeCandidates || 0)}</strong></p>
+      Candidats à migration sûre : <strong>${Number(triage.versionOnlyCandidates || 0)+Number(triage.prototypeBarCandidates || 0)+Number(triage.additiveSafeCandidates || 0)}</strong></p>
       <p class="notes">Le fichier proposé contient exactement ce rapport : aucun second audit ne sera relancé pour l'export.</p>
     `,
     yes:{label:"Exporter le rapport JSON",icon:"fa-solid fa-file-export"},
@@ -1506,6 +1506,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
   const additiveSafeDoc=doc=>hasCode(doc,"missing-props")
     && (isSafeAdditiveMissing(templateKeyOf(doc),missingKeysOf(doc)) || doc.safeRecovery?.safe===true);
   const staleOnly=warningDocs.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props"));
+  const prototypeBarOnly=warningDocs.filter(d=>hasCode(d,"prototype-bar-mismatch") && !hasCode(d,"missing-props") && !hasCode(d,"stale-template-version"));
   const additiveSafe=warningDocs.filter(additiveSafeDoc);
   const missingOnly=warningDocs.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
   const staleAndMissing=warningDocs.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
@@ -1523,6 +1524,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
       warnings:warnings.length,
       errors:errors.length,
       staleOnly:warnings.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props")).length,
+      prototypeBar:warnings.filter(d=>hasCode(d,"prototype-bar-mismatch") && !hasCode(d,"missing-props") && !hasCode(d,"stale-template-version")).length,
       missingOnly:warnings.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
       additiveSafe:warnings.filter(additiveSafeDoc).length,
       mixed:warnings.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
@@ -1554,6 +1556,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
     errorDocuments:errorDocs.length,
     warningEntries:warningDocs.reduce((sum,d)=>sum+(d.warnings || []).length,0),
     versionOnlyCandidates:staleOnly.length,
+    prototypeBarCandidates:prototypeBarOnly.length,
     additiveSafeCandidates:additiveSafe.length,
     missingOnlyCandidates:missingOnly.length,
     mixedCandidates:staleAndMissing.length,
@@ -1581,10 +1584,14 @@ async function auditWorld() {
     const missing=[...inputs].filter(k=>!has(props,k));
     const legacyProps=Object.keys(props).filter(k=>k.startsWith("H0D_") && !all.has(k));
     const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0) !== Number(source.system?.templateSystemUniqueVersion ?? 0);
+    const wantedPrototypeBar=entry.kind==="Actor" ? prototypeBarAttribute(source) : "";
+    const currentPrototypeBar=entry.kind==="Actor" ? prototypeBarAttribute(entry.doc) : "";
+    const prototypeBarStale=!!wantedPrototypeBar && currentPrototypeBar!==wantedPrototypeBar;
     const recovery=safeMissingRecoveryPlan(entry.doc,tplEntry.key,missing);
     const errors=[]; const warnings=[]; const info=[];
     if (missing.length) warnings.push({code:"missing-props",count:missing.length,keys:missing});
     if (stale) warnings.push({code:"stale-template-version",current:entry.doc.system?.templateSystemUniqueVersion,wanted:source.system?.templateSystemUniqueVersion});
+    if (prototypeBarStale) warnings.push({code:"prototype-bar-mismatch",current:currentPrototypeBar,wanted:wantedPrototypeBar});
     if (legacyProps.length) info.push({code:"legacy-props",count:legacyProps.length,keys:legacyProps});
     docs.push({
       uuid:entry.doc.uuid,name:entry.doc.name,documentName:entry.doc.documentName,scope:entry.scope,
@@ -1617,7 +1624,7 @@ async function auditWorld() {
   const armorReference=await auditArmors();
   const warningTriage=buildWarningTriage(docs,shared);
   const counts={templates:{ok:templateRows.filter(r=>r.status.code==="ok").length,update:templateRows.filter(r=>r.status.code==="update").length,absent:templateRows.filter(r=>r.status.code==="absent").length},documents:{ok:docs.filter(d=>d.status==="ok").length,warnings:docs.filter(d=>d.status==="warning").length,errors:docs.filter(d=>d.status==="error").length},legacyTraitUsages:legacyUsages.length};
-  const report={format:"H0D_TEMPLATE_MANAGER_INTEGRITY_REPORT",formatVersion:2,moduleVersion:MODULE_VERSION,createdAt:new Date().toISOString(),world:{id:game.world?.id,title:game.world?.title,system:game.system?.id,systemVersion:game.system?.version},registry:TEMPLATE_INDEX,templates:templateRows.map(r=>({key:r.key,id:r.id,name:r.name,version:r.version,status:r.status.code,label:r.status.label,installed:r.status.installed,wanted:r.status.wanted})),documents:docs,sharedCompendiums:shared,legacyTrait:{installed:!!legacy,usages:legacyUsages},weaponReference,armorReference,warningTriage,safeVersionMigration:H0DTemplateManagerState.lastSafeMigration,counts};
+  const report={format:"H0D_TEMPLATE_MANAGER_INTEGRITY_REPORT",formatVersion:2,moduleVersion:MODULE_VERSION,createdAt:new Date().toISOString(),world:{id:game.world?.id,title:game.world?.title,system:game.system?.id,systemVersion:game.system?.version},registry:TEMPLATE_INDEX,templates:templateRows.map(r=>({key:r.key,id:r.id,name:r.name,version:r.version,status:r.status.code,label:r.status.label,installed:r.status.installed,wanted:r.status.wanted,prototypeBarCurrent:r.status.prototypeBarCurrent ?? null,prototypeBarWanted:r.status.prototypeBarWanted ?? null})),documents:docs,sharedCompendiums:shared,legacyTrait:{installed:!!legacy,usages:legacyUsages},weaponReference,armorReference,warningTriage,safeVersionMigration:H0DTemplateManagerState.lastSafeMigration,counts};
   H0DTemplateManagerState.lastAudit=report;
   return report;
 }
@@ -1677,7 +1684,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       mechanicalDiffs:"—",mismatch:0,unreferenced:"—",sourceWarnings:"—"
     };
     const safeVersionCandidates=audit?.warningTriage
-      ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
+      ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.prototypeBarCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
       : 0;
     return foundry.utils.mergeObject(context,{
       moduleVersion:MODULE_VERSION,
@@ -1767,7 +1774,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const audit=await auditWorld();
     H0DTemplateManagerState.lastAudit=audit;
     const triage=audit.warningTriage || {};
-    const safeRemaining=Number(triage.versionOnlyCandidates || 0)+Number(triage.additiveSafeCandidates || 0);
+    const safeRemaining=Number(triage.versionOnlyCandidates || 0)+Number(triage.prototypeBarCandidates || 0)+Number(triage.additiveSafeCandidates || 0);
     const success=Number(migration.errors || 0)===0
       && Number(migration.remaining || 0)===0
       && safeRemaining===0;
