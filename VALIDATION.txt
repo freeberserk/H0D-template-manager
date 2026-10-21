@@ -1,3 +1,16 @@
+H0D Template Manager v1.7.22 — BAC — taille Créature / PNJ
+
+Contrôles à effectuer :
+- Installer / mettre à jour le template Créature / PNJ v1.27.
+- Vérifier la présence du champ Taille dans l'en-tête, entre Rôle / fonction et Menace.
+- Vérifier les neuf choix de taille et la valeur par défaut Moyenne.
+- Audit monde : les anciennes fiches v1.26 doivent être candidates à migration sûre avec H0D_Creature_Taille manquant.
+- Migrer données sûres : les anciennes fiches reçoivent Moyenne sans autre modification de props.
+- Aucun changement de DEF, attaque, dégâts, PV, PER / DET ou vitesse ne doit apparaître.
+- Après mise à jour de H0D Creature Builder 0.3.0+, utiliser sa synchronisation de taille pour appliquer les tailles canoniques aux profils de faune générée.
+
+Contrôle automatisé :
+- tests/creature-size-field.mjs valide le champ, les options et la version du template.
 H0D Template Manager v1.7.21 — BAC — propagation prototype H0D_Health
 
 Cas de référence : monde BAC déjà passé en 1.7.20, 36 Actors migrés vers les versions canoniques mais prototypeToken.bar1 encore ancien.

@@ -11,8 +11,8 @@ const cases = [
     max:"${H0D_PV_Max_Calc}$"
   },
   {
-    path:"data/templates/H0D_Actor-template-creature-v1.26.json",
-    name:"H0D_Actor-template-creature v1.26",
+    path:"data/templates/H0D_Actor-template-creature-v1.27.json",
+    name:"H0D_Actor-template-creature v1.27",
     value:"${H0D_Creature_PV_Actuels}$",
     max:"${H0D_Creature_PV_Max_Calc}$"
   },
