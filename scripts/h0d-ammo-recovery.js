@@ -327,8 +327,8 @@ async function finishCombatAmmo(combat) {
 async function latestPendingCombatId() {
   const state=readState();
   const rows=Object.values(state)
-    .filter(x=>x && !x.resolvedAt)
-    .sort((a,b)=>String(b.endedAt || b.startedAt || "").localeCompare(String(a.endedAt || a.startedAt || "")));
+    .filter(x=>x && x.endedAt && !x.resolvedAt)
+    .sort((a,b)=>String(b.endedAt || "").localeCompare(String(a.endedAt || "")));
   return rows[0]?.combatId || null;
 }
 
@@ -343,7 +343,11 @@ export function registerAmmoRecoverySettings() {
 
 export function registerAmmoRecoveryHooks() {
   Hooks.on("combatStart",combat=>{
-    captureCombatAmmo(combat).catch(err=>console.error(MODULE_ID+" | ammo combatStart",err));
+    (async()=>{
+      const pending=await latestPendingCombatId();
+      if (pending) await resolveAmmoRecovery(pending,{automatic:true});
+      await captureCombatAmmo(combat);
+    })().catch(err=>console.error(MODULE_ID+" | ammo combatStart",err));
   });
 
   Hooks.on("updateCombat",(combat,changes)=>{
@@ -374,4 +378,11 @@ export async function openPendingAmmoRecovery() {
 
 export function ammoRecoveryRates() {
   return clone(RECOVERY_RATES);
+}
+
+export async function promptPendingAmmoRecoveryOnReady() {
+  if (!isResponsibleGM()) return false;
+  const combatId=await latestPendingCombatId();
+  if (!combatId) return false;
+  return resolveAmmoRecovery(combatId,{automatic:true});
 }
