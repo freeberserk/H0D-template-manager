@@ -1,7 +1,7 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.20";
+const MODULE_VERSION = "1.7.21";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -371,14 +371,31 @@ function installedTemplate(entry) {
   return null;
 }
 
+function prototypeBarAttribute(doc) {
+  return String(doc?.prototypeToken?.bar1?.attribute || "");
+}
+
+function prototypeBarMatches(doc, source) {
+  const wanted=prototypeBarAttribute(source);
+  return !wanted || prototypeBarAttribute(doc)===wanted;
+}
+
 async function templateStatus(entry) {
   const doc = installedTemplate(entry);
   const source = await loadTemplate(entry);
   const wantedUnique = Number(source.system?.templateSystemUniqueVersion ?? 0);
   if (!doc) return {code:"absent", label:"Absent", icon:"fa-solid fa-circle-plus", installed:"—", wanted:entry.version, doc:null};
   const installedUnique = Number(doc.system?.templateSystemUniqueVersion ?? 0);
-  if (doc.name === entry.name && installedUnique === wantedUnique) {
+  const prototypeOk=entry.kind!=="Actor" || prototypeBarMatches(doc,source);
+  if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk) {
     return {code:"ok", label:"Canonique", icon:"fa-solid fa-circle-check", installed:entry.version, wanted:entry.version, doc};
+  }
+  if (doc.name === entry.name && installedUnique === wantedUnique && !prototypeOk) {
+    return {
+      code:"update", label:"Prototype Token à mettre à jour", icon:"fa-solid fa-arrows-rotate",
+      installed:entry.version, wanted:entry.version, doc,
+      prototypeBarCurrent:prototypeBarAttribute(doc),prototypeBarWanted:prototypeBarAttribute(source)
+    };
   }
   const m = String(doc.name || "").match(/v([0-9.]+)\s*$/i);
   return {code:"update", label:"Mise à jour disponible", icon:"fa-solid fa-arrows-rotate", installed:m?.[1] || doc.name, wanted:entry.version, doc};
@@ -581,6 +598,7 @@ async function pushBackup(doc, runId, scope) {
     runId, createdAt:new Date().toISOString(), uuid:doc.uuid, name:doc.name, img:doc.img,
     documentName:doc.documentName, scope, templateId:templateId(doc),
     templateSystemUniqueVersion:Number(doc.system?.templateSystemUniqueVersion ?? 0),
+    prototypeBar1:clone(doc.prototypeToken?.bar1 || null),
     props:clone(doc.system?.props || {})
   });
   while (old.length > MAX_BACKUPS) old.shift();
@@ -896,7 +914,11 @@ async function updateTemplate(entry) {
   if (doc) {
     if (doc.id !== entry.id) throw new Error(`${entry.name} existe avec un ID différent (${doc.id}). Mise à jour refusée.`);
     const sourceData=clone(source);
-    await doc.update({name:sourceData.name, system:sourceData.system});
+    const update={name:sourceData.name, system:sourceData.system};
+    if (entry.kind==="Actor" && sourceData.prototypeToken?.bar1) {
+      update["prototypeToken.bar1"]=clone(sourceData.prototypeToken.bar1);
+    }
+    await doc.update(update);
     return {state:"updated",name:entry.name};
   }
   const createData=clone(source);
@@ -981,7 +1003,11 @@ async function restoreLastCycle() {
     const backup=[...backups].reverse().find(b=>b.runId === runId);
     if (!backup?.props) continue;
     try {
-      await entry.doc.update({"system.props":clone(backup.props)});
+      const update={"system.props":clone(backup.props)};
+      if (backup.prototypeBar1 && entry.doc.documentName==="Actor") {
+        update["prototypeToken.bar1"]=clone(backup.prototypeBar1);
+      }
+      await entry.doc.update(update);
       restored++;
     } catch(err) { errors++; console.error(`H0D Template Manager — restauration ${entry.doc.name}`,err); }
   }
