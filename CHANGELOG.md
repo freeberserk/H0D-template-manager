@@ -1,3 +1,14 @@
+## 1.7.20 — Barre de santé commune CSB
+
+- Ajoute une barre complexe **`H0D_Health`** aux trois templates Actor.
+- PJ **v3.72** : valeur `H0D_PV_Actuels`, maximum `H0D_PV_Max_Calc`.
+- Créature / PNJ **v1.26** : valeur `H0D_Creature_PV_Actuels`, maximum `H0D_Creature_PV_Max_Calc`.
+- Machine **v3.17** : valeur `H0D_Machine_PV_Actuels`, maximum `H0D_Machine_PV_Max_Calc`.
+- Les trois barres sont des barres complexes CSB non éditables directement depuis le Token.
+- Le `prototypeToken.bar1` des trois templates pointe maintenant vers `attributeBar.H0D_Health`.
+- Aucun calcul de PV, de dégâts ou de maximum n'est modifié.
+- Les trois changements de templates sont version-only et restent compatibles avec la migration sûre existante.
+- Ajoute un test CI dédié qui impose le même nom de barre et les bonnes formules sur les trois templates.
 ## 1.7.19 — Récupération sûre depuis backup pré-reload
 
 - Ajoute une récupération contrôlée des champs manquants depuis le flag historique `world.h0dSafeReloadBackupV2`.
