@@ -1,3 +1,21 @@
+H0D Template Manager v1.7.20 — BAC — barre de santé commune CSB
+
+Contrôles à effectuer :
+- Installer les templates PJ v3.72, Créature/PNJ v1.26 et Machine v3.17.
+- Audit monde : les fiches utilisant les trois versions précédentes doivent apparaître comme candidates « version seule », sans champ de props manquant.
+- Lancer Migrer données sûres puis l'audit final.
+- Ouvrir Configure Attribute Bars sur chacun des trois templates : une barre H0D_Health doit être présente.
+- PJ : Value = H0D_PV_Actuels ; Maximum = H0D_PV_Max_Calc.
+- Créature / PNJ : Value = H0D_Creature_PV_Actuels ; Maximum = H0D_Creature_PV_Max_Calc.
+- Machine : Value = H0D_Machine_PV_Actuels ; Maximum = H0D_Machine_PV_Max_Calc.
+- Vérifier qu'une modification des PV actuels sur chaque type d'Actor met immédiatement à jour H0D_Health.
+- Vérifier que le maximum affiché suit toujours les calculs existants, sans nouvelle donnée de PV.
+- Ouvrir la configuration d'un Token neuf créé depuis chacun des trois templates : Bar 1 doit pointer vers H0D_Health.
+- Vérifier que la barre complexe n'est pas éditable directement depuis le Token.
+- Aucun autre champ, formule de PV ou comportement de combat ne doit changer.
+
+Contrôle automatisé :
+- tests/common-health-bar.mjs vérifie la clé commune, les formules Value/Maximum, editable=false et prototypeToken.bar1 sur les trois templates.
 H0D Template Manager v1.7.19 — BAC — récupération sûre des derniers champs manquants
 
 Cas de référence : Griffes + Morsure, Item monde, template Arme v2.8.

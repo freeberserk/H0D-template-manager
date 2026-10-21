@@ -14,8 +14,8 @@ const findKey = (root,key) => {
   return hit;
 };
 
-const creature=await load("data/templates/H0D_Actor-template-creature-v1.25.json");
-const machine=await load("data/templates/H0D_Actor-template-machine-v3.16.json");
+const creature=await load("data/templates/H0D_Actor-template-creature-v1.26.json");
+const machine=await load("data/templates/H0D_Actor-template-machine-v3.17.json");
 const piece=await load("data/templates/H0D_Piece_Detachable-v2.7.json");
 
 for (const key of ["H0D_Creature_Perception","H0D_Creature_Perception_Jet","H0D_Creature_Detection_Calc","H0D_Creature_Perception_Portee","H0D_Creature_Sens_Speciaux","H0D_Creature_Sens_Portee"])

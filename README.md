@@ -1,5 +1,18 @@
-# H0D Template Manager — v1.7.19
+# H0D Template Manager — v1.7.20
 
+## v1.7.20 — Barre de santé commune CSB
+
+Les trois templates Actor exposent désormais la même barre complexe CSB : **`H0D_Health`**.
+
+| Template | Version | Value | Maximum |
+| --- | --- | --- | --- |
+| PJ | v3.72 | `H0D_PV_Actuels` | `H0D_PV_Max_Calc` |
+| Créature / PNJ | v1.26 | `H0D_Creature_PV_Actuels` | `H0D_Creature_PV_Max_Calc` |
+| Machine | v3.17 | `H0D_Machine_PV_Actuels` | `H0D_Machine_PV_Max_Calc` |
+
+Dans les JSON CSB, les valeurs sont stockées comme formules `${...}$` avec `editable:false`. La barre 1 du prototype Token pointe également vers `attributeBar.H0D_Health`.
+
+Aucune règle de PV n'est modifiée : la barre commune ne fait qu'exposer une passerelle homogène vers les calculs déjà existants. Les trois changements de templates sont des migrations **version seule** pour le Template Manager.
 ## v1.7.19 — Récupération sûre depuis backup pré-reload
 
 Le dernier reliquat du BAC est désormais traitable sans deviner de données. Lorsqu'une fiche possède des champs manquants normalement exclus de l'allowlist, le manager peut les considérer comme sûrs uniquement si le backup historique `h0dSafeReloadBackupV2` appartient au **même UUID** et au **même template** et contient leur valeur exacte.

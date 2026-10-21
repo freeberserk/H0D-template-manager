@@ -2,20 +2,20 @@
   {
     "kind": "Actor",
     "id": "uympqkQiS6MHHmIx",
-    "name": "H0D_Actor-template-PJ v3.71",
-    "file": "H0D_Actor-template-PJ-v3.71.json"
+    "name": "H0D_Actor-template-PJ v3.72",
+    "file": "H0D_Actor-template-PJ-v3.72.json"
   },
   {
     "kind": "Actor",
     "id": "H0DCreatActor001",
-    "name": "H0D_Actor-template-creature v1.25",
-    "file": "H0D_Actor-template-creature-v1.25.json"
+    "name": "H0D_Actor-template-creature v1.26",
+    "file": "H0D_Actor-template-creature-v1.26.json"
   },
   {
     "kind": "Actor",
     "id": "wRHfQ4gZbHTaYOsR",
-    "name": "H0D_Actor-template-machine v3.16",
-    "file": "H0D_Actor-template-machine-v3.16.json"
+    "name": "H0D_Actor-template-machine v3.17",
+    "file": "H0D_Actor-template-machine-v3.17.json"
   },
   {
     "kind": "Item",

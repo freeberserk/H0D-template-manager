@@ -126,7 +126,7 @@ assert.equal(
 
 
 // Template structure checks.
-const pj=JSON.parse(await readFile(new URL("../data/templates/H0D_Actor-template-PJ-v3.71.json",import.meta.url),"utf8"));
+const pj=JSON.parse(await readFile(new URL("../data/templates/H0D_Actor-template-PJ-v3.72.json",import.meta.url),"utf8"));
 const text=JSON.stringify(pj);
 assert.ok(text.includes("PASSAGE DE NIVEAU"),"Bloc joueur simplifié absent");
 assert.ok(text.includes("globalThis.H0DLevelUp.run"),"Bouton automatique absent");
