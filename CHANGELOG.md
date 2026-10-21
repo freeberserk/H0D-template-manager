@@ -1,3 +1,17 @@
+## 1.7.23 — Récupération simple des munitions
+
+- Ajoute un snapshot automatique des lots de munitions physiques des PJ au début du combat.
+- Détecte à la fin du combat les quantités réellement dépensées via `H0D_Objet_Quantite`.
+- Suit en V1 les familles Flèche, Carreau et Projectile / arme de jet.
+- Ouvre automatiquement une fenêtre MJ à la fin du combat avec trois contextes : Faune, Faction, Machines.
+- Taux standard : 75 % / 60 % / 25 %.
+- Taux renforcé : 90 % / 80 % / 60 %.
+- Le nombre de munitions renforcées dépensées peut être saisi par lot ; le reste est standard.
+- Chaque munition effectue un vrai jet d100 de récupération.
+- Les munitions récupérées sont rendues au lot d'origine sans dépasser le stock de départ.
+- Une récupération fermée reste en attente et est reproposée au chargement suivant ou avant le prochain combat.
+- Ajoute l'API `game.h0dTemplateManager.recoverAmmo()` et `ammoRecoveryRates()`.
+- Ajoute une protection contre les doubles dialogues `combatEnd` / `deleteCombat`.
 ## 1.7.22 — Taille physique des Créatures / PNJ
 
 - Ajoute `H0D_Creature_Taille` au template Créature / PNJ **v1.27**.
