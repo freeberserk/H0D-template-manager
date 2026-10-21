@@ -14,7 +14,7 @@ const findKey = (root,key) => {
   return hit;
 };
 
-const creature=await load("data/templates/H0D_Actor-template-creature-v1.26.json");
+const creature=await load("data/templates/H0D_Actor-template-creature-v1.27.json");
 const machine=await load("data/templates/H0D_Actor-template-machine-v3.17.json");
 const piece=await load("data/templates/H0D_Piece_Detachable-v2.7.json");
 
