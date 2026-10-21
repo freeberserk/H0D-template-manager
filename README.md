@@ -1,5 +1,14 @@
-# H0D Template Manager — v1.7.21
+# H0D Template Manager — v1.7.22
 
+## v1.7.22 — Taille physique des Créatures / PNJ
+
+Le template **Créature / PNJ v1.27** ajoute le champ `H0D_Creature_Taille` dans l'en-tête de fiche, indépendamment du niveau de Menace.
+
+Tailles disponibles : **Infime, Minuscule, Très petite, Petite, Moyenne, Grande, Très grande, Gigantesque, Colossale**. La valeur par défaut est **Moyenne** afin de préserver les PNJ humanoïdes existants.
+
+Le champ est une donnée de morphologie / empreinte et **ne modifie aucun calcul de DEF, d'attaque ou de dégâts** dans le template. L'empreinte Foundry de la faune générée est gérée par H0D Creature Builder 0.3.0+.
+
+`H0D_Creature_Taille` est allowlisté comme ajout additif sûr : les anciennes fiches Créature/PNJ peuvent recevoir `Moyenne` lors de la migration de template sans altérer leurs autres valeurs. Les profils de faune générée sont ensuite synchronisés vers leur taille canonique par Creature Builder.
 ## v1.7.21 — Propagation sûre de la barre prototype H0D_Health
 
 Le BAC de la v1.7.20 a confirmé que `system.attributeBar.H0D_Health` était bien installé dans les trois templates, mais a révélé que l'ancien `prototypeToken.bar1` était conservé lors d'une mise à jour d'un template déjà présent.
