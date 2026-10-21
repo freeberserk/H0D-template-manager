@@ -1,3 +1,13 @@
+## 1.7.21 — Propagation sûre de la barre prototype H0D_Health
+
+- Corrige l'installation des templates Actor déjà présents : `prototypeToken.bar1` est désormais synchronisé avec le JSON canonique.
+- Ajoute le diagnostic `prototype-bar-mismatch` dans l'audit des Actors monde.
+- Un template Actor dont la version système est correcte mais dont la barre prototype est ancienne n'est plus déclaré « Canonique ».
+- Ajoute les candidats `prototypeBarCandidates` au triage et à l'activation de la migration sûre.
+- Permet de réparer une ancienne barre prototype sans incrémenter artificiellement la version du template.
+- La synchronisation globale applique elle aussi la barre prototype canonique.
+- Les sauvegardes internes et la restauration du dernier cycle prennent maintenant en compte `prototypeToken.bar1`.
+- Aucun changement de structure : PJ v3.72, Créature/PNJ v1.26 et Machine v3.17 restent les versions canoniques.
 ## 1.7.20 — Barre de santé commune CSB
 
 - Ajoute une barre complexe **`H0D_Health`** aux trois templates Actor.
