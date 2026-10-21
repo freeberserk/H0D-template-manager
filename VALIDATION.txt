@@ -1,3 +1,29 @@
+H0D Template Manager v1.7.23 — BAC — récupération des munitions
+
+Préparation :
+- Utiliser un PJ possédant un Item Objet de munition avec H0D_Objet_Munition_Active=true ou H0D_Objet_Type=Munition.
+- Famille : Fleche, Carreau ou Projectile.
+- Quantité de départ conseillée : 10 ou 20.
+
+Contrôles :
+- Démarrer un combat avec le PJ engagé : aucune fenêtre ne doit apparaître.
+- Réduire manuellement H0D_Objet_Quantite pendant le combat pour simuler les tirs.
+- Terminer le combat : la fenêtre H0D — Récupérer les munitions doit apparaître automatiquement uniquement si une quantité a diminué.
+- Vérifier les trois choix Faune / Faction / Machines.
+- Vérifier que chaque ligne montre PJ, lot, famille et quantité dépensée.
+- Entrer un nombre de munitions renforcées compris entre 0 et le nombre dépensé.
+- Faune : standard 75 %, renforcée 90 %.
+- Faction : standard 60 %, renforcée 80 %.
+- Machines : standard 25 %, renforcée 60 %.
+- Après validation, vérifier que les munitions récupérées sont ajoutées au lot sans dépasser sa quantité de début de combat.
+- Vérifier le message Chat récapitulatif : dépensées / récupérées / perdues.
+- Fermer volontairement la fenêtre sans valider : aucun stock ne doit changer et la récupération doit rester en attente.
+- Recharger le monde ou démarrer un autre combat : la récupération laissée en attente doit être reproposée.
+- Terminer un combat sans dépense : aucune fenêtre ne doit apparaître.
+- Vérifier qu'une Bombe, Cartouche ou Cellule n'est pas suivie.
+
+Contrôle automatisé :
+- `tests/ammo-recovery.mjs` vérifie familles, taux, hooks de combat, suivi des Items Objet, renforcées, attente persistante et restitution de quantité.
 H0D Template Manager v1.7.22 — BAC — taille Créature / PNJ
 
 Contrôles à effectuer :
