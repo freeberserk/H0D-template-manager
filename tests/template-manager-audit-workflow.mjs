@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.18","Le manifest doit être en 1.7.18");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.18";'),"MODULE_VERSION doit être en 1.7.18");
+assert.equal(manifest.version,"1.7.19","Le manifest doit être en 1.7.19");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.19";'),"MODULE_VERSION doit être en 1.7.19");
 
 assert.ok(hbs.includes('data-action="audit"'),"Le bouton Audit doit rester présent");
 assert.ok(hbs.includes("{{auditState.label}}"),"Le libellé d'audit doit être contextuel");
@@ -36,6 +36,13 @@ assert.ok(script.includes("const safeVersionCandidates=audit?.warningTriage"),"L
 assert.ok(script.includes("hasEquipmentRepair:!!audit && ("),"La réparation doit rester disponible sur un audit silencieux");
 assert.equal(script.includes("safeVersionCandidates=(!auditDirty && audit?.warningTriage)"),false,"auditDirty ne doit plus désactiver les migrations si un rapport courant existe");
 assert.ok(script.includes("H0DTemplateManagerState.auditDirty=false;"),"Un audit explicite doit remettre l'état à jour");
+assert.ok(script.includes("function trustedSafeReloadBackup(doc)"),"La récupération depuis backup sûr doit exister");
+assert.ok(script.includes("function safeMissingRecoveryPlan(doc,templateKey,missingKeys=[])"),"Le plan de récupération sûre doit exister");
+assert.ok(script.includes("backup.templateId"),"Le backup doit être validé contre le template courant");
+assert.ok(script.includes("backup.uuid"),"Le backup doit être validé contre l'UUID courant");
+assert.ok(script.includes('migrationKind="backup-recovery"'),"La migration doit tracer les récupérations depuis backup");
+assert.ok(script.includes("recoveredKeys"),"Le rapport de migration doit tracer les clés récupérées");
+assert.ok(script.includes("doc.safeRecovery?.safe===true"),"Le triage doit rendre les cas récupérables éligibles à la migration sûre");
 
 const auditButton=hbs.indexOf('data-action="audit"');
 const snapshotButton=hbs.indexOf('data-action="snapshot"');
@@ -43,7 +50,7 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(auditButton>=0 && snapshotButton>auditButton && installButton>snapshotButton,
   "La barre doit commencer par Audit puis Snapshot puis Installation");
 
-assert.ok(readme.startsWith("# H0D Template Manager — v1.7.18"),"README non aligné sur la version");
+assert.ok(readme.startsWith("# H0D Template Manager — v1.7.19"),"README non aligné sur la version");
 assert.ok(readme.includes("Audit final recommandé"),"README doit documenter l'audit final");
 
-console.log("Template Manager audit workflow 1.7.18 OK");
+console.log("Template Manager audit workflow 1.7.19 OK");
