@@ -1,7 +1,7 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.21";
+const MODULE_VERSION = "1.7.22";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -9,7 +9,7 @@ const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
   {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.72", version:"3.72", file:"H0D_Actor-template-PJ-v3.72.json"},
-  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.26", version:"1.26", file:"H0D_Actor-template-creature-v1.26.json"},
+  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.27", version:"1.27", file:"H0D_Actor-template-creature-v1.27.json"},
   {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.17", version:"3.17", file:"H0D_Actor-template-machine-v3.17.json"},
   {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.8", version:"2.8", file:"H0D_Arme-v2.8.json"},
   {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v2.0", version:"2.0", file:"H0D_Armure-v2.0.json"},
@@ -88,6 +88,7 @@ const SAFE_ADDITIVE_MISSING_KEYS = {
   ]),
   "actor-creature": new Set([
     "H0D_Creature_DD_Capacites",
+    "H0D_Creature_Taille",
     "H0D_Creature_Perception",
     "H0D_Creature_Perception_Portee",
     "H0D_Creature_Sens_Speciaux",
