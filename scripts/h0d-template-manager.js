@@ -639,21 +639,30 @@ async function collectSafeVersionCandidates() {
     const wantedVersion=Number(source.system?.templateSystemUniqueVersion ?? 0);
     const installed=installedTemplate(tpl);
     // Une fiche ne peut être migrée sûrement que si le template canonique installé
-    // est déjà celui livré par le module. Sinon reloadTemplate() rechargerait l'ancienne structure.
+    // est déjà celui livré par le module, y compris son prototype Token pour les Actors.
     if (!installed || Number(installed.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion) continue;
+    if (tpl.kind==="Actor" && !prototypeBarMatches(installed,source)) continue;
     const {inputs}=componentKeySets(source);
     const props=entry.doc.system?.props || {};
     const missing=[...inputs].filter(k=>!has(props,k));
     const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion;
+    const wantedPrototypeBar=tpl.kind==="Actor" ? prototypeBarAttribute(source) : "";
+    const currentPrototypeBar=tpl.kind==="Actor" ? prototypeBarAttribute(entry.doc) : "";
+    const prototypeBarMismatch=!!wantedPrototypeBar && currentPrototypeBar!==wantedPrototypeBar;
     const recovery=safeMissingRecoveryPlan(entry.doc,tpl.key,missing);
     const additiveSafe=recovery.safe;
     const versionOnly=stale && missing.length===0;
+    const prototypeBarOnly=prototypeBarMismatch && missing.length===0;
     // Les ajouts explicitement allowlistés sont sûrs même si le document porte
-    // déjà la version canonique : certaines anciennes fiches ont été marquées à
-    // jour sans avoir reçu les nouveaux champs du template.
-    if (versionOnly || additiveSafe) {
+    // déjà la version canonique. Le prototype Token peut lui aussi être réparé
+    // sans toucher aux données de jeu lorsque seule sa barre 1 est obsolète.
+    if (versionOnly || additiveSafe || prototypeBarOnly) {
       // Ne pas conserver la référence Document : le reload d'un Actor peut recréer
       // ses Embedded Items et invalider les objets collectés au début du cycle.
+      let migrationKind="version-only";
+      if (additiveSafe) migrationKind=Object.keys(recovery.recoveredValues).length ? "backup-recovery" : "additive-safe";
+      else if (!stale && prototypeBarOnly) migrationKind="prototype-bar";
+      else if (stale && prototypeBarMismatch) migrationKind="version+prototype-bar";
       results.push({
         uuid:entry.doc.uuid,
         name:entry.doc.name,
@@ -661,12 +670,13 @@ async function collectSafeVersionCandidates() {
         scope:entry.scope,
         templateEntry:tpl,
         wantedVersion,
-        migrationKind:additiveSafe
-          ? (Object.keys(recovery.recoveredValues).length ? "backup-recovery" : "additive-safe")
-          : "version-only",
+        migrationKind,
         missingKeys:clone(missing),
         recoveredValues:clone(recovery.recoveredValues),
-        defaultKeys:clone(recovery.defaultKeys)
+        defaultKeys:clone(recovery.defaultKeys),
+        prototypeBarMismatch,
+        currentPrototypeBar,
+        wantedPrototypeBar
       });
     }
   }
@@ -964,8 +974,17 @@ async function safeReload(entry, runId) {
       if (has(fresh,key) && !labels.has(key)) { restored[key]=clone(value); kept++; }
       else if (!has(fresh,key)) removed++;
     }
-    await doc.update({"system.props":restored});
-    return {ok:true,kind:entry.kind,name:doc.name,scope:entry.scope,template:templateEntry.name,kept,added:Object.keys(fresh).filter(k=>!has(working,k)).length,removed};
+    const update={"system.props":restored};
+    let prototypeBarUpdated=false;
+    if (entry.kind==="Actor") {
+      const wantedPrototypeBar=prototypeBarAttribute(templateData);
+      if (wantedPrototypeBar && prototypeBarAttribute(doc)!==wantedPrototypeBar) {
+        update["prototypeToken.bar1.attribute"]=wantedPrototypeBar;
+        prototypeBarUpdated=true;
+      }
+    }
+    await doc.update(update);
+    return {ok:true,kind:entry.kind,name:doc.name,scope:entry.scope,template:templateEntry.name,kept,added:Object.keys(fresh).filter(k=>!has(working,k)).length,removed,prototypeBarUpdated};
   } catch(err) {
     console.error(`H0D Template Manager — synchro ${doc.name}`,err);
     return {ok:false,kind:entry.kind,name:doc.name,scope:entry.scope,error:String(err?.message || err)};
