@@ -17,7 +17,7 @@ const findKey = (root, key) => {
 const weapon=await load("data/templates/H0D_Arme-v2.8.json");
 const armor=await load("data/templates/H0D_Armure-v2.0.json");
 const pj=await load("data/templates/H0D_Actor-template-PJ-v3.72.json");
-const creature=await load("data/templates/H0D_Actor-template-creature-v1.26.json");
+const creature=await load("data/templates/H0D_Actor-template-creature-v1.27.json");
 
 for (let i=1;i<=3;i++) {
   assert.ok(findKey(weapon,`H0D_Arme_Amelioration_${i}_Type`), "Type amélioration arme manquant "+i);
