@@ -1,3 +1,14 @@
+## 1.7.19 — Récupération sûre depuis backup pré-reload
+
+- Ajoute une récupération contrôlée des champs manquants depuis le flag historique `world.h0dSafeReloadBackupV2`.
+- Le backup n'est accepté que s'il correspond au même UUID et au même template que le document courant.
+- Les clés déjà allowlistées continuent d'utiliser uniquement leur valeur neutre canonique.
+- Les clés normalement exclues car elles nécessitent un choix mécanique peuvent être restaurées uniquement si leur valeur exacte existe dans ce backup fiable.
+- Le rapport d'audit expose désormais `safeRecovery` et la migration trace les `recoveredKeys`.
+- Le contrôle post-migration vérifie que chaque valeur récupérée est encore identique après écriture.
+- Corrige le reliquat BAC **Griffes / Morsure** sans hardcoder leur nom ni leur UUID.
+- Les compendiums partagés restent hors migration automatique.
+
 ## 1.7.18 — Réaudit silencieux après maintenance
 
 - Après **Synchroniser le monde**, relance automatiquement un audit complet en arrière-plan sans dialogue ni export.
