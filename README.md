@@ -1,5 +1,19 @@
-# H0D Template Manager — v1.7.20
+# H0D Template Manager — v1.7.21
 
+## v1.7.21 — Propagation sûre de la barre prototype H0D_Health
+
+Le BAC de la v1.7.20 a confirmé que `system.attributeBar.H0D_Health` était bien installé dans les trois templates, mais a révélé que l'ancien `prototypeToken.bar1` était conservé lors d'une mise à jour d'un template déjà présent.
+
+La v1.7.21 ferme cet angle mort sans changer les versions de structure PJ v3.72 / Créature v1.26 / Machine v3.17 :
+
+- **Installer/mettre à jour** synchronise maintenant la barre 1 du prototype Token du template Actor ;
+- l'audit marque un template comme incomplet si sa barre prototype diffère du JSON canonique ;
+- les Actors existants avec une ancienne barre prototype apparaissent comme candidats de maintenance sûre ;
+- **Migrer données sûres** peut corriger uniquement `prototypeToken.bar1.attribute`, même si la version CSB de la fiche est déjà canonique ;
+- **Synchroniser le monde** applique également cette barre canonique aux Actors ;
+- les sauvegardes internes conservent `prototypeToken.bar1` afin que la restauration du dernier cycle puisse l'annuler.
+
+La valeur commune attendue reste `attributeBar.H0D_Health`. Aucune formule de PV et aucune propriété de gameplay n'est modifiée.
 ## v1.7.20 — Barre de santé commune CSB
 
 Les trois templates Actor exposent désormais la même barre complexe CSB : **`H0D_Health`**.
