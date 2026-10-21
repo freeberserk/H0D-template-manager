@@ -1,7 +1,7 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.18";
+const MODULE_VERSION = "1.7.19";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -168,6 +168,36 @@ function isSafeAdditiveMissing(templateKey, missingKeys=[]) {
   if (!missingKeys.length) return false;
   const allowed=SAFE_ADDITIVE_MISSING_KEYS[templateKey];
   return !!allowed && missingKeys.every(key=>allowed.has(key));
+}
+
+function trustedSafeReloadBackup(doc) {
+  const backup=doc?.flags?.world?.h0dSafeReloadBackupV2;
+  if (!backup || !backup.props || typeof backup.props!=="object") return null;
+  if (String(backup.templateId || "")!==templateId(doc)) return null;
+  if (backup.uuid && String(backup.uuid)!==String(doc?.uuid || "")) return null;
+  return backup.props;
+}
+
+function safeMissingRecoveryPlan(doc,templateKey,missingKeys=[]) {
+  if (!missingKeys.length) return {safe:false,recoveredValues:{},defaultKeys:[]};
+  const allowed=SAFE_ADDITIVE_MISSING_KEYS[templateKey] || new Set();
+  const backup=trustedSafeReloadBackup(doc);
+  const recoveredValues={};
+  const defaultKeys=[];
+
+  for (const key of missingKeys) {
+    if (allowed.has(key)) {
+      defaultKeys.push(key);
+      continue;
+    }
+    if (backup && has(backup,key)) {
+      recoveredValues[key]=clone(backup[key]);
+      continue;
+    }
+    return {safe:false,recoveredValues:{},defaultKeys:[]};
+  }
+
+  return {safe:true,recoveredValues,defaultKeys};
 }
 const templateCache = new Map();
 let equipmentReferenceCache = null;
@@ -597,7 +627,8 @@ async function collectSafeVersionCandidates() {
     const props=entry.doc.system?.props || {};
     const missing=[...inputs].filter(k=>!has(props,k));
     const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion;
-    const additiveSafe=isSafeAdditiveMissing(tpl.key,missing);
+    const recovery=safeMissingRecoveryPlan(entry.doc,tpl.key,missing);
+    const additiveSafe=recovery.safe;
     const versionOnly=stale && missing.length===0;
     // Les ajouts explicitement allowlistés sont sûrs même si le document porte
     // déjà la version canonique : certaines anciennes fiches ont été marquées à
@@ -612,8 +643,12 @@ async function collectSafeVersionCandidates() {
         scope:entry.scope,
         templateEntry:tpl,
         wantedVersion,
-        migrationKind:additiveSafe ? "additive-safe" : "version-only",
-        missingKeys:clone(missing)
+        migrationKind:additiveSafe
+          ? (Object.keys(recovery.recoveredValues).length ? "backup-recovery" : "additive-safe")
+          : "version-only",
+        missingKeys:clone(missing),
+        recoveredValues:clone(recovery.recoveredValues),
+        defaultKeys:clone(recovery.defaultKeys)
       });
     }
   }
@@ -660,18 +695,28 @@ async function safeVersionReload(entry, runId) {
     }
 
     const addedKeys=[];
+    const recoveredKeys=[];
     if (hasAdditive) {
-      // CSB 6 peut mettre la version à jour sans matérialiser les nouveaux inputs.
-      // On complète donc, dans la même passe, uniquement les clés allowlistées,
-      // avec les valeurs par défaut du template canonique.
+      // Les clés neutres explicitement allowlistées reçoivent leur valeur par défaut
+      // canonique. Une clé non allowlistée n'est restaurée que si le backup sûr
+      // pré-reload du même UUID et du même template contient sa valeur exacte.
       const allowed=SAFE_ADDITIVE_MISSING_KEYS[entry.templateEntry.key];
       const source=await loadTemplate(entry.templateEntry);
       const defaults=componentInputDefaults(source);
       const next=clone(doc.system?.props || {});
+      const recoveredValues=entry.recoveredValues || {};
 
       for (const key of entry.missingKeys || []) {
-        if (!allowed?.has(key)) throw new Error(`Ajout direct refusé pour une clé non allowlistée : ${key}`);
         if (has(next,key)) continue;
+
+        if (has(recoveredValues,key)) {
+          next[key]=clone(recoveredValues[key]);
+          addedKeys.push(key);
+          recoveredKeys.push(key);
+          continue;
+        }
+
+        if (!allowed?.has(key)) throw new Error(`Ajout direct refusé : clé ni allowlistée ni récupérable depuis le backup sûr : ${key}`);
         if (!defaults.has(key)) throw new Error(`Valeur par défaut canonique introuvable pour : ${key}`);
         next[key]=clone(defaults.get(key));
         addedKeys.push(key);
@@ -691,16 +736,23 @@ async function safeVersionReload(entry, runId) {
 
     if (changedLocal.length) throw new Error(`Valeurs locales modifiées pendant la migration : ${changedLocal.join(", ")}`);
     if (stillMissing.length) throw new Error(`Champs additifs toujours absents après migration : ${stillMissing.join(", ")}`);
+    for (const [key,value] of Object.entries(entry.recoveredValues || {})) {
+      if (!has(finalProps,key) || !jsonEqual(finalProps[key],value)) {
+        throw new Error(`Valeur récupérée depuis le backup non préservée : ${key}`);
+      }
+    }
     if (finalVersion!==wantedVersion) throw new Error(`Version finale inattendue (${finalVersion}, attendu ${wantedVersion}).`);
 
     let migrationKind="version-only";
-    if (hasAdditive && needsReload) migrationKind="version+additive-safe-direct";
+    if (recoveredKeys.length && needsReload) migrationKind="version+backup-recovery";
+    else if (recoveredKeys.length) migrationKind="backup-recovery";
+    else if (hasAdditive && needsReload) migrationKind="version+additive-safe-direct";
     else if (hasAdditive) migrationKind="additive-safe-direct";
 
     return {
       ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,
       templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,
-      migrationKind,addedKeys
+      migrationKind,addedKeys,recoveredKeys
     };
   } catch(err) {
     console.error(`H0D Template Manager — migration version sûre ${entry.name}`,err);
@@ -1386,7 +1438,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
   const missingKeysOf=doc=>(doc.warnings || []).find(w=>w.code==="missing-props")?.keys || [];
   const templateKeyOf=doc=>TEMPLATE_INDEX.find(e=>e.id===doc.templateId)?.key || "";
   const additiveSafeDoc=doc=>hasCode(doc,"missing-props")
-    && isSafeAdditiveMissing(templateKeyOf(doc),missingKeysOf(doc));
+    && (isSafeAdditiveMissing(templateKeyOf(doc),missingKeysOf(doc)) || doc.safeRecovery?.safe===true);
   const staleOnly=warningDocs.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props"));
   const additiveSafe=warningDocs.filter(additiveSafeDoc);
   const missingOnly=warningDocs.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
@@ -1463,11 +1515,21 @@ async function auditWorld() {
     const missing=[...inputs].filter(k=>!has(props,k));
     const legacyProps=Object.keys(props).filter(k=>k.startsWith("H0D_") && !all.has(k));
     const stale=Number(entry.doc.system?.templateSystemUniqueVersion ?? 0) !== Number(source.system?.templateSystemUniqueVersion ?? 0);
+    const recovery=safeMissingRecoveryPlan(entry.doc,tplEntry.key,missing);
     const errors=[]; const warnings=[]; const info=[];
     if (missing.length) warnings.push({code:"missing-props",count:missing.length,keys:missing});
     if (stale) warnings.push({code:"stale-template-version",current:entry.doc.system?.templateSystemUniqueVersion,wanted:source.system?.templateSystemUniqueVersion});
     if (legacyProps.length) info.push({code:"legacy-props",count:legacyProps.length,keys:legacyProps});
-    docs.push({uuid:entry.doc.uuid,name:entry.doc.name,documentName:entry.doc.documentName,scope:entry.scope,templateId:tid,templateName:tplEntry.name,status:errors.length?"error":warnings.length?"warning":"ok",errors,warnings,info});
+    docs.push({
+      uuid:entry.doc.uuid,name:entry.doc.name,documentName:entry.doc.documentName,scope:entry.scope,
+      templateId:tid,templateName:tplEntry.name,status:errors.length?"error":warnings.length?"warning":"ok",
+      errors,warnings,info,
+      safeRecovery:missing.length ? {
+        safe:recovery.safe,
+        recoveredKeys:Object.keys(recovery.recoveredValues),
+        defaultKeys:clone(recovery.defaultKeys)
+      } : null
+    });
   }
   const shared=[];
   for (const pack of game.packs) {
