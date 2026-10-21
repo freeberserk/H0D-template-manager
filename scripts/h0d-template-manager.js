@@ -795,13 +795,13 @@ async function migrateSafeVersions() {
     .filter(key=>counts[key]>0)
     .map(key=>`<strong>${counts[key]}</strong> ${SAFE_VERSION_LABELS[key] || key}`)
     .join(" · ");
-  const additiveCount=initialCandidates.filter(c=>c.migrationKind==="additive-safe").length;
+  const additiveCount=initialCandidates.filter(c=>c.migrationKind!=="version-only").length;
   const ok=await confirmDialog(
     "H0D — Migrer les données sûres",
     `<p>Mettre à niveau <strong>${initialCandidates.length} fiche(s)</strong> :</p>
      <p>${detail}</p>
-     <p><strong>${initialCandidates.length-additiveCount}</strong> candidat(s) « version seule » · <strong>${additiveCount}</strong> évolution(s) additive(s) sûre(s).</p>
-     <p>Les évolutions additives autorisées couvrent uniquement des champs neutres dont la valeur canonique par défaut est sans effet : nouveaux champs de compétences PJ initialisés à 0/faux/vide, métadonnées vides d'objets, cible personnalisée vide des dons/talents, champs descriptifs vides d'armes/armures et emplacements d'amélioration. Aucun rang, statut de classe ou bonus d'origine n'est inventé pendant la migration. Les champs nécessitant un vrai choix mécanique, comme la catégorie d'arme, restent exclus.</p><p>Les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template. Si une mise à jour de version est aussi nécessaire, reloadTemplate() est exécuté puis les champs additifs sont complétés dans la même passe, sans modifier les valeurs locales.</p>
+     <p><strong>${initialCandidates.length-additiveCount}</strong> candidat(s) « version seule » · <strong>${additiveCount}</strong> évolution(s) additive(s) sûre(s) / récupération(s) sûre(s).</p>
+     <p>Les évolutions additives autorisées couvrent les champs neutres dont la valeur canonique par défaut est sans effet. Une clé qui exige normalement un vrai choix mécanique, comme la catégorie d'arme, n'est restaurée que si le backup sûr pré-reload du <strong>même document</strong> et du <strong>même template</strong> contient sa valeur exacte. Le manager n'invente donc toujours aucun rang, statut de classe, origine ou choix mécanique.</p><p>Les clés absentes allowlistées sont ajoutées avec les valeurs par défaut du template ; les clés récupérables sont recopiées depuis le backup sûr puis vérifiées après écriture. Si une mise à jour de version est aussi nécessaire, reloadTemplate() est exécuté puis les champs sont complétés dans la même passe, sans modifier les valeurs locales existantes.</p>
      <p>Le manager traite les candidats <strong>un par un en les recollectant après chaque tentative</strong>. Les autres cas avec champs manquants ou warnings mixtes restent exclus. Les valeurs locales, dynamicTables et propriétés legacy sont conservées. Une sauvegarde interne est créée par fiche ; aucun snapshot JSON n'est téléchargé automatiquement.</p>`,
     "Migrer les données sûres"
   );
