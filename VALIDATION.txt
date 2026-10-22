@@ -1,3 +1,35 @@
+H0D Template Manager v1.7.24 — BAC — interface Actor commune
+
+Préparation :
+- Mettre à jour H0D Template Manager en 1.7.24 et H0D Token Tooltip en 0.3.0.
+- Installer / mettre à jour les templates : PJ v3.73, Créature/PNJ v1.28, Machine v3.18.
+
+Contrôles templates :
+- Configure Attribute Bars doit montrer exactement les quatre interfaces H0D_Health / H0D_Defense / H0D_Perception / H0D_Detection sur les trois templates.
+- H0D_Health reste la Bar 1 du prototype Token.
+- PJ : DEF = H0D_Defense_Totale_Calc ; PER = H0D_Skill_Perception_Total ; DET = 10 + PER.
+- Créature : DEF = H0D_Creature_DEF_Total_Calc ; PER = H0D_Creature_Perception ; DET = H0D_Creature_Detection_Calc.
+- Machine : DEF = H0D_Machine_DEF_Total_Calc ; PER = H0D_Machine_Perception_Effective_Calc ; DET = H0D_Machine_Detection_Calc.
+- Vérifier que le vieux system.props.H0D_Defense du PJ existe toujours et conserve son rôle de bonus de classe.
+
+Contrôles migration :
+- Audit monde avant migration : les Actors sur anciennes versions doivent être candidats sûrs.
+- Migrer données sûres : aucune valeur métier locale ne doit changer.
+- Audit final : aucun `common-interface-missing` attendu sur les Actors migrés.
+- Retirer artificiellement une entrée attributeBar sur un clone : l'audit doit la signaler et Migrer données sûres doit la restaurer.
+- Restaurer dernier cycle sur un clone doit restaurer à la fois props, prototypeToken.bar1 et attributeBar.
+
+Contrôles fonctionnels :
+- Cibler un Maraudeur Rouge DEF 12 et lancer H0D — Attaques : un total 21 doit afficher TOUCHÉ, jamais NON COMPARÉ.
+- Tester la même comparaison sur un PJ et une Machine.
+- Token Tooltip doit afficher les mêmes PV / DEF / PER / DET que les fiches.
+- Modifier une DEF, une PER ou un état Aveuglée Machine : le Tooltip et l'API commune doivent refléter le nouveau résultat après recalcul CSB.
+- API console : game.h0dTemplateManager.commonStats(actor) doit renvoyer les quatre valeurs communes.
+
+Contrôle automatisé :
+- tests/common-actor-interface.mjs valide les trois templates, les formules, les fallbacks et le cas PNJ DEF non matérialisée.
+- tests/h0d-attacks-smoke.mjs vérifie une attaque comparée à attributeBar.H0D_Defense.
+- tests/common-health-bar.mjs garantit que H0D_Health reste compatible avec les trois nouveaux templates.
 H0D Template Manager v1.7.23 — BAC — récupération des munitions
 
 Préparation :
