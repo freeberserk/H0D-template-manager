@@ -1,5 +1,34 @@
-# H0D Template Manager — v1.7.23
+# H0D Template Manager — v1.7.24
 
+## v1.7.24 — Interface Actor commune
+
+Les trois templates Actor exposent désormais la même interface calculée dans `system.attributeBar` :
+
+| Interface | Sens | PJ | Créature / PNJ | Machine |
+| --- | --- | --- | --- | --- |
+| `H0D_Health` | PV actuels / max | `H0D_PV_Actuels` / `H0D_PV_Max_Calc` | `H0D_Creature_PV_Actuels` / `H0D_Creature_PV_Max_Calc` | `H0D_Machine_PV_Actuels` / `H0D_Machine_PV_Max_Calc` |
+| `H0D_Defense` | DEF finale | `H0D_Defense_Totale_Calc` | `H0D_Creature_DEF_Total_Calc` | `H0D_Machine_DEF_Total_Calc` |
+| `H0D_Perception` | PER effective | `H0D_Skill_Perception_Total` | `H0D_Creature_Perception` | `H0D_Machine_Perception_Effective_Calc` |
+| `H0D_Detection` | DET passive | `10 + H0D_Skill_Perception_Total` | `H0D_Creature_Detection_Calc` | `H0D_Machine_Detection_Calc` |
+
+Versions canoniques : **PJ v3.73**, **Créature / PNJ v1.28**, **Machine v3.18**.
+
+Important : le PJ possède déjà un `system.props.H0D_Defense` qui représente son bonus de défense de classe. Il n'est pas modifié. La nouvelle DEF commune est `system.attributeBar.H0D_Defense`, dans un namespace distinct.
+
+### Consommateurs
+
+- **H0D — Attaques** lit désormais `H0D_Defense` en priorité ; cela corrige notamment les PNJ dont `H0D_Creature_DEF_Total_Calc` n'était pas matérialisé dans `system.props` et affichait `NON COMPARÉ`.
+- L'API Template Manager expose `commonStat(actor,key)`, `commonHealth(actor)` et `commonStats(actor)`.
+- **H0D Token Tooltip 0.3.0** consomme la même interface pour PV / DEF / PER / DET.
+
+### Migration / sécurité
+
+- Les anciennes fiches passent par une migration de version sûre pour recevoir les nouvelles `attributeBar`.
+- L'audit ajoute `common-interface-missing` si un Actor n'expose pas les quatre passerelles attendues.
+- Un Actor déjà à la bonne version mais dont l'interface commune est incomplète devient candidat `commonInterfaceCandidates` et peut être réparé par **Migrer données sûres**.
+- Les sauvegardes internes conservent maintenant aussi `system.attributeBar` pour permettre un rollback complet du cycle.
+- Les anciens champs métier restent la source des calculs ; aucune formule de combat existante n'est remplacée.
+- Pendant la transition, le moteur commun garde des fallbacks robustes, y compris un recalcul direct de DEF Créature / Machine / PJ lorsque les champs `...Total_Calc` ne sont pas matérialisés.
 ## v1.7.23 — Récupération simple des munitions après combat
 
 Cette version ajoute une première automatisation volontairement simple de récupération des munitions physiques des PJ.
