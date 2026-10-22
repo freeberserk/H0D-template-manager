@@ -1,3 +1,17 @@
+## 1.7.24 — Interface Actor commune
+
+- PJ passe en **v3.73**, Créature / PNJ en **v1.28**, Machine en **v3.18**.
+- Les trois templates exposent `H0D_Health`, `H0D_Defense`, `H0D_Perception` et `H0D_Detection` dans `system.attributeBar`.
+- `H0D_Health` conserve son comportement existant et reste la barre 1 du prototype Token.
+- `H0D_Defense`, `H0D_Perception` et `H0D_Detection` sont des passerelles techniques non éditables et ne remplacent aucun champ métier.
+- Le PJ calcule DET comme `10 + H0D_Skill_Perception_Total`.
+- Ajoute `scripts/h0d-common-stats.js` avec API commune et fallbacks legacy.
+- Corrige H0D — Attaques : la DEF de cible passe par `H0D_Defense`; un PNJ avec seulement `H0D_Creature_DEF_Base` reste comparable via recalcul de secours.
+- L'API monde expose `commonAttribute`, `commonStat`, `commonHealth` et `commonStats`.
+- L'audit détecte `common-interface-missing` et compte les réparations dans `commonInterfaceCandidates`.
+- Une interface commune manquante peut déclencher un reload sûr même si la version du document est déjà canonique.
+- Les backups internes / Restaurer données incluent désormais `system.attributeBar`.
+- Ajoute un test CI dédié à l'interface commune et étend le smoke test Attaques à une vraie comparaison de DEF.
 ## 1.7.23 — Récupération simple des munitions
 
 - Ajoute un snapshot automatique des lots de munitions physiques des PJ au début du combat.
