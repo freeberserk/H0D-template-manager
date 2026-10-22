@@ -1,5 +1,12 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 import {
+  COMMON_ATTRIBUTE_KEYS,
+  commonAttributeEntry,
+  commonStat,
+  commonHealth,
+  commonStats
+} from "./h0d-common-stats.js";
+import {
   registerAmmoRecoverySettings,
   registerAmmoRecoveryHooks,
   openPendingAmmoRecovery,
@@ -388,6 +395,27 @@ function prototypeBarMatches(doc, source) {
   return !wanted || prototypeBarAttribute(doc)===wanted;
 }
 
+function sourceCommonAttributeKeys(source) {
+  const bars=source?.system?.attributeBar || {};
+  return COMMON_ATTRIBUTE_KEYS.filter(key=>Object.prototype.hasOwnProperty.call(bars,key));
+}
+
+function missingCommonAttributeBars(doc,source) {
+  if (doc?.documentName!=="Actor") return [];
+  const bars=doc?.system?.attributeBar || {};
+  return sourceCommonAttributeKeys(source).filter(key=>!Object.prototype.hasOwnProperty.call(bars,key));
+}
+
+function commonAttributeDefinitionsMatch(doc,source) {
+  if (doc?.documentName!=="Actor") return true;
+  const installed=doc?.system?.attributeBar || {};
+  const wanted=source?.system?.attributeBar || {};
+  for (const key of sourceCommonAttributeKeys(source)) {
+    if (!jsonEqual(installed[key],wanted[key])) return false;
+  }
+  return true;
+}
+
 async function templateStatus(entry) {
   const doc = installedTemplate(entry);
   const source = await loadTemplate(entry);
@@ -395,8 +423,15 @@ async function templateStatus(entry) {
   if (!doc) return {code:"absent", label:"Absent", icon:"fa-solid fa-circle-plus", installed:"—", wanted:entry.version, doc:null};
   const installedUnique = Number(doc.system?.templateSystemUniqueVersion ?? 0);
   const prototypeOk=entry.kind!=="Actor" || prototypeBarMatches(doc,source);
-  if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk) {
+  const commonInterfaceOk=entry.kind!=="Actor" || commonAttributeDefinitionsMatch(doc,source);
+  if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk && commonInterfaceOk) {
     return {code:"ok", label:"Canonique", icon:"fa-solid fa-circle-check", installed:entry.version, wanted:entry.version, doc};
+  }
+  if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk && !commonInterfaceOk) {
+    return {
+      code:"update", label:"Interface commune à mettre à jour", icon:"fa-solid fa-arrows-rotate",
+      installed:entry.version, wanted:entry.version, doc
+    };
   }
   if (doc.name === entry.name && installedUnique === wantedUnique && !prototypeOk) {
     return {
