@@ -32,12 +32,15 @@ for(const test of cases){
  globalThis.ChatMessage={getSpeaker:()=>({alias:"Test"}),getWhisperRecipients:()=>[{id:"gm-test"}],create:async x=>posts.push(x)};
  await openH0DAttacks();
  assert.deepEqual(warnings,[],test.name+": avertissement inattendu");
- assert.equal(posts.length,1,test.name+": un seul message attendu");
+ assert.equal(posts.length,2,test.name+": attaque + détail MJ attendus quand la DEF est comparable");
  if(test.name==="PJ") assert.equal(posts[0].whisper,undefined,"PJ : message public attendu");
  else assert.deepEqual(posts[0].whisper,["gm-test"],test.name+": attaque ennemie doit être privée MJ");
+ assert.deepEqual(posts[1].whisper,["gm-test"],test.name+": détail DEF/marge doit être privé MJ");
  const rendered=posts[0].content.replace(/<[^>]*>/g," ").replace(/\s+/g," ");
  assert.ok(rendered.includes("= "+(12+test.bonus)),test.name+": total d'attaque incorrect");
  assert.ok(rendered.includes("TOUCHÉ"),test.name+": la DEF commune doit être comparée");
  assert.ok(rendered.includes("Dégâts"),test.name+": dégâts absents");
+ const detail=posts[1].content.replace(/<[^>]*>/g," ").replace(/\s+/g," ");
+ assert.ok(detail.includes("DEF") && detail.includes("10"),test.name+": détail DEF commune absent");
  console.log("Smoke OK:",test.name);
 }
