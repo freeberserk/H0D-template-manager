@@ -747,18 +747,20 @@ async function safeVersionReload(entry, runId) {
   let originalProps={};
   let originalVersion=0;
   let originalPrototypeBar1=null;
+  let originalAttributeBar={};
   let reloadAttempted=false;
   try {
     doc=await resolveFreshDocument(entry);
     originalProps=clone(doc.system?.props || {});
     originalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
     originalPrototypeBar1=clone(doc.prototypeToken?.bar1 || null);
+    originalAttributeBar=clone(doc.system?.attributeBar || {});
     const validationTemplate=await loadTemplate(entry.templateEntry);
     const originalEditable=editableInputSnapshot(validationTemplate,originalProps);
     await pushBackup(doc,runId,`Migration version sûre — ${entry.scope}`);
 
     const wantedVersion=Number(entry.wantedVersion);
-    const needsReload=originalVersion!==wantedVersion;
+    const needsReload=originalVersion!==wantedVersion || entry.commonInterfaceMismatch===true;
     const hasAdditive=(entry.missingKeys || []).length>0;
 
     if (needsReload) {
@@ -823,10 +825,14 @@ async function safeVersionReload(entry, runId) {
     const finalEditable=editableInputSnapshot(validationTemplate,finalProps);
     const changedLocal=diffShape(originalEditable,finalEditable);
     const stillMissing=(entry.missingKeys || []).filter(key=>!has(finalProps,key));
+    const stillMissingCommon=entry.commonInterfaceMismatch
+      ? missingCommonAttributeBars(doc,validationTemplate)
+      : [];
     const finalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
 
     if (changedLocal.length) throw new Error(`Valeurs locales modifiées pendant la migration : ${changedLocal.join(", ")}`);
     if (stillMissing.length) throw new Error(`Champs additifs toujours absents après migration : ${stillMissing.join(", ")}`);
+    if (stillMissingCommon.length) throw new Error(`Interface Actor commune toujours incomplète : ${stillMissingCommon.join(", ")}`);
     for (const [key,value] of Object.entries(entry.recoveredValues || {})) {
       if (!has(finalProps,key) || !jsonEqual(finalProps[key],value)) {
         throw new Error(`Valeur récupérée depuis le backup non préservée : ${key}`);
@@ -842,13 +848,16 @@ async function safeVersionReload(entry, runId) {
     else if (recoveredKeys.length) migrationKind="backup-recovery";
     else if (hasAdditive && needsReload) migrationKind="version+additive-safe-direct";
     else if (hasAdditive) migrationKind="additive-safe-direct";
+    else if (entry.commonInterfaceMismatch && originalVersion!==wantedVersion) migrationKind="version+common-interface";
+    else if (entry.commonInterfaceMismatch) migrationKind="common-interface";
     else if (prototypeBarChanged && needsReload) migrationKind="version+prototype-bar";
     else if (prototypeBarChanged) migrationKind="prototype-bar";
 
     return {
       ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,
       templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,
-      migrationKind,addedKeys,recoveredKeys,prototypeBarChanged
+      migrationKind,addedKeys,recoveredKeys,prototypeBarChanged,
+      commonInterfaceChanged:entry.commonInterfaceMismatch===true
     };
   } catch(err) {
     console.error(`H0D Template Manager — migration version sûre ${entry.name}`,err);
@@ -867,8 +876,9 @@ async function safeVersionReload(entry, runId) {
           for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
           restoreUpdate["system.props"]=restored;
         }
-        if (originalPrototypeBar1 && doc.documentName==="Actor") {
-          restoreUpdate["prototypeToken.bar1"]=clone(originalPrototypeBar1);
+        if (doc.documentName==="Actor") {
+          if (originalPrototypeBar1) restoreUpdate["prototypeToken.bar1"]=clone(originalPrototypeBar1);
+          restoreUpdate["system.attributeBar"]=clone(originalAttributeBar);
         }
         await doc.update(restoreUpdate);
       }
