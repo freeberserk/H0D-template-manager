@@ -17,7 +17,7 @@ function findByKey(node,key){
 }
 
 assert.equal(doc.name,"H0D_Actor-template-creature v1.28");
-assert.equal(doc.system.templateSystemUniqueVersion,3034657909);
+assert.equal(doc.system.templateSystemUniqueVersion,3034657910);
 
 const size=findByKey(doc.system.body,"H0D_Creature_Taille");
 assert.ok(size,"Champ H0D_Creature_Taille absent");
