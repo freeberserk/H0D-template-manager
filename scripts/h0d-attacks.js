@@ -1,3 +1,5 @@
+import { commonStat } from "./h0d-common-stats.js";
+
 /* H0D — Attaques : moteur autonome distribué par H0D Template Manager.
  * La macro historique « H0D — Attaques ennemi » n'est jamais modifiée.
  * Version initiale dérivée de l'export utilisateur v1.1.
@@ -6,7 +8,7 @@
  */
 export async function openH0DAttacks() {
 /*
- * H0D — ATTAQUES v1.2 (Template Manager)
+ * H0D — ATTAQUES v1.3 (Template Manager)
  * Foundry VTT v14 / Custom System Builder
  *
  * Sélectionner UN token (PJ, PNJ, créature ou machine).
@@ -124,29 +126,7 @@ function getTarget() {
 
 function resolveDefense(targetActor) {
   if (!targetActor) return null;
-
-  const p = actorProps(targetActor);
-
-  const keys = [
-    "H0D_Defense_Totale_Calc",
-    "H0D_Defense_Totale",
-    "H0D_Creature_DEF_Total_Calc",
-    "H0D_Creature_DEF_Total",
-    "H0D_Machine_DEF_Total_Calc",
-    "H0D_Machine_DEF_Total"
-  ];
-
-  for (const key of keys) {
-    if (
-      Object.prototype.hasOwnProperty.call(p, key) &&
-      p[key] !== "" &&
-      Number.isFinite(Number(p[key]))
-    ) {
-      return Number(p[key]);
-    }
-  }
-
-  return null;
+  return commonStat(targetActor,"H0D_Defense",{legacy:true});
 }
 
 /* --------------------------------------------------------- */
