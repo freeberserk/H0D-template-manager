@@ -8,16 +8,16 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.23";
+const MODULE_VERSION = "1.7.24";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
 const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
-  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.72", version:"3.72", file:"H0D_Actor-template-PJ-v3.72.json"},
-  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.27", version:"1.27", file:"H0D_Actor-template-creature-v1.27.json"},
-  {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.17", version:"3.17", file:"H0D_Actor-template-machine-v3.17.json"},
+  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.73", version:"3.73", file:"H0D_Actor-template-PJ-v3.73.json"},
+  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.28", version:"1.28", file:"H0D_Actor-template-creature-v1.28.json"},
+  {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.18", version:"3.18", file:"H0D_Actor-template-machine-v3.18.json"},
   {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.8", version:"2.8", file:"H0D_Arme-v2.8.json"},
   {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v2.0", version:"2.0", file:"H0D_Armure-v2.0.json"},
   {key:"item-don-talent", family:"Item", kind:"Item", id:"H0DDonTalent0001", name:"H0D_Don_Talent v2.5", version:"2.5", file:"H0D_Don_Talent-v2.5.json"},
