@@ -57,6 +57,40 @@ assert.ok(helper.includes("H0D_Defense_Totale_Calc"),"Fallback PJ DEF absent");
 assert.ok(helper.includes("H0D_Creature_DEF_Total_Calc"),"Fallback Créature DEF absent");
 assert.ok(helper.includes("H0D_Machine_DEF_Total_Calc"),"Fallback Machine DEF absent");
 
+const helperModule=await import("data:text/javascript,"+encodeURIComponent(helper));
+const maraudeur={
+  system:{
+    attributeBar:{},
+    props:{
+      H0D_Creature_DEF_Base:12,
+      H0D_Creature_DEF_Divers:0,
+      H0D_Creature_Armure_DEF_Total_Calc:0,
+      H0D_Creature_EQ_DEF_Total:0,
+      H0D_Creature_Mod_DEF_Total:0,
+      H0D_Creature_Perception:3
+    }
+  }
+};
+assert.equal(helperModule.commonStat(maraudeur,"H0D_Defense",{legacy:true}),12,
+  "Un PNJ sans DEF_Total matérialisée doit recalculer sa DEF depuis DEF_Base");
+assert.equal(helperModule.commonStat(maraudeur,"H0D_Perception",{legacy:true}),3);
+assert.equal(helperModule.commonStat(maraudeur,"H0D_Detection",{legacy:true}),13);
+
+const actorWithCommon={
+  system:{
+    attributeBar:{
+      H0D_Defense:{value:17,max:17},
+      H0D_Perception:{value:5,max:5},
+      H0D_Detection:{value:15,max:15},
+      H0D_Health:{value:22,max:30}
+    },
+    props:{H0D_Creature_DEF_Base:1}
+  }
+};
+assert.equal(helperModule.commonStat(actorWithCommon,"H0D_Defense",{legacy:true}),17,
+  "L'interface commune doit toujours être prioritaire");
+assert.deepEqual(helperModule.commonHealth(actorWithCommon),{value:22,max:30});
+
 const attacks=await readFile(new URL("../scripts/h0d-attacks.js",import.meta.url),"utf8");
 assert.ok(attacks.includes('commonStat(targetActor,"H0D_Defense",{legacy:true})'),
   "Le lanceur d'attaques doit utiliser l'interface commune de DEF");
