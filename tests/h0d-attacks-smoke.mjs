@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
 
 // Charger le moteur comme ESM, indépendamment du package.json Foundry.
-const source=await readFile(new URL("../scripts/h0d-attacks.js",import.meta.url),"utf8");
-const {openH0DAttacks}=await import("data:text/javascript,"+encodeURIComponent(source));
+const helperSource=(await readFile(new URL("../scripts/h0d-common-stats.js",import.meta.url),"utf8")).replaceAll("export ","");
+const attackSource=(await readFile(new URL("../scripts/h0d-attacks.js",import.meta.url),"utf8"))
+  .replace('import { commonStat } from "./h0d-common-stats.js";',"");
+const {openH0DAttacks}=await import("data:text/javascript,"+encodeURIComponent(helperSource+"\n"+attackSource));
 
 const cases=[
  {name:"Machine",bonus:5,actor:{H0D_Machine_Attaque_Base:5,H0D_Machine_Attaque_Effective_Calc:5,H0D_Machine_PV_Actuels:21},weapon:{H0D_ArmeMachine_Mode:"Naturelle",H0D_ArmeMachine_PV_Actuels:5,H0D_ArmeMachine_Etat:"Intacte",H0D_ArmeMachine_Degats:"1d8",H0D_ArmeMachine_Type_Degats:"Contondant"}},
@@ -22,7 +24,9 @@ for(const test of cases){
    assert.ok(content.includes("ATQ +"+test.bonus),"Bonus attaque incorrect : "+test.name);
    return {weapon:"test-weapon",situational:0};
  }}}}};
- globalThis.game={user:{id:"gm-test",targets:new Set()},combat:null};
+ const targetActor={name:"Cible",system:{attributeBar:{H0D_Defense:{value:10,max:10}},props:{}}};
+ const target={name:"Cible",actor:targetActor};
+ globalThis.game={user:{id:"gm-test",targets:new Set([target])},combat:null};
  globalThis.ui={notifications:{warn:x=>warnings.push(x),error:x=>warnings.push(x)}};
  globalThis.Roll=class{constructor(formula){this.formula=formula;this.total=formula==="1d20"?12:5;}async evaluate(){return this;}};
  globalThis.ChatMessage={getSpeaker:()=>({alias:"Test"}),getWhisperRecipients:()=>[{id:"gm-test"}],create:async x=>posts.push(x)};
@@ -33,6 +37,7 @@ for(const test of cases){
  else assert.deepEqual(posts[0].whisper,["gm-test"],test.name+": attaque ennemie doit être privée MJ");
  const rendered=posts[0].content.replace(/<[^>]*>/g," ").replace(/\s+/g," ");
  assert.ok(rendered.includes("= "+(12+test.bonus)),test.name+": total d'attaque incorrect");
+ assert.ok(rendered.includes("TOUCHÉ"),test.name+": la DEF commune doit être comparée");
  assert.ok(rendered.includes("Dégâts"),test.name+": dégâts absents");
  console.log("Smoke OK:",test.name);
 }
