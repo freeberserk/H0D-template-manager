@@ -686,6 +686,7 @@ async function collectSafeVersionCandidates() {
     // est déjà celui livré par le module, y compris son prototype Token pour les Actors.
     if (!installed || Number(installed.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion) continue;
     if (tpl.kind==="Actor" && !prototypeBarMatches(installed,source)) continue;
+    if (tpl.kind==="Actor" && !commonAttributeDefinitionsMatch(installed,source)) continue;
     const {inputs}=componentKeySets(source);
     const props=entry.doc.system?.props || {};
     const missing=[...inputs].filter(k=>!has(props,k));
@@ -693,18 +694,23 @@ async function collectSafeVersionCandidates() {
     const wantedPrototypeBar=tpl.kind==="Actor" ? prototypeBarAttribute(source) : "";
     const currentPrototypeBar=tpl.kind==="Actor" ? prototypeBarAttribute(entry.doc) : "";
     const prototypeBarMismatch=!!wantedPrototypeBar && currentPrototypeBar!==wantedPrototypeBar;
+    const commonAttributeMissing=tpl.kind==="Actor" ? missingCommonAttributeBars(entry.doc,source) : [];
+    const commonInterfaceMismatch=commonAttributeMissing.length>0;
     const recovery=safeMissingRecoveryPlan(entry.doc,tpl.key,missing);
     const additiveSafe=recovery.safe;
     const versionOnly=stale && missing.length===0;
     const prototypeBarOnly=prototypeBarMismatch && missing.length===0;
+    const commonInterfaceOnly=commonInterfaceMismatch && missing.length===0;
     // Les ajouts explicitement allowlistés sont sûrs même si le document porte
-    // déjà la version canonique. Le prototype Token peut lui aussi être réparé
-    // sans toucher aux données de jeu lorsque seule sa barre 1 est obsolète.
-    if (versionOnly || additiveSafe || prototypeBarOnly) {
+    // déjà la version canonique. Le prototype Token et l'interface Actor commune
+    // peuvent aussi être réparés sans toucher aux valeurs métier.
+    if (versionOnly || additiveSafe || prototypeBarOnly || commonInterfaceOnly) {
       // Ne pas conserver la référence Document : le reload d'un Actor peut recréer
       // ses Embedded Items et invalider les objets collectés au début du cycle.
       let migrationKind="version-only";
       if (additiveSafe) migrationKind=Object.keys(recovery.recoveredValues).length ? "backup-recovery" : "additive-safe";
+      else if (!stale && commonInterfaceOnly) migrationKind="common-interface";
+      else if (stale && commonInterfaceMismatch) migrationKind="version+common-interface";
       else if (!stale && prototypeBarOnly) migrationKind="prototype-bar";
       else if (stale && prototypeBarMismatch) migrationKind="version+prototype-bar";
       results.push({
@@ -720,7 +726,9 @@ async function collectSafeVersionCandidates() {
         defaultKeys:clone(recovery.defaultKeys),
         prototypeBarMismatch,
         currentPrototypeBar,
-        wantedPrototypeBar
+        wantedPrototypeBar,
+        commonInterfaceMismatch,
+        commonAttributeMissing:clone(commonAttributeMissing)
       });
     }
   }
