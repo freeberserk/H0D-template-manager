@@ -1957,6 +1957,10 @@ Hooks.once("ready",async()=>{
     retireLegacyTrait,
     recoverAmmo:openPendingAmmoRecovery,
     ammoRecoveryRates,
+    commonAttribute:commonAttributeEntry,
+    commonStat,
+    commonHealth,
+    commonStats,
     getTemplate:getManagedTemplate,
     registry:()=>clone(TEMPLATE_INDEX)
   };
