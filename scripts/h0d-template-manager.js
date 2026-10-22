@@ -1,5 +1,12 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 import {
+  COMMON_ATTRIBUTE_KEYS,
+  commonAttributeEntry,
+  commonStat,
+  commonHealth,
+  commonStats
+} from "./h0d-common-stats.js";
+import {
   registerAmmoRecoverySettings,
   registerAmmoRecoveryHooks,
   openPendingAmmoRecovery,
@@ -8,16 +15,16 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.23";
+const MODULE_VERSION = "1.7.24";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
 const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
-  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.72", version:"3.72", file:"H0D_Actor-template-PJ-v3.72.json"},
-  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.27", version:"1.27", file:"H0D_Actor-template-creature-v1.27.json"},
-  {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.17", version:"3.17", file:"H0D_Actor-template-machine-v3.17.json"},
+  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.73", version:"3.73", file:"H0D_Actor-template-PJ-v3.73.json"},
+  {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.28", version:"1.28", file:"H0D_Actor-template-creature-v1.28.json"},
+  {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.18", version:"3.18", file:"H0D_Actor-template-machine-v3.18.json"},
   {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.8", version:"2.8", file:"H0D_Arme-v2.8.json"},
   {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v2.0", version:"2.0", file:"H0D_Armure-v2.0.json"},
   {key:"item-don-talent", family:"Item", kind:"Item", id:"H0DDonTalent0001", name:"H0D_Don_Talent v2.5", version:"2.5", file:"H0D_Don_Talent-v2.5.json"},
@@ -318,7 +325,7 @@ async function promptAuditExport(report,{final=false}={}) {
       <p><strong>${final ? "✅ Vérification finale terminée." : "✅ Audit terminé en lecture seule."}</strong></p>
       <p>Templates : <strong>${templates.ok ?? 0} OK</strong> · ${templates.update ?? 0} mise(s) à jour · ${templates.absent ?? 0} absent(s)<br>
       Fiches : <strong>${documents.ok ?? 0} saines</strong> · ${documents.warnings ?? 0} avertissement(s) · ${documents.errors ?? 0} erreur(s)<br>
-      Candidats à migration sûre : <strong>${Number(triage.versionOnlyCandidates || 0)+Number(triage.prototypeBarCandidates || 0)+Number(triage.additiveSafeCandidates || 0)}</strong></p>
+      Candidats à migration sûre : <strong>${Number(triage.versionOnlyCandidates || 0)+Number(triage.prototypeBarCandidates || 0)+Number(triage.commonInterfaceCandidates || 0)+Number(triage.additiveSafeCandidates || 0)}</strong></p>
       <p class="notes">Le fichier proposé contient exactement ce rapport : aucun second audit ne sera relancé pour l'export.</p>
     `,
     yes:{label:"Exporter le rapport JSON",icon:"fa-solid fa-file-export"},
@@ -388,6 +395,27 @@ function prototypeBarMatches(doc, source) {
   return !wanted || prototypeBarAttribute(doc)===wanted;
 }
 
+function sourceCommonAttributeKeys(source) {
+  const bars=source?.system?.attributeBar || {};
+  return COMMON_ATTRIBUTE_KEYS.filter(key=>Object.prototype.hasOwnProperty.call(bars,key));
+}
+
+function missingCommonAttributeBars(doc,source) {
+  if (doc?.documentName!=="Actor") return [];
+  const bars=doc?.system?.attributeBar || {};
+  return sourceCommonAttributeKeys(source).filter(key=>!Object.prototype.hasOwnProperty.call(bars,key));
+}
+
+function commonAttributeDefinitionsMatch(doc,source) {
+  if (doc?.documentName!=="Actor") return true;
+  const installed=doc?.system?.attributeBar || {};
+  const wanted=source?.system?.attributeBar || {};
+  for (const key of sourceCommonAttributeKeys(source)) {
+    if (!jsonEqual(installed[key],wanted[key])) return false;
+  }
+  return true;
+}
+
 async function templateStatus(entry) {
   const doc = installedTemplate(entry);
   const source = await loadTemplate(entry);
@@ -395,8 +423,15 @@ async function templateStatus(entry) {
   if (!doc) return {code:"absent", label:"Absent", icon:"fa-solid fa-circle-plus", installed:"—", wanted:entry.version, doc:null};
   const installedUnique = Number(doc.system?.templateSystemUniqueVersion ?? 0);
   const prototypeOk=entry.kind!=="Actor" || prototypeBarMatches(doc,source);
-  if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk) {
+  const commonInterfaceOk=entry.kind!=="Actor" || commonAttributeDefinitionsMatch(doc,source);
+  if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk && commonInterfaceOk) {
     return {code:"ok", label:"Canonique", icon:"fa-solid fa-circle-check", installed:entry.version, wanted:entry.version, doc};
+  }
+  if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk && !commonInterfaceOk) {
+    return {
+      code:"update", label:"Interface commune à mettre à jour", icon:"fa-solid fa-arrows-rotate",
+      installed:entry.version, wanted:entry.version, doc
+    };
   }
   if (doc.name === entry.name && installedUnique === wantedUnique && !prototypeOk) {
     return {
@@ -607,6 +642,7 @@ async function pushBackup(doc, runId, scope) {
     documentName:doc.documentName, scope, templateId:templateId(doc),
     templateSystemUniqueVersion:Number(doc.system?.templateSystemUniqueVersion ?? 0),
     prototypeBar1:clone(doc.prototypeToken?.bar1 || null),
+    attributeBar:clone(doc.system?.attributeBar || {}),
     props:clone(doc.system?.props || {})
   });
   while (old.length > MAX_BACKUPS) old.shift();
@@ -650,6 +686,7 @@ async function collectSafeVersionCandidates() {
     // est déjà celui livré par le module, y compris son prototype Token pour les Actors.
     if (!installed || Number(installed.system?.templateSystemUniqueVersion ?? 0)!==wantedVersion) continue;
     if (tpl.kind==="Actor" && !prototypeBarMatches(installed,source)) continue;
+    if (tpl.kind==="Actor" && !commonAttributeDefinitionsMatch(installed,source)) continue;
     const {inputs}=componentKeySets(source);
     const props=entry.doc.system?.props || {};
     const missing=[...inputs].filter(k=>!has(props,k));
@@ -657,18 +694,23 @@ async function collectSafeVersionCandidates() {
     const wantedPrototypeBar=tpl.kind==="Actor" ? prototypeBarAttribute(source) : "";
     const currentPrototypeBar=tpl.kind==="Actor" ? prototypeBarAttribute(entry.doc) : "";
     const prototypeBarMismatch=!!wantedPrototypeBar && currentPrototypeBar!==wantedPrototypeBar;
+    const commonAttributeMissing=tpl.kind==="Actor" ? missingCommonAttributeBars(entry.doc,source) : [];
+    const commonInterfaceMismatch=commonAttributeMissing.length>0;
     const recovery=safeMissingRecoveryPlan(entry.doc,tpl.key,missing);
     const additiveSafe=recovery.safe;
     const versionOnly=stale && missing.length===0;
     const prototypeBarOnly=prototypeBarMismatch && missing.length===0;
+    const commonInterfaceOnly=commonInterfaceMismatch && missing.length===0;
     // Les ajouts explicitement allowlistés sont sûrs même si le document porte
-    // déjà la version canonique. Le prototype Token peut lui aussi être réparé
-    // sans toucher aux données de jeu lorsque seule sa barre 1 est obsolète.
-    if (versionOnly || additiveSafe || prototypeBarOnly) {
+    // déjà la version canonique. Le prototype Token et l'interface Actor commune
+    // peuvent aussi être réparés sans toucher aux valeurs métier.
+    if (versionOnly || additiveSafe || prototypeBarOnly || commonInterfaceOnly) {
       // Ne pas conserver la référence Document : le reload d'un Actor peut recréer
       // ses Embedded Items et invalider les objets collectés au début du cycle.
       let migrationKind="version-only";
       if (additiveSafe) migrationKind=Object.keys(recovery.recoveredValues).length ? "backup-recovery" : "additive-safe";
+      else if (!stale && commonInterfaceOnly) migrationKind="common-interface";
+      else if (stale && commonInterfaceMismatch) migrationKind="version+common-interface";
       else if (!stale && prototypeBarOnly) migrationKind="prototype-bar";
       else if (stale && prototypeBarMismatch) migrationKind="version+prototype-bar";
       results.push({
@@ -684,7 +726,9 @@ async function collectSafeVersionCandidates() {
         defaultKeys:clone(recovery.defaultKeys),
         prototypeBarMismatch,
         currentPrototypeBar,
-        wantedPrototypeBar
+        wantedPrototypeBar,
+        commonInterfaceMismatch,
+        commonAttributeMissing:clone(commonAttributeMissing)
       });
     }
   }
@@ -703,18 +747,20 @@ async function safeVersionReload(entry, runId) {
   let originalProps={};
   let originalVersion=0;
   let originalPrototypeBar1=null;
+  let originalAttributeBar={};
   let reloadAttempted=false;
   try {
     doc=await resolveFreshDocument(entry);
     originalProps=clone(doc.system?.props || {});
     originalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
     originalPrototypeBar1=clone(doc.prototypeToken?.bar1 || null);
+    originalAttributeBar=clone(doc.system?.attributeBar || {});
     const validationTemplate=await loadTemplate(entry.templateEntry);
     const originalEditable=editableInputSnapshot(validationTemplate,originalProps);
     await pushBackup(doc,runId,`Migration version sûre — ${entry.scope}`);
 
     const wantedVersion=Number(entry.wantedVersion);
-    const needsReload=originalVersion!==wantedVersion;
+    const needsReload=originalVersion!==wantedVersion || entry.commonInterfaceMismatch===true;
     const hasAdditive=(entry.missingKeys || []).length>0;
 
     if (needsReload) {
@@ -779,10 +825,14 @@ async function safeVersionReload(entry, runId) {
     const finalEditable=editableInputSnapshot(validationTemplate,finalProps);
     const changedLocal=diffShape(originalEditable,finalEditable);
     const stillMissing=(entry.missingKeys || []).filter(key=>!has(finalProps,key));
+    const stillMissingCommon=entry.commonInterfaceMismatch
+      ? missingCommonAttributeBars(doc,validationTemplate)
+      : [];
     const finalVersion=Number(doc.system?.templateSystemUniqueVersion ?? 0);
 
     if (changedLocal.length) throw new Error(`Valeurs locales modifiées pendant la migration : ${changedLocal.join(", ")}`);
     if (stillMissing.length) throw new Error(`Champs additifs toujours absents après migration : ${stillMissing.join(", ")}`);
+    if (stillMissingCommon.length) throw new Error(`Interface Actor commune toujours incomplète : ${stillMissingCommon.join(", ")}`);
     for (const [key,value] of Object.entries(entry.recoveredValues || {})) {
       if (!has(finalProps,key) || !jsonEqual(finalProps[key],value)) {
         throw new Error(`Valeur récupérée depuis le backup non préservée : ${key}`);
@@ -798,13 +848,16 @@ async function safeVersionReload(entry, runId) {
     else if (recoveredKeys.length) migrationKind="backup-recovery";
     else if (hasAdditive && needsReload) migrationKind="version+additive-safe-direct";
     else if (hasAdditive) migrationKind="additive-safe-direct";
+    else if (entry.commonInterfaceMismatch && originalVersion!==wantedVersion) migrationKind="version+common-interface";
+    else if (entry.commonInterfaceMismatch) migrationKind="common-interface";
     else if (prototypeBarChanged && needsReload) migrationKind="version+prototype-bar";
     else if (prototypeBarChanged) migrationKind="prototype-bar";
 
     return {
       ok:true,uuid:entry.uuid,name:entry.name,scope:entry.scope,
       templateKey:entry.templateEntry.key,from:originalVersion,to:finalVersion,
-      migrationKind,addedKeys,recoveredKeys,prototypeBarChanged
+      migrationKind,addedKeys,recoveredKeys,prototypeBarChanged,
+      commonInterfaceChanged:entry.commonInterfaceMismatch===true
     };
   } catch(err) {
     console.error(`H0D Template Manager — migration version sûre ${entry.name}`,err);
@@ -823,8 +876,9 @@ async function safeVersionReload(entry, runId) {
           for (const [key,value] of Object.entries(originalProps)) restored[key]=clone(value);
           restoreUpdate["system.props"]=restored;
         }
-        if (originalPrototypeBar1 && doc.documentName==="Actor") {
-          restoreUpdate["prototypeToken.bar1"]=clone(originalPrototypeBar1);
+        if (doc.documentName==="Actor") {
+          if (originalPrototypeBar1) restoreUpdate["prototypeToken.bar1"]=clone(originalPrototypeBar1);
+          restoreUpdate["system.attributeBar"]=clone(originalAttributeBar);
         }
         await doc.update(restoreUpdate);
       }
@@ -1052,8 +1106,9 @@ async function restoreLastCycle() {
     if (!backup?.props) continue;
     try {
       const update={"system.props":clone(backup.props)};
-      if (backup.prototypeBar1 && entry.doc.documentName==="Actor") {
-        update["prototypeToken.bar1"]=clone(backup.prototypeBar1);
+      if (entry.doc.documentName==="Actor") {
+        if (backup.prototypeBar1) update["prototypeToken.bar1"]=clone(backup.prototypeBar1);
+        if (backup.attributeBar) update["system.attributeBar"]=clone(backup.attributeBar);
       }
       await entry.doc.update(update);
       restored++;
@@ -1515,6 +1570,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
     && (isSafeAdditiveMissing(templateKeyOf(doc),missingKeysOf(doc)) || doc.safeRecovery?.safe===true);
   const staleOnly=warningDocs.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props"));
   const prototypeBarOnly=warningDocs.filter(d=>hasCode(d,"prototype-bar-mismatch") && !hasCode(d,"missing-props") && !hasCode(d,"stale-template-version"));
+  const commonInterfaceOnly=warningDocs.filter(d=>hasCode(d,"common-interface-missing") && !hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !hasCode(d,"prototype-bar-mismatch"));
   const additiveSafe=warningDocs.filter(additiveSafeDoc);
   const missingOnly=warningDocs.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
   const staleAndMissing=warningDocs.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d));
@@ -1533,6 +1589,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
       errors:errors.length,
       staleOnly:warnings.filter(d=>hasCode(d,"stale-template-version") && !hasCode(d,"missing-props")).length,
       prototypeBar:warnings.filter(d=>hasCode(d,"prototype-bar-mismatch") && !hasCode(d,"missing-props") && !hasCode(d,"stale-template-version")).length,
+      commonInterface:warnings.filter(d=>hasCode(d,"common-interface-missing") && !hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !hasCode(d,"prototype-bar-mismatch")).length,
       missingOnly:warnings.filter(d=>hasCode(d,"missing-props") && !hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
       additiveSafe:warnings.filter(additiveSafeDoc).length,
       mixed:warnings.filter(d=>hasCode(d,"missing-props") && hasCode(d,"stale-template-version") && !additiveSafeDoc(d)).length,
@@ -1565,6 +1622,7 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
     warningEntries:warningDocs.reduce((sum,d)=>sum+(d.warnings || []).length,0),
     versionOnlyCandidates:staleOnly.length,
     prototypeBarCandidates:prototypeBarOnly.length,
+    commonInterfaceCandidates:commonInterfaceOnly.length,
     additiveSafeCandidates:additiveSafe.length,
     missingOnlyCandidates:missingOnly.length,
     mixedCandidates:staleAndMissing.length,
@@ -1595,11 +1653,13 @@ async function auditWorld() {
     const wantedPrototypeBar=entry.kind==="Actor" ? prototypeBarAttribute(source) : "";
     const currentPrototypeBar=entry.kind==="Actor" ? prototypeBarAttribute(entry.doc) : "";
     const prototypeBarStale=!!wantedPrototypeBar && currentPrototypeBar!==wantedPrototypeBar;
+    const commonAttributeMissing=entry.kind==="Actor" ? missingCommonAttributeBars(entry.doc,source) : [];
     const recovery=safeMissingRecoveryPlan(entry.doc,tplEntry.key,missing);
     const errors=[]; const warnings=[]; const info=[];
     if (missing.length) warnings.push({code:"missing-props",count:missing.length,keys:missing});
     if (stale) warnings.push({code:"stale-template-version",current:entry.doc.system?.templateSystemUniqueVersion,wanted:source.system?.templateSystemUniqueVersion});
     if (prototypeBarStale) warnings.push({code:"prototype-bar-mismatch",current:currentPrototypeBar,wanted:wantedPrototypeBar});
+    if (commonAttributeMissing.length) warnings.push({code:"common-interface-missing",count:commonAttributeMissing.length,keys:commonAttributeMissing});
     if (legacyProps.length) info.push({code:"legacy-props",count:legacyProps.length,keys:legacyProps});
     docs.push({
       uuid:entry.doc.uuid,name:entry.doc.name,documentName:entry.doc.documentName,scope:entry.scope,
@@ -1692,7 +1752,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       mechanicalDiffs:"—",mismatch:0,unreferenced:"—",sourceWarnings:"—"
     };
     const safeVersionCandidates=audit?.warningTriage
-      ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.prototypeBarCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
+      ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.prototypeBarCandidates||0)+Number(audit.warningTriage.commonInterfaceCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
       : 0;
     return foundry.utils.mergeObject(context,{
       moduleVersion:MODULE_VERSION,
@@ -1782,7 +1842,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const audit=await auditWorld();
     H0DTemplateManagerState.lastAudit=audit;
     const triage=audit.warningTriage || {};
-    const safeRemaining=Number(triage.versionOnlyCandidates || 0)+Number(triage.prototypeBarCandidates || 0)+Number(triage.additiveSafeCandidates || 0);
+    const safeRemaining=Number(triage.versionOnlyCandidates || 0)+Number(triage.prototypeBarCandidates || 0)+Number(triage.commonInterfaceCandidates || 0)+Number(triage.additiveSafeCandidates || 0);
     const success=Number(migration.errors || 0)===0
       && Number(migration.remaining || 0)===0
       && safeRemaining===0;
@@ -1897,6 +1957,10 @@ Hooks.once("ready",async()=>{
     retireLegacyTrait,
     recoverAmmo:openPendingAmmoRecovery,
     ammoRecoveryRates,
+    commonAttribute:commonAttributeEntry,
+    commonStat,
+    commonHealth,
+    commonStats,
     getTemplate:getManagedTemplate,
     registry:()=>clone(TEMPLATE_INDEX)
   };

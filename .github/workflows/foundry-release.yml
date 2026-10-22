@@ -18,6 +18,7 @@ jobs:
         run: |
           node --check scripts/h0d-template-manager.js
           node --check scripts/h0d-attacks.js
+          node --check scripts/h0d-common-stats.js
           node --check scripts/h0d-ammo-recovery.js
           node tests/template-manager-audit-workflow.mjs
           node tests/ammo-recovery.mjs
@@ -25,6 +26,7 @@ jobs:
           node tests/gameplay-automation.mjs
           node tests/perception-detection.mjs
           node tests/common-health-bar.mjs
+          node tests/common-actor-interface.mjs
           node tests/creature-size-field.mjs
           node tests/h0d-level-up.mjs
           node tests/pj-skills-craft.mjs

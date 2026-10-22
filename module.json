@@ -1,8 +1,8 @@
 {
   "id": "h0d-template-manager",
   "title": "H0D Template Manager",
-  "description": "Gestionnaire centralisé H0D : templates, audits, migrations sûres, perception/détection, automatisations de combat et récupération des munitions.",
-  "version": "1.7.23",
+  "description": "Gestionnaire centralisé H0D : templates, interface Actor commune, audits, migrations sûres, automatisations de combat et récupération des munitions.",
+  "version": "1.7.24",
   "authors": [
     {
       "name": "JDR Zero Dawn"

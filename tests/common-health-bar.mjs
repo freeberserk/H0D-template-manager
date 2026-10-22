@@ -5,20 +5,20 @@ const load = async path => JSON.parse(await readFile(new URL("../"+path, import.
 
 const cases = [
   {
-    path:"data/templates/H0D_Actor-template-PJ-v3.72.json",
-    name:"H0D_Actor-template-PJ v3.72",
+    path:"data/templates/H0D_Actor-template-PJ-v3.73.json",
+    name:"H0D_Actor-template-PJ v3.73",
     value:"${H0D_PV_Actuels}$",
     max:"${H0D_PV_Max_Calc}$"
   },
   {
-    path:"data/templates/H0D_Actor-template-creature-v1.27.json",
-    name:"H0D_Actor-template-creature v1.27",
+    path:"data/templates/H0D_Actor-template-creature-v1.28.json",
+    name:"H0D_Actor-template-creature v1.28",
     value:"${H0D_Creature_PV_Actuels}$",
     max:"${H0D_Creature_PV_Max_Calc}$"
   },
   {
-    path:"data/templates/H0D_Actor-template-machine-v3.17.json",
-    name:"H0D_Actor-template-machine v3.17",
+    path:"data/templates/H0D_Actor-template-machine-v3.18.json",
+    name:"H0D_Actor-template-machine v3.18",
     value:"${H0D_Machine_PV_Actuels}$",
     max:"${H0D_Machine_PV_Max_Calc}$"
   }
@@ -27,8 +27,8 @@ const cases = [
 for (const expected of cases) {
   const doc=await load(expected.path);
   assert.equal(doc.name, expected.name, "Version/template inattendu : "+expected.path);
-  assert.deepEqual(Object.keys(doc.system.attributeBar || {}), ["H0D_Health"],
-    "Le template doit exposer une unique barre complexe commune H0D_Health : "+expected.path);
+  assert.ok(Object.prototype.hasOwnProperty.call(doc.system.attributeBar || {},"H0D_Health"),
+    "Le template doit exposer H0D_Health : "+expected.path);
   const bar=doc.system.attributeBar.H0D_Health;
   assert.equal(bar.value, expected.value, "Formule Value H0D_Health incorrecte : "+expected.path);
   assert.equal(bar.max, expected.max, "Formule Maximum H0D_Health incorrecte : "+expected.path);
