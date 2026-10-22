@@ -36,6 +36,76 @@ function propValue(actor,key) {
   return Object.prototype.hasOwnProperty.call(p,key) ? p[key] : undefined;
 }
 
+function propNumber(actor,key,zero=false) {
+  const value=finiteNumber(propValue(actor,key));
+  return value===null && zero ? 0 : value;
+}
+
+function legacyDefense(actor) {
+  const p=actor?.system?.props || {};
+
+  if (Object.prototype.hasOwnProperty.call(p,"H0D_Creature_DEF_Base")) {
+    const base=propNumber(actor,"H0D_Creature_DEF_Base");
+    if (base!==null) return Math.max(0,
+      base
+      + propNumber(actor,"H0D_Creature_DEF_Divers",true)
+      + propNumber(actor,"H0D_Creature_Armure_DEF_Total_Calc",true)
+      + propNumber(actor,"H0D_Creature_EQ_DEF_Total",true)
+      + propNumber(actor,"H0D_Creature_Mod_DEF_Total",true)
+    );
+  }
+
+  if (Object.prototype.hasOwnProperty.call(p,"H0D_Machine_DEF_Corps_Base")) {
+    const base=propNumber(actor,"H0D_Machine_DEF_Corps_Base");
+    if (base!==null) return Math.max(0,
+      base
+      + propNumber(actor,"H0D_Machine_DEF_Bonus_Pieces_Calc",true)
+      + propNumber(actor,"H0D_Machine_Mod_DEF_Temp",true)
+    );
+  }
+
+  if (Object.prototype.hasOwnProperty.call(p,"H0D_DEX_MOD")) {
+    const dex=propNumber(actor,"H0D_DEX_MOD",true);
+    return 10
+      + dex
+      + propNumber(actor,"H0D_Defense",true)
+      + propNumber(actor,"H0D_Armure_Bonus_Total_Calc",true)
+      + propNumber(actor,"H0D_Taille_Mod_Calc",true)
+      + propNumber(actor,"H0D_Defense_Divers",true)
+      + propNumber(actor,"H0D_DT_Bonus_DEF_Perm_Total",true)
+      + propNumber(actor,"H0D_DT_Bonus_DEF_Esquive_Total",true)
+      + propNumber(actor,"H0D_EQ_Trait_DEF_Total",true);
+  }
+
+  return null;
+}
+
+function legacyPerception(actor) {
+  const p=actor?.system?.props || {};
+
+  if (Object.prototype.hasOwnProperty.call(p,"H0D_Creature_Perception")) {
+    return propNumber(actor,"H0D_Creature_Perception");
+  }
+
+  if (Object.prototype.hasOwnProperty.call(p,"H0D_Machine_Perception_Base")) {
+    const base=propNumber(actor,"H0D_Machine_Perception_Base");
+    if (base!==null) return base
+      + propNumber(actor,"H0D_Machine_Perception_Bonus_Pieces_Calc",true)
+      + propNumber(actor,"H0D_Machine_Mod_Perception_Temp",true)
+      + (p.H0D_Machine_Etat_Aveuglee===true || p.H0D_Machine_Etat_Aveuglee==="true" ? -4 : 0);
+  }
+
+  if (Object.prototype.hasOwnProperty.call(p,"H0D_Skill_Perception_Rangs")) {
+    return propNumber(actor,"H0D_SAG_MOD",true)
+      + propNumber(actor,"H0D_Skill_Perception_Rangs",true)
+      + propNumber(actor,"H0D_Skill_Perception_Divers",true)
+      + propNumber(actor,"H0D_DT_Bonus_Skill_Perception_Total",true)
+      + propNumber(actor,"H0D_Skill_Perception_Bonus_Origine",true);
+  }
+
+  return null;
+}
+
 export function commonAttributeEntry(actor,key) {
   return actor?.system?.attributeBar?.[key] ?? null;
 }
@@ -59,6 +129,10 @@ export function commonStat(actor,key,{legacy=true}={}) {
     const value=finiteNumber(propValue(actor,legacyKey));
     if (value!==null) return value;
   }
+
+  if (key==="H0D_Defense") return legacyDefense(actor);
+
+  if (key==="H0D_Perception") return legacyPerception(actor);
 
   if (key==="H0D_Detection") {
     const perception=commonStat(actor,"H0D_Perception",{legacy:true});
