@@ -5,20 +5,20 @@ const load = async path => JSON.parse(await readFile(new URL("../"+path, import.
 
 const cases = [
   {
-    path:"data/templates/H0D_Actor-template-PJ-v3.72.json",
-    name:"H0D_Actor-template-PJ v3.72",
+    path:"data/templates/H0D_Actor-template-PJ-v3.73.json",
+    name:"H0D_Actor-template-PJ v3.73",
     value:"${H0D_PV_Actuels}$",
     max:"${H0D_PV_Max_Calc}$"
   },
   {
-    path:"data/templates/H0D_Actor-template-creature-v1.27.json",
-    name:"H0D_Actor-template-creature v1.27",
+    path:"data/templates/H0D_Actor-template-creature-v1.28.json",
+    name:"H0D_Actor-template-creature v1.28",
     value:"${H0D_Creature_PV_Actuels}$",
     max:"${H0D_Creature_PV_Max_Calc}$"
   },
   {
-    path:"data/templates/H0D_Actor-template-machine-v3.17.json",
-    name:"H0D_Actor-template-machine v3.17",
+    path:"data/templates/H0D_Actor-template-machine-v3.18.json",
+    name:"H0D_Actor-template-machine v3.18",
     value:"${H0D_Machine_PV_Actuels}$",
     max:"${H0D_Machine_PV_Max_Calc}$"
   }
