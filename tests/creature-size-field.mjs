@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
 
-const path="data/templates/H0D_Actor-template-creature-v1.27.json";
+const path="data/templates/H0D_Actor-template-creature-v1.28.json";
 const doc=JSON.parse(await readFile(new URL("../"+path,import.meta.url),"utf8"));
 
 function findByKey(node,key){
@@ -16,7 +16,7 @@ function findByKey(node,key){
   return null;
 }
 
-assert.equal(doc.name,"H0D_Actor-template-creature v1.27");
+assert.equal(doc.name,"H0D_Actor-template-creature v1.28");
 assert.equal(doc.system.templateSystemUniqueVersion,3034657909);
 
 const size=findByKey(doc.system.body,"H0D_Creature_Taille");
@@ -31,4 +31,4 @@ assert.deepEqual(size.options.map(x=>x.key),[
 const menace=findByKey(doc.system.body,"H0D_Creature_Menace");
 assert.ok(menace,"Menace disparue");
 
-console.log("Creature size field v1.27 OK");
+console.log("Creature size field v1.28 OK");
