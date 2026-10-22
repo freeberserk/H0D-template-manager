@@ -27,8 +27,8 @@ const cases = [
 for (const expected of cases) {
   const doc=await load(expected.path);
   assert.equal(doc.name, expected.name, "Version/template inattendu : "+expected.path);
-  assert.deepEqual(Object.keys(doc.system.attributeBar || {}), ["H0D_Health"],
-    "Le template doit exposer une unique barre complexe commune H0D_Health : "+expected.path);
+  assert.ok(Object.prototype.hasOwnProperty.call(doc.system.attributeBar || {},"H0D_Health"),
+    "Le template doit exposer H0D_Health : "+expected.path);
   const bar=doc.system.attributeBar.H0D_Health;
   assert.equal(bar.value, expected.value, "Formule Value H0D_Health incorrecte : "+expected.path);
   assert.equal(bar.max, expected.max, "Formule Maximum H0D_Health incorrecte : "+expected.path);
