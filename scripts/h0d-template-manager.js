@@ -642,6 +642,7 @@ async function pushBackup(doc, runId, scope) {
     documentName:doc.documentName, scope, templateId:templateId(doc),
     templateSystemUniqueVersion:Number(doc.system?.templateSystemUniqueVersion ?? 0),
     prototypeBar1:clone(doc.prototypeToken?.bar1 || null),
+    attributeBar:clone(doc.system?.attributeBar || {}),
     props:clone(doc.system?.props || {})
   });
   while (old.length > MAX_BACKUPS) old.shift();
@@ -1087,8 +1088,9 @@ async function restoreLastCycle() {
     if (!backup?.props) continue;
     try {
       const update={"system.props":clone(backup.props)};
-      if (backup.prototypeBar1 && entry.doc.documentName==="Actor") {
-        update["prototypeToken.bar1"]=clone(backup.prototypeBar1);
+      if (entry.doc.documentName==="Actor") {
+        if (backup.prototypeBar1) update["prototypeToken.bar1"]=clone(backup.prototypeBar1);
+        if (backup.attributeBar) update["system.attributeBar"]=clone(backup.attributeBar);
       }
       await entry.doc.update(update);
       restored++;
