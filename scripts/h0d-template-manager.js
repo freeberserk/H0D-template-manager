@@ -15,19 +15,19 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.25";
+const MODULE_VERSION = "1.7.26";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
 const LAST_CYCLE_SETTING = "lastCycleId";
 
 const TEMPLATE_INDEX = [
-  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.73", version:"3.73", file:"H0D_Actor-template-PJ-v3.73.json"},
+  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.74", version:"3.74", file:"H0D_Actor-template-PJ-v3.74.json"},
   {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.28", version:"1.28", file:"H0D_Actor-template-creature-v1.28.json"},
   {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.18", version:"3.18", file:"H0D_Actor-template-machine-v3.18.json"},
   {key:"item-arme", family:"Item", kind:"Item", id:"O6qwtv7ozECILPHV", name:"H0D_Arme v2.8", version:"2.8", file:"H0D_Arme-v2.8.json"},
   {key:"item-armure", family:"Item", kind:"Item", id:"dEeBbuthkI0CVMa3", name:"H0D_Armure v2.0", version:"2.0", file:"H0D_Armure-v2.0.json"},
-  {key:"item-don-talent", family:"Item", kind:"Item", id:"H0DDonTalent0001", name:"H0D_Don_Talent v2.5", version:"2.5", file:"H0D_Don_Talent-v2.5.json"},
+  {key:"item-don-talent", family:"Item", kind:"Item", id:"H0DDonTalent0001", name:"H0D_Don_Talent v2.6", version:"2.6", file:"H0D_Don_Talent-v2.6.json"},
   {key:"item-modificateur", family:"Item", kind:"Item", id:"H0DCreaMod000001", name:"H0D_Modificateur v1.3", version:"1.3", file:"H0D_Modificateur-v1.3.json"},
   {key:"item-objet", family:"Item", kind:"Item", id:"H0DObjTpl0000001", name:"H0D_Objet v2.9", version:"2.9", file:"H0D_Objet-v2.9.json"},
   {key:"item-ressource", family:"Item", kind:"Item", id:"H0DResTpl0000001", name:"H0D_Ressource v2.5", version:"2.5", file:"H0D_Ressource-v2.5.json"},
@@ -168,7 +168,12 @@ const SAFE_ADDITIVE_MISSING_KEYS = {
     "H0D_Armure_Amelioration_3_Effet"
   ]),
   "item-don-talent": new Set([
-    "H0D_DT_Connaissance_Cible_Perso"
+    "H0D_DT_Connaissance_Cible_Perso",
+    "H0D_DT_Artisanat_Portee",
+    "H0D_DT_Artisanat_Cible",
+    "H0D_DT_Artisanat_Bonus_Type",
+    "H0D_DT_Artisanat_Bonus_Fixe",
+    "H0D_DT_Artisanat_Classe"
   ]),
   "item-objet": new Set([
     "H0D_Objet_Sous_Type",

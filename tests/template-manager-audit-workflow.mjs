@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.25","Le manifest doit être en 1.7.25");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.25";'),"MODULE_VERSION doit être en 1.7.25");
+assert.equal(manifest.version,"1.7.26","Le manifest doit être en 1.7.26");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.26";'),"MODULE_VERSION doit être en 1.7.26");
 
 assert.ok(hbs.includes('data-action="audit"'),"Le bouton Audit doit rester présent");
 assert.ok(hbs.includes("{{auditState.label}}"),"Le libellé d'audit doit être contextuel");
@@ -60,7 +60,7 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(auditButton>=0 && snapshotButton>auditButton && installButton>snapshotButton,
   "La barre doit commencer par Audit puis Snapshot puis Installation");
 
-assert.ok(readme.startsWith("# H0D Template Manager — v1.7.25"),"README non aligné sur la version");
+assert.ok(readme.startsWith("# H0D Template Manager — v1.7.26"),"README non aligné sur la version");
 assert.ok(readme.includes("Audit final recommandé"),"README doit documenter l'audit final");
 
-console.log("Template Manager audit workflow 1.7.25 OK");
+console.log("Template Manager audit workflow 1.7.26 OK");

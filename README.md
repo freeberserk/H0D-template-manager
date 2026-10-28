@@ -1,4 +1,11 @@
-# H0D Template Manager — v1.7.25
+# H0D Template Manager — v1.7.26
+
+## v1.7.26 — Bonus des Dons sur les Artisanats
+
+- Template **Don/Talent v2.6** : portée « un artisanat » ou « tous les artisanats », choix parmi les huit spécialités, bonus fixe ou dépendant des niveaux de classe. La case « Actif » contrôle le bonus.
+- Template **PJ v3.74** : les huit totaux d'Artisanat ajoutent les bonus des Dons actifs, ciblés ou globaux, sans modifier les rangs, les bonus d'origine ni les autres compétences.
+- Les Connaissances conservent leur tableau dynamique et leur mécanisme de bonus ciblés préexistant.
+- Les identifiants des templates restent stables ; mise à jour des templates et migration sûre des versions conseillées après installation.
 
 ## v1.7.25 — Cartes d'attaque unifiées
 

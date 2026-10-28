@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
 
-const pj=JSON.parse(await readFile(new URL("../data/templates/H0D_Actor-template-PJ-v3.73.json",import.meta.url),"utf8"));
+const pj=JSON.parse(await readFile(new URL("../data/templates/H0D_Actor-template-PJ-v3.74.json",import.meta.url),"utf8"));
 
 function walk(root,fn){
   if(Array.isArray(root)){root.forEach(v=>walk(v,fn));return;}
@@ -15,7 +15,7 @@ function findKey(key){
   return hit;
 }
 
-assert.equal(pj.name,"H0D_Actor-template-PJ v3.73");
+assert.equal(pj.name,"H0D_Actor-template-PJ v3.74");
 const raw=JSON.stringify(pj);
 assert.equal(raw.includes("Réparation / Artisanat"),false,"Réparation doit être séparée d’Artisanat");
 
@@ -90,4 +90,4 @@ for(let n=1;n<=3;n++){
   }
 }
 
-console.log("PJ skills / Artisanat v3.73 OK");
+console.log("PJ skills / Artisanat v3.74 OK");

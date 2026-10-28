@@ -2,7 +2,7 @@
   "id": "h0d-template-manager",
   "title": "H0D Template Manager",
   "description": "Gestionnaire centralisé H0D : templates, interface Actor commune, cartes d’attaque unifiées, audits, migrations sûres et automatisations de combat.",
-  "version": "1.7.25",
+  "version": "1.7.26",
   "authors": [
     {
       "name": "JDR Zero Dawn"

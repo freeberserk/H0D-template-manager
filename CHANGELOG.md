@@ -1,3 +1,9 @@
+## 1.7.26 — Dons et Artisanats
+
+- H0D_Don_Talent v2.6 : bonus ciblé ou global sur les huit Artisanats (fixe / niveau de classe).
+- H0D_Actor-template-PJ v3.74 : prise en compte automatique des bonus de Dons actifs dans chaque total d'Artisanat.
+- Compatibilité : rangs, bonus d'origine, connaissances et autres calculs préservés.
+
 ## 1.7.25 — Cartes d'attaque unifiées
 
 - Remplace le vieux rendu inline clair de `H0D — Attaques` par les cartes modernes `h0d-chat-card h0d-chat-attack`.

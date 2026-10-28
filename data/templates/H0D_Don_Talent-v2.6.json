@@ -1,0 +1,2376 @@
+{
+  "_id": "H0DDonTalent0001",
+  "name": "H0D_Don_Talent v2.6",
+  "type": "_equippableItemTemplate",
+  "system": {
+    "hidden": [],
+    "header": {
+      "contents": [],
+      "key": "custom_header",
+      "type": "panel"
+    },
+    "body": {
+      "contents": [
+        {
+          "key": "",
+          "colSpan": 1,
+          "rowSpan": 1,
+          "cssClass": "zd-page",
+          "role": "0",
+          "editRole": 0,
+          "permission": "0",
+          "tooltip": "",
+          "visibilityFormula": "",
+          "editableFormula": "",
+          "escapeHTML": false,
+          "type": "panel",
+          "contents": [
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "DON / TALENT",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_DT_Type",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Type",
+                        "defaultValue": "Don",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Don",
+                            "value": "Don"
+                          },
+                          {
+                            "key": "Talent",
+                            "value": "Talent de classe"
+                          },
+                          {
+                            "key": "DonOccupation",
+                            "value": "Don d’occupation"
+                          },
+                          {
+                            "key": "DonClasse",
+                            "value": "Don de classe"
+                          },
+                          {
+                            "key": "Maitrise",
+                            "value": "Maîtrise"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Mode",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Fonctionnement",
+                        "defaultValue": "Passif",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Passif",
+                            "value": "Passif"
+                          },
+                          {
+                            "key": "Activable",
+                            "value": "Activable"
+                          },
+                          {
+                            "key": "Conditionnel",
+                            "value": "Conditionnel"
+                          },
+                          {
+                            "key": "Reaction",
+                            "value": "Réaction / rappel"
+                          },
+                          {
+                            "key": "Maitrise",
+                            "value": "Maîtrise"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Source",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Source / origine",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Actif",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Décochez pour neutraliser temporairement les bonus automatiques du don/talent.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "checkbox",
+                        "size": "auto",
+                        "label": "Effet pris en compte",
+                        "defaultValue": null,
+                        "defaultChecked": true
+                      },
+                      {
+                        "key": "H0D_DT_Action",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${not(equalText(H0D_DT_Mode,'Passif'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Action",
+                        "defaultValue": "Passive",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Passive",
+                            "value": "Passive"
+                          },
+                          {
+                            "key": "Libre",
+                            "value": "Libre"
+                          },
+                          {
+                            "key": "Mouvement",
+                            "value": "Mouvement"
+                          },
+                          {
+                            "key": "Attaque",
+                            "value": "Attaque"
+                          },
+                          {
+                            "key": "Standard",
+                            "value": "Standard"
+                          },
+                          {
+                            "key": "Complete",
+                            "value": "Action complète"
+                          },
+                          {
+                            "key": "Reaction",
+                            "value": "Réaction"
+                          },
+                          {
+                            "key": "Variable",
+                            "value": "Variable"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Condition",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${or(equalText(H0D_DT_Mode,'Conditionnel'),equalText(H0D_DT_Mode,'Reaction'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Condition / portée",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      }
+                    ]
+                  ],
+                  "cols": "3",
+                  "rows": "2",
+                  "layout": "lll"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-orange",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-orange-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "UTILISATION",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_DT_Utilisations_Restantes",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${or(equalText(H0D_DT_Mode,'Activable'),equalText(H0D_DT_Mode,'Reaction'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Utilisations restantes",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "999",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Utilisations_Max",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${or(equalText(H0D_DT_Mode,'Activable'),equalText(H0D_DT_Mode,'Reaction'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Maximum",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "999",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Recharge",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${or(equalText(H0D_DT_Mode,'Activable'),equalText(H0D_DT_Mode,'Reaction'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Recharge",
+                        "defaultValue": "Illimité",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      },
+                      {
+                        "key": "H0D_DT_Cout_PA",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${and(not(equalText(H0D_DT_Mode,'Passif')),not(equalText(H0D_DT_Mode,'Maitrise')))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Coût PA",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "10",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ]
+                  ],
+                  "cols": "4",
+                  "rows": "1",
+                  "layout": "cccc"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "PRÉREQUIS",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_DT_Prereq_Carac",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Caractéristique",
+                        "defaultValue": "Aucune",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucune",
+                            "value": "—"
+                          },
+                          {
+                            "key": "FOR",
+                            "value": "FOR"
+                          },
+                          {
+                            "key": "DEX",
+                            "value": "DEX"
+                          },
+                          {
+                            "key": "CON",
+                            "value": "CON"
+                          },
+                          {
+                            "key": "INT",
+                            "value": "INT"
+                          },
+                          {
+                            "key": "SAG",
+                            "value": "SAG"
+                          },
+                          {
+                            "key": "CHA",
+                            "value": "CHA"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Prereq_Carac_Min",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${not(equalText(H0D_DT_Prereq_Carac,'Aucune'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Minimum",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "30",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Prereq_BBA_Min",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "BBA minimum",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "20",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Prereq_Competence",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Compétence",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "—"
+                          },
+                          {
+                            "key": "Acrobaties",
+                            "value": "Acrobaties"
+                          },
+                          {
+                            "key": "Athletisme",
+                            "value": "Athlétisme"
+                          },
+                          {
+                            "key": "Discretion",
+                            "value": "Discrétion"
+                          },
+                          {
+                            "key": "Perception",
+                            "value": "Perception"
+                          },
+                          {
+                            "key": "Survie",
+                            "value": "Survie"
+                          },
+                          {
+                            "key": "Technologie",
+                            "value": "Technologie"
+                          },
+                          {
+                            "key": "Reparation",
+                            "value": "Réparation"
+                          },
+                          {
+                            "key": "Soins",
+                            "value": "Soins"
+                          },
+                          {
+                            "key": "Diplomatie",
+                            "value": "Diplomatie"
+                          },
+                          {
+                            "key": "Connaissances",
+                            "value": "Connaissances"
+                          },
+                          {
+                            "key": "Focus",
+                            "value": "Focus"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Prereq_Rangs",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${not(equalText(H0D_DT_Prereq_Competence,'Aucun'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Rangs minimum",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "0",
+                        "maxVal": "30",
+                        "allowRelative": true,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Prereq_Texte",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Autre prérequis",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      }
+                    ]
+                  ],
+                  "cols": "3",
+                  "rows": "2",
+                  "layout": "lll"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": true,
+              "defaultCollapsed": true,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-orange",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-orange-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "BONUS AUTOMATIQUES",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_DT_Bonus_DEF_Perm",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "DEF permanent",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_DEF_Esquive",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "DEF esquive",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Initiative",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Initiative",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Vitesse",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Vitesse (m)",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-30",
+                        "maxVal": "30",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Bonus_Vigueur",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Vigueur",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Reflexes",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Réflexes",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Volonte",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Volonté",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Seuil_Massif",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Seuil massif",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-30",
+                        "maxVal": "30",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Bonus_PV",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "PV max",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-100",
+                        "maxVal": "100",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Attaque_Global",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Attaque globale",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Degats_Global",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Dégâts globaux",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      null
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Bonus_Attaque_Distance",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Attaque distance",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Degats_Distance",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Dégâts distance",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Attaque_Melee",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Attaque mêlée",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Bonus_Degats_Melee",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Dégâts mêlée",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ]
+                  ],
+                  "cols": "4",
+                  "rows": "4",
+                  "layout": "cccc"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_DT_Competence1",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Compétence 1",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "—"
+                          },
+                          {
+                            "key": "Acrobaties",
+                            "value": "Acrobaties"
+                          },
+                          {
+                            "key": "Athletisme",
+                            "value": "Athlétisme"
+                          },
+                          {
+                            "key": "Discretion",
+                            "value": "Discrétion"
+                          },
+                          {
+                            "key": "Perception",
+                            "value": "Perception"
+                          },
+                          {
+                            "key": "Survie",
+                            "value": "Survie"
+                          },
+                          {
+                            "key": "Technologie",
+                            "value": "Technologie"
+                          },
+                          {
+                            "key": "Reparation",
+                            "value": "Réparation"
+                          },
+                          {
+                            "key": "Soins",
+                            "value": "Soins"
+                          },
+                          {
+                            "key": "Diplomatie",
+                            "value": "Diplomatie"
+                          },
+                          {
+                            "key": "Connaissances",
+                            "value": "Connaissances"
+                          },
+                          {
+                            "key": "Focus",
+                            "value": "Focus"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Competence1_Bonus",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Bonus",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Competence2",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Compétence 2",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "—"
+                          },
+                          {
+                            "key": "Acrobaties",
+                            "value": "Acrobaties"
+                          },
+                          {
+                            "key": "Athletisme",
+                            "value": "Athlétisme"
+                          },
+                          {
+                            "key": "Discretion",
+                            "value": "Discrétion"
+                          },
+                          {
+                            "key": "Perception",
+                            "value": "Perception"
+                          },
+                          {
+                            "key": "Survie",
+                            "value": "Survie"
+                          },
+                          {
+                            "key": "Technologie",
+                            "value": "Technologie"
+                          },
+                          {
+                            "key": "Reparation",
+                            "value": "Réparation"
+                          },
+                          {
+                            "key": "Soins",
+                            "value": "Soins"
+                          },
+                          {
+                            "key": "Diplomatie",
+                            "value": "Diplomatie"
+                          },
+                          {
+                            "key": "Connaissances",
+                            "value": "Connaissances"
+                          },
+                          {
+                            "key": "Focus",
+                            "value": "Focus"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Competence2_Bonus",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Bonus",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Competence3",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Compétence 3",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "—"
+                          },
+                          {
+                            "key": "Acrobaties",
+                            "value": "Acrobaties"
+                          },
+                          {
+                            "key": "Athletisme",
+                            "value": "Athlétisme"
+                          },
+                          {
+                            "key": "Discretion",
+                            "value": "Discrétion"
+                          },
+                          {
+                            "key": "Perception",
+                            "value": "Perception"
+                          },
+                          {
+                            "key": "Survie",
+                            "value": "Survie"
+                          },
+                          {
+                            "key": "Technologie",
+                            "value": "Technologie"
+                          },
+                          {
+                            "key": "Reparation",
+                            "value": "Réparation"
+                          },
+                          {
+                            "key": "Soins",
+                            "value": "Soins"
+                          },
+                          {
+                            "key": "Diplomatie",
+                            "value": "Diplomatie"
+                          },
+                          {
+                            "key": "Connaissances",
+                            "value": "Connaissances"
+                          },
+                          {
+                            "key": "Focus",
+                            "value": "Focus"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Competence3_Bonus",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Bonus",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "20",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      }
+                    ]
+                  ],
+                  "cols": "2",
+                  "rows": "3",
+                  "layout": "ll"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": true,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "BONUS CONNAISSANCES",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_DT_Connaissance_Portee",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Détermine si cet Item modifie une connaissance précise ou toutes.",
+                        "visibilityFormula": "${or(equalText(H0D_DT_Prereq_Competence,'Connaissances'),or(equalText(H0D_DT_Competence1,'Connaissances'),or(equalText(H0D_DT_Competence2,'Connaissances'),equalText(H0D_DT_Competence3,'Connaissances'))))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Portée",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "Aucun"
+                          },
+                          {
+                            "key": "Cible",
+                            "value": "Une connaissance"
+                          },
+                          {
+                            "key": "Toutes",
+                            "value": "Toutes les connaissances"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Connaissance_Cible",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Utilisée lorsque Portée = Une connaissance.",
+                        "visibilityFormula": "${and(or(equalText(H0D_DT_Prereq_Competence,'Connaissances'),or(equalText(H0D_DT_Competence1,'Connaissances'),or(equalText(H0D_DT_Competence2,'Connaissances'),equalText(H0D_DT_Competence3,'Connaissances')))),equalText(H0D_DT_Connaissance_Portee,'Cible'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Connaissance ciblée",
+                        "defaultValue": "histoire",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "histoire",
+                            "value": "Histoire"
+                          },
+                          {
+                            "key": "geographie",
+                            "value": "Géographie"
+                          },
+                          {
+                            "key": "tribus_cultures",
+                            "value": "Tribus & cultures"
+                          },
+                          {
+                            "key": "machines",
+                            "value": "Machines"
+                          },
+                          {
+                            "key": "faune",
+                            "value": "Faune"
+                          },
+                          {
+                            "key": "flore",
+                            "value": "Flore"
+                          },
+                          {
+                            "key": "technologie",
+                            "value": "Technologie"
+                          },
+                          {
+                            "key": "ancien_monde",
+                            "value": "Ancien Monde"
+                          },
+                          {
+                            "key": "ruines_antiques",
+                            "value": "Ruines antiques"
+                          },
+                          {
+                            "key": "autre",
+                            "value": "Autre / personnalisée"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Connaissance_Cible_Perso",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "À remplir seulement si la cible est Autre / personnalisée.",
+                        "visibilityFormula": "${and(equalText(H0D_DT_Connaissance_Portee,'Cible'),equalText(H0D_DT_Connaissance_Cible,'autre'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Nom personnalisé",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Connaissance_Bonus_Type",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${or(equalText(H0D_DT_Prereq_Competence,'Connaissances'),or(equalText(H0D_DT_Competence1,'Connaissances'),or(equalText(H0D_DT_Competence2,'Connaissances'),equalText(H0D_DT_Competence3,'Connaissances'))))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Type de bonus",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "Aucun"
+                          },
+                          {
+                            "key": "Fixe",
+                            "value": "Bonus fixe"
+                          },
+                          {
+                            "key": "NiveauClasse",
+                            "value": "Niveau de classe"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Connaissance_Bonus_Fixe",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Ex. +3 pour Skill Emphasis.",
+                        "visibilityFormula": "${equalText(H0D_DT_Connaissance_Bonus_Type,'Fixe')}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Bonus fixe",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "50",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Connaissance_Classe",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Utilisée quand Type de bonus = Niveau de classe.",
+                        "visibilityFormula": "${equalText(H0D_DT_Connaissance_Bonus_Type,'NiveauClasse')}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Classe de référence",
+                        "defaultValue": "Intelligent",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Fort",
+                            "value": "Héros Fort"
+                          },
+                          {
+                            "key": "Rapide",
+                            "value": "Héros Rapide"
+                          },
+                          {
+                            "key": "Robuste",
+                            "value": "Héros Robuste"
+                          },
+                          {
+                            "key": "Intelligent",
+                            "value": "Héros Intelligent"
+                          },
+                          {
+                            "key": "Devoue",
+                            "value": "Héros Dévoué"
+                          },
+                          {
+                            "key": "Charismatique",
+                            "value": "Héros Charismatique"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      }
+                    ]
+                  ],
+                  "cols": "3",
+                  "rows": "2",
+                  "layout": "lll"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "Les choix standards utilisent une clé normalisée. « Autre » garde un champ libre ; dans ce cas le nom saisi dans l’Item doit correspondre au nom personnalisé de la ligne de Connaissance.",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "label"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": true,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "BONUS ARTISANATS",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_DT_Artisanat_Portee",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Aucun, une spécialité ou toutes les spécialités.",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Portée",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "Aucun"
+                          },
+                          {
+                            "key": "Cible",
+                            "value": "Un artisanat"
+                          },
+                          {
+                            "key": "Toutes",
+                            "value": "Tous les artisanats"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Artisanat_Cible",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Utilisée lorsque Portée = Une connaissance.",
+                        "visibilityFormula": "${equalText(H0D_DT_Artisanat_Portee,'Cible')}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Artisanat ciblé",
+                        "defaultValue": "histoire",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Chimique",
+                            "value": "Chimique"
+                          },
+                          {
+                            "key": "Electronique",
+                            "value": "Electronique"
+                          },
+                          {
+                            "key": "Mecanique",
+                            "value": "Mecanique"
+                          },
+                          {
+                            "key": "Pharmaceutique",
+                            "value": "Pharmaceutique"
+                          },
+                          {
+                            "key": "Structurel",
+                            "value": "Structurel"
+                          },
+                          {
+                            "key": "Arts_Visuels",
+                            "value": "Arts Visuels"
+                          },
+                          {
+                            "key": "Ecriture",
+                            "value": "Ecriture"
+                          },
+                          {
+                            "key": "Autre",
+                            "value": "Autre"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      }
+                    ],
+                    [
+                      {
+                        "key": "H0D_DT_Artisanat_Bonus_Type",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Type de bonus",
+                        "defaultValue": "Aucun",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucun",
+                            "value": "Aucun"
+                          },
+                          {
+                            "key": "Fixe",
+                            "value": "Bonus fixe"
+                          },
+                          {
+                            "key": "NiveauClasse",
+                            "value": "Niveau de classe"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Artisanat_Bonus_Fixe",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Ex. +3 pour Skill Emphasis.",
+                        "visibilityFormula": "${equalText(H0D_DT_Artisanat_Bonus_Type,'Fixe')}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "numberField",
+                        "size": "auto",
+                        "label": "Bonus fixe",
+                        "defaultValue": "0",
+                        "allowDecimal": false,
+                        "minVal": "-20",
+                        "maxVal": "50",
+                        "allowRelative": false,
+                        "showControls": true,
+                        "controlsStyle": "hover",
+                        "controlsCustomIncrements": "",
+                        "inputStyle": "text"
+                      },
+                      {
+                        "key": "H0D_DT_Artisanat_Classe",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "Utilisée quand Type de bonus = Niveau de classe.",
+                        "visibilityFormula": "${equalText(H0D_DT_Artisanat_Bonus_Type,'NiveauClasse')}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Classe de référence",
+                        "defaultValue": "Intelligent",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Fort",
+                            "value": "Héros Fort"
+                          },
+                          {
+                            "key": "Rapide",
+                            "value": "Héros Rapide"
+                          },
+                          {
+                            "key": "Robuste",
+                            "value": "Héros Robuste"
+                          },
+                          {
+                            "key": "Intelligent",
+                            "value": "Héros Intelligent"
+                          },
+                          {
+                            "key": "Devoue",
+                            "value": "Héros Dévoué"
+                          },
+                          {
+                            "key": "Charismatique",
+                            "value": "Héros Charismatique"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      }
+                    ]
+                  ],
+                  "cols": "3",
+                  "rows": "2",
+                  "layout": "lll"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "Les artisanats sont indépendants sur la fiche PJ. « Tous » affecte les huit spécialités, « Un artisanat » uniquement la spécialité sélectionnée.",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "label"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": true,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-teal",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-teal-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "MAÎTRISE",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "table",
+                  "contents": [
+                    [
+                      {
+                        "key": "H0D_DT_Maitrise",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${or(equalText(H0D_DT_Type,'Maitrise'),equalText(H0D_DT_Mode,'Maitrise'))}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "select",
+                        "label": "Maîtrise",
+                        "defaultValue": "Aucune",
+                        "size": "auto",
+                        "options": [
+                          {
+                            "key": "Aucune",
+                            "value": "—"
+                          },
+                          {
+                            "key": "ArmesSimples",
+                            "value": "Armes simples"
+                          },
+                          {
+                            "key": "ArmesArchaiques",
+                            "value": "Armes archaïques"
+                          },
+                          {
+                            "key": "ArmuresLegeres",
+                            "value": "Armures légères"
+                          },
+                          {
+                            "key": "Autre",
+                            "value": "Autre"
+                          }
+                        ],
+                        "tableKey": null,
+                        "tableKeyColumn": null,
+                        "tableLabelColumn": null
+                      },
+                      {
+                        "key": "H0D_DT_Maitrise_Autre",
+                        "colSpan": 1,
+                        "rowSpan": 1,
+                        "cssClass": "",
+                        "role": "0",
+                        "editRole": 0,
+                        "permission": "0",
+                        "tooltip": "",
+                        "visibilityFormula": "${equalText(H0D_DT_Maitrise,'Autre')}$",
+                        "editableFormula": "",
+                        "escapeHTML": false,
+                        "type": "textField",
+                        "size": "auto",
+                        "label": "Précision",
+                        "defaultValue": "",
+                        "charList": "",
+                        "maxLength": "",
+                        "autocomplete": ""
+                      }
+                    ]
+                  ],
+                  "cols": "2",
+                  "rows": "1",
+                  "layout": "ll"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": true,
+              "defaultCollapsed": true,
+              "title": "",
+              "titleStyle": "default"
+            },
+            {
+              "key": "",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "zd-section zd-orange",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "panel",
+              "contents": [
+                {
+                  "key": "",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "zd-orange-title",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "label",
+                  "size": "auto",
+                  "icon": "",
+                  "value": "EFFET",
+                  "prefix": "",
+                  "suffix": "",
+                  "rollMessage": "",
+                  "altRollMessage": "",
+                  "rollMessageToChat": true,
+                  "altRollMessageToChat": true,
+                  "style": "title"
+                },
+                {
+                  "key": "H0D_DT_Resume",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "textArea",
+                  "size": "auto",
+                  "label": "Résumé court",
+                  "defaultValue": "",
+                  "style": "dialog"
+                },
+                {
+                  "key": "H0D_DT_Effet",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "textArea",
+                  "size": "auto",
+                  "label": "Effet / règles",
+                  "defaultValue": "",
+                  "style": "dialog"
+                },
+                {
+                  "key": "H0D_DT_Notes",
+                  "colSpan": 1,
+                  "rowSpan": 1,
+                  "cssClass": "",
+                  "role": "0",
+                  "editRole": 0,
+                  "permission": "0",
+                  "tooltip": "",
+                  "visibilityFormula": "",
+                  "editableFormula": "",
+                  "escapeHTML": false,
+                  "type": "textArea",
+                  "size": "auto",
+                  "label": "Notes / adaptation campagne",
+                  "defaultValue": "",
+                  "style": "dialog"
+                }
+              ],
+              "flow": "vertical",
+              "align": "center",
+              "verticalAlign": "top",
+              "collapsible": false,
+              "defaultCollapsed": false,
+              "title": "",
+              "titleStyle": "default"
+            }
+          ],
+          "flow": "vertical",
+          "align": "center",
+          "verticalAlign": "top",
+          "collapsible": false,
+          "defaultCollapsed": false,
+          "title": "",
+          "titleStyle": "default"
+        }
+      ],
+      "key": "custom_body",
+      "type": "panel"
+    },
+    "templateSystemUniqueVersion": 8,
+    "display": {
+      "width": 900,
+      "height": 860,
+      "fix_size": false,
+      "pp_width": 110,
+      "pp_height": 110
+    },
+    "uniqueId": "zero_dawn_don_talent_v21"
+  },
+  "flags": {
+    "custom-system-builder": {
+      "version": "6.0.2",
+      "templateHistory": "[]",
+      "templateHistoryRedo": "[]"
+    }
+  },
+  "img": "icons/sundries/books/book-embossed-gold-red.webp",
+  "effects": [],
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "custom-system-builder",
+    "systemVersion": "6.0.2"
+  },
+  "items": []
+}

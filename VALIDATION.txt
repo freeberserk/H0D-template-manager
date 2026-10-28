@@ -1,3 +1,13 @@
+H0D Template Manager v1.7.26 — BAC — Dons / Artisanats
+
+- Installer les templates PJ v3.74 et Don/Talent v2.6, puis migrer les versions sûres et auditer.
+- Don actif +3 sur Artisanat Chimique : seul le total Chimique augmente de 3.
+- Don actif +2 sur tous les Artisanats : les huit totaux augmentent de 2.
+- Désactiver chaque don : le bonus disparaît sans changer les rangs ni les bonus d'origine.
+- Tester un bonus fondé sur les rangs d'une classe, et une combinaison de plusieurs dons.
+- Tester une Connaissance ciblée, toutes les Connaissances et une connaissance personnalisée ; vérifier l'absence de régression.
+- Contrôler les jets et les raccourcis des huit Artisanats dans Foundry.
+
 H0D Template Manager v1.7.25 — BAC — cartes d'attaque unifiées
 
 Préparation :
