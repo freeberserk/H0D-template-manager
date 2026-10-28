@@ -36,10 +36,17 @@ for(const test of cases){
  if(test.name==="PJ") assert.equal(posts[0].whisper,undefined,"PJ : message public attendu");
  else assert.deepEqual(posts[0].whisper,["gm-test"],test.name+": attaque ennemie doit être privée MJ");
  assert.deepEqual(posts[1].whisper,["gm-test"],test.name+": détail DEF/marge doit être privé MJ");
+ const expectedClass=test.name==="PJ" ? "h0d-chat-pj" : (test.name==="Machine" ? "h0d-chat-machine" : "h0d-chat-creature");
+ assert.ok(posts[0].content.includes("h0d-chat-card h0d-chat-attack"),test.name+": carte d'attaque H0D moderne absente");
+ assert.ok(posts[0].content.includes(expectedClass),test.name+": classe visuelle d'acteur absente");
+ assert.ok(posts[0].content.includes("h0d-chat-summary"),test.name+": tableau résumé moderne absent");
+ assert.ok(posts[0].content.includes("h0d-chat-headline"),test.name+": titre moderne absent");
+ assert.equal(posts[0].content.includes("background:#f5f5f5"),false,test.name+": ancien rendu inline clair encore présent");
  const rendered=posts[0].content.replace(/<[^>]*>/g," ").replace(/\s+/g," ");
- assert.ok(rendered.includes("= "+(12+test.bonus)),test.name+": total d'attaque incorrect");
+ assert.ok(rendered.includes(String(12+test.bonus)),test.name+": total d'attaque incorrect");
  assert.ok(rendered.includes("TOUCHÉ"),test.name+": la DEF commune doit être comparée");
  assert.ok(rendered.includes("Dégâts"),test.name+": dégâts absents");
+ assert.ok(posts[1].content.includes("h0d-chat-card h0d-chat-attack"),test.name+": détail MJ doit utiliser la même famille de carte");
  const detail=posts[1].content.replace(/<[^>]*>/g," ").replace(/\s+/g," ");
  assert.ok(detail.includes("DEF") && detail.includes("10"),test.name+": détail DEF commune absent");
  console.log("Smoke OK:",test.name);
