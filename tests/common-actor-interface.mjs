@@ -5,8 +5,8 @@ const load = async path => JSON.parse(await readFile(new URL("../"+path, import.
 
 const expected = [
   {
-    path:"data/templates/H0D_Actor-template-PJ-v3.73.json",
-    name:"H0D_Actor-template-PJ v3.73",
+    path:"data/templates/H0D_Actor-template-PJ-v3.74.json",
+    name:"H0D_Actor-template-PJ v3.74",
     defense:"${H0D_Defense_Totale_Calc}$",
     perception:"${H0D_Skill_Perception_Total}$",
     detection:"${10 + H0D_Skill_Perception_Total}$"

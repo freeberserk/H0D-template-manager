@@ -5,8 +5,8 @@ const load = async path => JSON.parse(await readFile(new URL("../"+path, import.
 
 const cases = [
   {
-    path:"data/templates/H0D_Actor-template-PJ-v3.73.json",
-    name:"H0D_Actor-template-PJ v3.73",
+    path:"data/templates/H0D_Actor-template-PJ-v3.74.json",
+    name:"H0D_Actor-template-PJ v3.74",
     value:"${H0D_PV_Actuels}$",
     max:"${H0D_PV_Max_Calc}$"
   },
