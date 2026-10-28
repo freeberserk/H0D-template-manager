@@ -1,3 +1,14 @@
+## 1.7.25 — Cartes d'attaque unifiées
+
+- Remplace le vieux rendu inline clair de `H0D — Attaques` par les cartes modernes `h0d-chat-card h0d-chat-attack`.
+- Utilise la même structure visuelle pour PJ, Créatures/PNJ/Factions et Machines.
+- Conserve une classe de type d'Actor pour les accents visuels : PJ / Créature / Machine.
+- Le message privé MJ DEF / marge / verdict utilise désormais la même famille de cartes.
+- L'ancienne macro officielle **H0D — Attaques ennemi v1.1** est automatiquement reliée au moteur commun.
+- L'ancien code de cette macro est sauvegardé dans `flags.h0d-template-manager.legacyEnemyAttackBackup` avant conversion.
+- Les macros personnelles ne correspondant pas à la signature officielle v1.1 ne sont pas modifiées.
+- Étend le smoke test aux classes de cartes modernes et interdit le retour de l'ancien fond inline `#f5f5f5`.
+
 ## 1.7.24 — Interface Actor commune
 
 - PJ passe en **v3.73**, Créature / PNJ en **v1.28**, Machine en **v3.18**.
