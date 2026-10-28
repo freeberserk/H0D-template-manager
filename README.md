@@ -1,4 +1,27 @@
-# H0D Template Manager — v1.7.24
+# H0D Template Manager — v1.7.25
+
+## v1.7.25 — Cartes d'attaque unifiées
+
+Le moteur **H0D — Attaques** utilise désormais la même famille de cartes de chat que les attaques lancées depuis les fiches PJ : `h0d-chat-card h0d-chat-attack`.
+
+Le rendu est commun aux trois types d'Actor :
+- PJ : `h0d-chat-pj`
+- Créature / PNJ / Faction : `h0d-chat-creature`
+- Machine : `h0d-chat-machine`
+
+La carte principale affiche le même squelette : **arme**, attaquant/cible, **Résultat**, **Verdict**, **Dégâts**, effet éventuel, métadonnées puis un bloc **Détails du jet** repliable. Le vieux bloc clair en styles inline est supprimé.
+
+Le message privé de **détail MJ** (DEF / marge / verdict) utilise lui aussi une carte H0D moderne au lieu d'un simple bloc HTML.
+
+### Ancienne macro « H0D — Attaques ennemi »
+
+L'ancienne macro officielle v1.1 contenait encore une copie complète du vieux moteur, donc elle pouvait continuer à afficher l'ancien rendu même après mise à jour du Template Manager.
+
+À partir de 1.7.25, le manager détecte précisément cette macro par sa signature `H0D — ATTAQUES ENNEMI v1.1`, sauvegarde son ancien code dans ses flags, puis remplace sa commande par :
+
+`game.h0dTemplateManager.openAttacks();`
+
+Le **même bouton de hotbar** reste donc utilisable, mais il appelle désormais le moteur commun. Une macro personnelle qui ne porte pas la signature legacy officielle n'est pas réécrite.
 
 ## v1.7.24 — Interface Actor commune
 
