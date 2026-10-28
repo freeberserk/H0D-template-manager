@@ -49,6 +49,10 @@ assert.ok(script.includes('"prototype-bar-mismatch"'),"L'audit doit détecter le
 assert.ok(script.includes("prototypeBarCandidates"),"Le triage doit compter les réparations sûres de prototype Token");
 assert.ok(script.includes("prototypeBar1:clone"),"Les sauvegardes internes doivent conserver la barre prototype");
 assert.ok(script.includes("prototypeBarChanged"),"La migration sûre doit tracer la réparation de barre prototype");
+assert.ok(script.includes("async function migrateLegacyEnemyAttackMacro()"),"La migration de la macro ennemie historique doit exister");
+assert.ok(script.includes("H0D — ATTAQUES ENNEMI v1.1"),"La migration doit cibler uniquement la macro legacy officielle v1.1");
+assert.ok(script.includes("legacyEnemyAttackBackup"),"L'ancien code de la macro ennemie doit être sauvegardé avant conversion");
+assert.ok(script.includes("await migrateLegacyEnemyAttackMacro();"),"La conversion de la macro ennemie doit être exécutée au ready");
 
 const auditButton=hbs.indexOf('data-action="audit"');
 const snapshotButton=hbs.indexOf('data-action="snapshot"');
