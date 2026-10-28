@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.24","Le manifest doit être en 1.7.24");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.24";'),"MODULE_VERSION doit être en 1.7.24");
+assert.equal(manifest.version,"1.7.25","Le manifest doit être en 1.7.25");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.25";'),"MODULE_VERSION doit être en 1.7.25");
 
 assert.ok(hbs.includes('data-action="audit"'),"Le bouton Audit doit rester présent");
 assert.ok(hbs.includes("{{auditState.label}}"),"Le libellé d'audit doit être contextuel");
@@ -49,6 +49,10 @@ assert.ok(script.includes('"prototype-bar-mismatch"'),"L'audit doit détecter le
 assert.ok(script.includes("prototypeBarCandidates"),"Le triage doit compter les réparations sûres de prototype Token");
 assert.ok(script.includes("prototypeBar1:clone"),"Les sauvegardes internes doivent conserver la barre prototype");
 assert.ok(script.includes("prototypeBarChanged"),"La migration sûre doit tracer la réparation de barre prototype");
+assert.ok(script.includes("async function migrateLegacyEnemyAttackMacro()"),"La migration de la macro ennemie historique doit exister");
+assert.ok(script.includes("H0D — ATTAQUES ENNEMI v1.1"),"La migration doit cibler uniquement la macro legacy officielle v1.1");
+assert.ok(script.includes("legacyEnemyAttackBackup"),"L'ancien code de la macro ennemie doit être sauvegardé avant conversion");
+assert.ok(script.includes("await migrateLegacyEnemyAttackMacro();"),"La conversion de la macro ennemie doit être exécutée au ready");
 
 const auditButton=hbs.indexOf('data-action="audit"');
 const snapshotButton=hbs.indexOf('data-action="snapshot"');
@@ -56,7 +60,7 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(auditButton>=0 && snapshotButton>auditButton && installButton>snapshotButton,
   "La barre doit commencer par Audit puis Snapshot puis Installation");
 
-assert.ok(readme.startsWith("# H0D Template Manager — v1.7.24"),"README non aligné sur la version");
+assert.ok(readme.startsWith("# H0D Template Manager — v1.7.25"),"README non aligné sur la version");
 assert.ok(readme.includes("Audit final recommandé"),"README doit documenter l'audit final");
 
-console.log("Template Manager audit workflow 1.7.24 OK");
+console.log("Template Manager audit workflow 1.7.25 OK");

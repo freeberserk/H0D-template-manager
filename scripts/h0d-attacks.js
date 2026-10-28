@@ -1,14 +1,14 @@
 import { commonStat } from "./h0d-common-stats.js";
 
-/* H0D — Attaques : moteur autonome distribué par H0D Template Manager.
- * La macro historique « H0D — Attaques ennemi » n'est jamais modifiée.
- * Version initiale dérivée de l'export utilisateur v1.1.
- * Note : comme v1.1, ce lanceur n'applique pas automatiquement les dégâts
+/* H0D — Attaques : moteur commun distribué par H0D Template Manager.
+ * Les macros PJ et l'ancienne macro « H0D — Attaques ennemi » doivent converger
+ * vers le même rendu de carte de chat.
+ * Note : ce lanceur n'applique pas automatiquement les dégâts
  * ni ne consomme les munitions. Pour ces fonctions, utiliser la fiche CSB.
  */
 export async function openH0DAttacks() {
 /*
- * H0D — ATTAQUES v1.3 (Template Manager)
+ * H0D — ATTAQUES v1.4 (Template Manager)
  * Foundry VTT v14 / Custom System Builder
  *
  * Sélectionner UN token (PJ, PNJ, créature ou machine).
@@ -127,6 +127,92 @@ function getTarget() {
 function resolveDefense(targetActor) {
   if (!targetActor) return null;
   return commonStat(targetActor,"H0D_Defense",{legacy:true});
+}
+
+function chatActorClass() {
+  if (isPJ) return "h0d-chat-pj";
+  if (isMachine) return "h0d-chat-machine";
+  return "h0d-chat-creature";
+}
+
+function attackDetailRow(label,value,{strong=false}={}) {
+  return `<tr><td>${esc(label)}</td><td>${strong ? "<strong>" : ""}${esc(value)}${strong ? "</strong>" : ""}</td></tr>`;
+}
+
+function attackCardContent({
+  info,natural,total,verdict,damageTotal,targetName,defense,situational
+}) {
+  const actorClass=chatActorClass();
+  const detailRows=[];
+
+  detailRows.push(attackDetailRow("d20",natural,{strong:true}));
+  detailRows.push(attackDetailRow("Bonus attaque",sign(info.attack)));
+  if (situational) detailRows.push(attackDetailRow("Situationnel",sign(situational)));
+  detailRows.push(attackDetailRow("Bonus total",sign(info.attack+situational),{strong:true}));
+
+  const damageFormula=info.damage + (info.damageFlat ? ` ${sign(info.damageFlat)}` : "");
+  detailRows.push(attackDetailRow("Dégâts de base",damageFormula));
+  if (info.damageType && info.damageType!=="—") detailRows.push(attackDetailRow("Type",info.damageType));
+  if (info.element && info.element!=="Aucun") detailRows.push(attackDetailRow("Élément",info.element));
+
+  const numericRange=Number(info.range);
+  const rangeText=numericRange>0
+    ? `${info.range} m`
+    : (String(info.range || "") && String(info.range)!=="0" ? String(info.range) : "—");
+  if (rangeText!=="—") detailRows.push(attackDetailRow("Portée",rangeText));
+  if (info.zone) detailRows.push(attackDetailRow("Zone",info.zone));
+  if (info.cooldown?.duration) detailRows.push(attackDetailRow("Recharge",`${info.cooldown.duration} round(s)`));
+
+  const warning=defense===null
+    ? `<div class="h0d-chat-warning"><strong>Comparaison :</strong> aucune DEF exploitable sur la cible.</div>`
+    : "";
+
+  const damageRow=damageTotal!==null
+    ? `<tr><td>Dégâts</td><td><strong>${damageTotal}</strong>${info.damageType && info.damageType!=="—" ? " · "+esc(info.damageType) : ""}${info.element && info.element!=="Aucun" ? " · "+esc(info.element) : ""}</td></tr>`
+    : "";
+
+  const effectRow=info.special
+    ? `<tr><td>Effet</td><td><strong>${esc(info.special)}</strong></td></tr>`
+    : "";
+
+  const meta=[];
+  if (info.category && info.category!=="—") meta.push(`<span>Catégorie : <b>${esc(info.category)}</b></span>`);
+  if (info.cooldown?.duration) meta.push(`<span>Recharge : <b>${esc(info.cooldown.text || info.cooldown.duration+" round(s)")}</b></span>`);
+
+  return `
+    <div class="h0d-chat-card h0d-chat-attack ${actorClass}">
+      <div class="h0d-chat-headline">${esc(info.name)}</div>
+      <div class="h0d-chat-sub"><b>${esc(actor.name)}</b> → ${esc(targetName)}</div>
+      ${warning}
+      <table class="h0d-chat-summary">
+        <tr><td><strong>Résultat</strong></td><td><strong>${total}</strong></td></tr>
+        <tr><td><strong>Verdict</strong></td><td><strong>${esc(verdict)}</strong></td></tr>
+        <tr><td>Cible</td><td><strong>${esc(targetName)}</strong></td></tr>
+        ${damageRow}
+        ${effectRow}
+      </table>
+      ${meta.length ? `<div class="h0d-chat-meta">${meta.join("")}</div>` : ""}
+      <details>
+        <summary>Détails du jet</summary>
+        <table>${detailRows.join("")}</table>
+      </details>
+    </div>
+  `;
+}
+
+function gmDefenseCardContent({info,targetName,defense,total,verdict}) {
+  const margin=total-defense;
+  return `
+    <div class="h0d-chat-card h0d-chat-attack ${chatActorClass()}">
+      <div class="h0d-chat-headline">Détail MJ — ${esc(info.name)}</div>
+      <div class="h0d-chat-sub"><b>${esc(actor.name)}</b> → ${esc(targetName)}</div>
+      <table class="h0d-chat-summary">
+        <tr><td><strong>DEF</strong></td><td><strong>${defense}</strong></td></tr>
+        <tr><td>Marge</td><td><strong>${sign(margin)}</strong></td></tr>
+        <tr><td>Verdict</td><td><strong>${esc(verdict)}</strong></td></tr>
+      </table>
+    </div>
+  `;
 }
 
 /* --------------------------------------------------------- */
@@ -827,114 +913,16 @@ async function attack(info, situational) {
     );
   }
 
-  const content = `
-    <div style="
-      border:1px solid #777;
-      border-radius:6px;
-      padding:8px;
-      background:#f5f5f5;
-    ">
-
-      <h3 style="
-        margin:0 0 6px 0;
-      ">
-        ${esc(actor.name)}
-        — ${esc(info.name)}
-      </h3>
-
-      <table style="
-        width:100%;
-      ">
-
-        <tr>
-          <td>Cible</td>
-          <td style="
-            text-align:right;
-          ">
-            <strong>
-              ${esc(targetName)}
-            </strong>
-          </td>
-        </tr>
-
-        <tr>
-          <td>Jet</td>
-          <td style="
-            text-align:right;
-          ">
-            d20
-            <strong>
-              ${natural}
-            </strong>
-            ${sign(
-              info.attack +
-              situational
-            )}
-            =
-            <strong>
-              ${total}
-            </strong>
-          </td>
-        </tr>
-
-        <tr>
-          <td>Résultat</td>
-          <td style="
-            text-align:right;
-          ">
-            <strong>
-              ${verdict}
-            </strong>
-          </td>
-        </tr>
-
-        ${
-          damageTotal !== null
-            ? `
-              <tr>
-                <td>Dégâts</td>
-                <td style="
-                  text-align:right;
-                ">
-                  <strong>
-                    ${damageTotal}
-                  </strong>
-
-                  ${
-                    details.length
-                      ? ` — ${esc(
-                          details.join(" · ")
-                        )}`
-                      : ""
-                  }
-                </td>
-              </tr>
-            `
-            : ""
-        }
-
-      </table>
-
-      ${
-        info.special
-          ? `
-            <hr>
-
-            <div>
-              <strong>
-                Effet :
-              </strong>
-
-              ${esc(
-                info.special
-              )}
-            </div>
-          `
-          : ""
-      }
-
-    </div>
-  `;
+  const content = attackCardContent({
+    info,
+    natural,
+    total,
+    verdict,
+    damageTotal,
+    targetName,
+    defense,
+    situational
+  });
 
   const speaker =
     ChatMessage.getSpeaker({
@@ -975,28 +963,13 @@ async function attack(info, situational) {
         speaker,
         whisper: gmIds,
 
-        content: `
-          <strong>
-            H0D — détail MJ
-          </strong>
-          <br>
-
-          ${esc(actor.name)}
-          →
-          ${esc(targetName)}
-          <br>
-
-          DEF :
-          <strong>
-            ${defense}
-          </strong>
-          <br>
-
-          Marge :
-          <strong>
-            ${sign(margin)}
-          </strong>
-        `
+        content: gmDefenseCardContent({
+          info,
+          targetName,
+          defense,
+          total,
+          verdict
+        })
       });
     }
   }

@@ -1,3 +1,26 @@
+H0D Template Manager v1.7.25 — BAC — cartes d'attaque unifiées
+
+Préparation :
+- Mettre à jour H0D Template Manager en 1.7.25.
+- Conserver sur la hotbar l'ancienne macro « H0D — Attaques ennemi » si elle existe déjà.
+
+Contrôles :
+- Au chargement du monde, la macro legacy officielle v1.1 doit rester au même emplacement / avec le même document Macro.
+- Son `command` doit devenir `game.h0dTemplateManager.openAttacks();`.
+- Vérifier la présence du backup `flags.h0d-template-manager.legacyEnemyAttackBackup`.
+- Une macro personnelle différente ne doit pas être modifiée.
+- Lancer une attaque de PJ : carte H0D moderne inchangée.
+- Lancer une attaque de Maraudeur Rouge via l'ancienne macro ennemie : carte sombre/moderne identique dans sa structure à celle des PJ.
+- Lancer une attaque de Machine : même structure de carte, avec la classe visuelle Machine.
+- Vérifier Résultat / Verdict / Cible / Dégâts / Effet éventuel / Détails du jet.
+- Vérifier que le message privé MJ DEF / marge est lui aussi stylé.
+- Aucun bloc avec fond clair `#f5f5f5` ne doit apparaître pour le moteur commun.
+- Les attaques ennemies restent privées au MJ ; seules les attaques PJ restent publiques.
+
+Contrôle automatisé :
+- `tests/h0d-attacks-smoke.mjs` valide les trois types d'Actor, la DEF, les classes de carte, le détail MJ et l'absence de l'ancien rendu inline.
+- `tests/template-manager-audit-workflow.mjs` contrôle la migration ciblée et la sauvegarde de la macro ennemie legacy.
+
 H0D Template Manager v1.7.24 — BAC — interface Actor commune
 
 Préparation :

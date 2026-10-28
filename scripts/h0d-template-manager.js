@@ -15,7 +15,7 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.24";
+const MODULE_VERSION = "1.7.25";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -1896,17 +1896,18 @@ function openManager() {
 }
 
 
-/* Macro universelle ajoutée sans modifier ni supprimer la macro historique.
- * Une macro personnelle de même nom est également préservée sans réécriture.
+/* Macro universelle H0D.
+ * Les macros personnelles portant le même nom restent préservées.
+ * L'ancienne macro officielle « H0D — Attaques ennemi v1.1 » est en revanche
+ * migrée vers ce moteur commun afin d'éviter deux moteurs et deux rendus de chat.
  */
 async function ensureAttacksMacro() {
   if (!game.user?.isGM) return;
   const name="H0D — Attaques";
   const existing=game.macros?.getName(name);
   if (existing) {
-    // Pas de mise à jour silencieuse d'une macro de combat utilisée en partie.
     if (existing.command !== "game.h0dTemplateManager.openAttacks();") {
-      console.warn("H0D Template Manager | Une macro nommée H0D — Attaques existe déjà : conservée sans modification.");
+      console.warn("H0D Template Manager | Une macro personnelle nommée H0D — Attaques existe déjà : conservée sans modification.");
     }
     return existing;
   }
@@ -1917,8 +1918,46 @@ async function ensureAttacksMacro() {
       flags:{"h0d-template-manager":{managedAttackLauncher:true}}
     });
   } catch (err) {
-    console.error("H0D Template Manager | Impossible de créer la nouvelle macro Attaques (ancienne macro intacte).",err);
+    console.error("H0D Template Manager | Impossible de créer la macro Attaques.",err);
     ui.notifications?.warn?.("H0D : macro Attaques non créée automatiquement, consulter la console.");
+    return null;
+  }
+}
+
+async function migrateLegacyEnemyAttackMacro() {
+  if (!game.user?.isGM) return null;
+
+  const wrapper="game.h0dTemplateManager.openAttacks();";
+  const macros=Array.from(game.macros || []);
+  const legacy=macros.find(macro=>{
+    const command=String(macro?.command || "");
+    return command.includes("H0D — ATTAQUES ENNEMI v1.1");
+  });
+
+  if (!legacy) return null;
+  if (legacy.command===wrapper) return legacy;
+
+  try {
+    if (!legacy.getFlag?.(MODULE_ID,"legacyEnemyAttackBackup")) {
+      await legacy.setFlag(MODULE_ID,"legacyEnemyAttackBackup",{
+        version:"1.1",
+        name:legacy.name,
+        command:String(legacy.command || ""),
+        migratedAt:new Date().toISOString()
+      });
+    }
+
+    await legacy.update({
+      command:wrapper,
+      "flags.h0d-template-manager.legacyEnemyAttackMigrated":true
+    });
+
+    ui.notifications?.info?.("H0D : l’ancienne macro « Attaques ennemi » utilise maintenant le moteur d’attaque commun.");
+    console.log("H0D Template Manager | Macro legacy Attaques ennemi migrée vers le moteur commun.");
+    return legacy;
+  } catch (err) {
+    console.error("H0D Template Manager | Impossible de migrer la macro legacy Attaques ennemi.",err);
+    ui.notifications?.warn?.("H0D : la macro historique Attaques ennemi n’a pas pu être migrée automatiquement.");
     return null;
   }
 }
@@ -1968,6 +2007,7 @@ Hooks.once("ready",async()=>{
   if (mod) mod.api=api;
   game.h0dTemplateManager=api;
   await ensureAttacksMacro();
+  await migrateLegacyEnemyAttackMacro();
   await promptPendingAmmoRecoveryOnReady();
   console.log(`H0D Template Manager v${MODULE_VERSION} prêt — interface ApplicationV2, API builders active.`);
 });
