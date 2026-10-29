@@ -15,7 +15,7 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.26";
+const MODULE_VERSION = "1.7.27";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -1978,7 +1978,7 @@ Hooks.on("getSceneControlButtons",controls=>{
   if (!game.user?.isGM || !controls.tokens?.tools) return;
   controls.tokens.tools.h0dTemplateManager={
     name:"h0dTemplateManager",title:"H0D — Template Manager",icon:"fa-solid fa-shield-halved",
-    order:Object.keys(controls.tokens.tools).length,button:true,visible:true,
+    order:-1000,button:true,visible:true,
     onChange:()=>openManager()
   };
 });

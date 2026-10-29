@@ -1,3 +1,6 @@
+## 1.7.27
+- Template Manager épinglé en tête de la barre d'outils Tokens (order -1000), indépendamment des outils H0D Loot.
+
 ## 1.7.26 — Dons et Artisanats
 
 - H0D_Don_Talent v2.6 : bonus ciblé ou global sur les huit Artisanats (fixe / niveau de classe).
