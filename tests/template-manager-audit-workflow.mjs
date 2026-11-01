@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.28","Le manifest doit être en 1.7.27");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.27";'),"MODULE_VERSION doit être en 1.7.27");
+assert.equal(manifest.version,"1.7.28","Le manifest doit être en 1.7.28");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.28";'),"MODULE_VERSION doit être en 1.7.28");
 
 assert.ok(script.includes('order:-1000,button:true,visible:true,'),"Le Template Manager doit être le premier outil de Tokens.");
 
