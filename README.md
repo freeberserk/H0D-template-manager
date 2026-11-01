@@ -1,3 +1,13 @@
+## v1.7.29 — Audit, sauvegardes internes et diagnostics
+- Le premier audit enregistre silencieusement un état initial des fiches H0D gérées dans des flags séparés des cycles de maintenance, sans export JSON. Cet état reste disponible après reconnexion ; les compendiums ne sont pas inclus dans cet état initial.
+- « Snapshot de sécurité » est le seul déclencheur d'export JSON de sauvegarde.
+- « Restaurer données » propose le dernier cycle de maintenance ou l'état initial du premier audit.
+- Audit plus rapide : composants de templates analysés une fois par famille, et non par fiche.
+- Comparaison structurelle des barres Actor, insensible à l'ordre des propriétés JSON ; le rapport indique les clés réellement divergentes.
+- Export du rapport d'audit uniquement sur validation explicite de la fenêtre.
+- « Synchroniser le monde » reste accessible ; les actions de réparation/migration sont conditionnées aux candidats du dernier audit.
+- Validation en jeu sur Foundry requise, notamment sur les performances et les opérations de restauration.
+
 ## v1.7.28 — Snapshot avant audit et vérification du manager
 
 - L’audit global exporte un snapshot JSON avant de calculer son rapport (y compris audit final). Si le snapshot échoue, l’audit est annulé.
@@ -5,7 +15,7 @@
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.28
+# H0D Template Manager — v1.7.29
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
@@ -397,7 +407,7 @@ L'export du rapport n'est plus une action permanente de la barre : il est propos
 
 ## Sécurité
 
-Aucune migration au démarrage. Le bouton **Audit monde** exporte automatiquement un snapshot JSON **avant** l’audit ; le bouton **Snapshot de sécurité** permet aussi un export manuel. Installation, synchronisation et réparation ne déclenchent pas de snapshot externe automatique. Les documents synchronisés/réparés conservent jusqu'à 5 sauvegardes internes par fiche.
+Aucune migration au démarrage. Le premier **Audit monde** crée un état initial interne des fiches gérées, sans téléchargement. Le bouton **Snapshot de sécurité** est le seul export JSON de sauvegarde. Installation, synchronisation et réparation ne déclenchent pas de snapshot externe automatique. Les documents synchronisés/réparés conservent jusqu'à 5 sauvegardes internes par fiche.
 
 Un audit est toujours en lecture seule. Lorsqu'une opération écrit réellement dans le monde, le bouton principal devient **Audit final recommandé**. Après synchronisation ou réparation, un réaudit silencieux remet immédiatement à jour les diagnostics nécessaires aux actions suivantes sans afficher de dialogue ni proposer d'export. L'export proposé à la fin d'un audit explicite ne relance pas le diagnostic.
 
