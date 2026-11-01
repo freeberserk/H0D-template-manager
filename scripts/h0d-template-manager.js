@@ -15,11 +15,13 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.28";
+const MODULE_VERSION = "1.7.29";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
 const LAST_CYCLE_SETTING = "lastCycleId";
+const INITIAL_AUDIT_SETTING = "initialAuditId";
+const INITIAL_AUDIT_FLAG = "initialAuditBackup";
 
 const TEMPLATE_INDEX = [
   {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.74", version:"3.74", file:"H0D_Actor-template-PJ-v3.74.json"},
@@ -298,7 +300,14 @@ function normalizeName(v) {
   return String(v ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
     .replace(/[’']/g, "'").replace(/[—–]/g, "-").replace(/\s+/g, " ").trim();
 }
-function jsonEqual(a,b) { return JSON.stringify(a) === JSON.stringify(b); }
+function jsonEqual(a,b) {
+  if (Object.is(a,b)) return true;
+  if (a===null || b===null || typeof a!=="object" || typeof b!=="object") return false;
+  if (Array.isArray(a)!==Array.isArray(b)) return false;
+  if (Array.isArray(a)) return a.length===b.length && a.every((v,i)=>jsonEqual(v,b[i]));
+  const ak=Object.keys(a),bk=Object.keys(b);
+  return ak.length===bk.length && ak.every(k=>Object.prototype.hasOwnProperty.call(b,k) && jsonEqual(a[k],b[k]));
+}
 function safeFilename(v) { return String(v).replace(/[^a-zA-Z0-9À-ÿ_.-]+/g,"-").replace(/-+/g,"-"); }
 
 async function confirmDialog(title, content, yes="Continuer") {
@@ -326,6 +335,8 @@ async function promptAuditExport(report,{final=false}={}) {
   const triage=report.warningTriage || {};
   const exportNow=await foundry.applications.api.DialogV2.confirm({
     window:{title:final ? "H0D — Audit final terminé" : "H0D — Audit terminé"},
+    modal:true,
+    rejectClose:false,
     content:`
       <p><strong>${final ? "✅ Vérification finale terminée." : "✅ Audit terminé en lecture seule."}</strong></p>
       <p>Templates : <strong>${templates.ok ?? 0} OK</strong> · ${templates.update ?? 0} mise(s) à jour · ${templates.absent ?? 0} absent(s)<br>
@@ -336,7 +347,7 @@ async function promptAuditExport(report,{final=false}={}) {
     yes:{label:"Exporter le rapport JSON",icon:"fa-solid fa-file-export"},
     no:{label:"Fermer",icon:"fa-solid fa-xmark"}
   });
-  if (exportNow) await exportAudit(report);
+  if (exportNow === true) await exportAudit(report);
 }
 
 function markAuditFinalRecommended(reason="Modification du monde",{preserveReport=false}={}) {
@@ -411,6 +422,13 @@ function missingCommonAttributeBars(doc,source) {
   return sourceCommonAttributeKeys(source).filter(key=>!Object.prototype.hasOwnProperty.call(bars,key));
 }
 
+function differingCommonAttributeBars(doc,source) {
+  if (doc?.documentName!=="Actor") return [];
+  const installed=doc?.system?.attributeBar || {};
+  const wanted=source?.system?.attributeBar || {};
+  return sourceCommonAttributeKeys(source).filter(key=>!jsonEqual(installed[key],wanted[key]));
+}
+
 function commonAttributeDefinitionsMatch(doc,source) {
   if (doc?.documentName!=="Actor") return true;
   const installed=doc?.system?.attributeBar || {};
@@ -428,14 +446,15 @@ async function templateStatus(entry) {
   if (!doc) return {code:"absent", label:"Absent", icon:"fa-solid fa-circle-plus", installed:"—", wanted:entry.version, doc:null};
   const installedUnique = Number(doc.system?.templateSystemUniqueVersion ?? 0);
   const prototypeOk=entry.kind!=="Actor" || prototypeBarMatches(doc,source);
-  const commonInterfaceOk=entry.kind!=="Actor" || commonAttributeDefinitionsMatch(doc,source);
+  const commonInterfaceDifferences=entry.kind==="Actor" ? differingCommonAttributeBars(doc,source) : [];
+  const commonInterfaceOk=commonInterfaceDifferences.length===0;
   if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk && commonInterfaceOk) {
     return {code:"ok", label:"Canonique", icon:"fa-solid fa-circle-check", installed:entry.version, wanted:entry.version, doc};
   }
   if (doc.name === entry.name && installedUnique === wantedUnique && prototypeOk && !commonInterfaceOk) {
     return {
       code:"update", label:"Interface commune à mettre à jour", icon:"fa-solid fa-arrows-rotate",
-      installed:entry.version, wanted:entry.version, doc
+      installed:entry.version, wanted:entry.version, doc, commonInterfaceDifferences
     };
   }
   if (doc.name === entry.name && installedUnique === wantedUnique && !prototypeOk) {
@@ -1101,14 +1120,26 @@ async function synchronize(mode="all", includePacks=false) {
 
 async function restoreLastCycle() {
   const runId=game.settings.get(MODULE_ID,LAST_CYCLE_SETTING);
-  if (!runId) { ui.notifications.warn("H0D : aucun cycle de sauvegarde connu dans ce monde."); return; }
-  const ok=await confirmDialog("H0D — Restaurer dernier cycle", `<p>Restaurer toutes les fiches possédant une sauvegarde du cycle <code>${runId}</code> ?</p><p>Cette action concerne le monde et les compendiums Items actuellement déverrouillés.</p>`,"Restaurer");
+  const initialId=game.settings.get(MODULE_ID,INITIAL_AUDIT_SETTING);
+  if (!runId && !initialId) { ui.notifications.warn("H0D : aucun point de restauration disponible."); return; }
+  const choice=await foundry.applications.api.DialogV2.input({
+    window:{title:"H0D — Restaurer données"},
+    content:`<p>Choisis le point de restauration. L'état initial couvre les fiches H0D du monde lors du premier audit, pas les compendiums ni une sauvegarde intégrale du serveur.</p>
+      <div class="form-group"><label>Point de restauration</label><select name="mode">
+      ${runId ? '<option value="last">Dernier cycle de maintenance</option>' : ""}
+      ${initialId ? '<option value="initial">État initial du premier audit</option>' : ""}
+      </select></div>`,
+    ok:{label:"Continuer",icon:"fa-solid fa-check"}
+  });
+  if (!choice) return;
+  const initial=String(choice.mode)==="initial";
+  const ok=await confirmDialog("H0D — Confirmer la restauration",`<p>Restaurer <strong>${initial ? "l'état initial du premier audit" : "le dernier cycle de maintenance"}</strong> ? Les valeurs actuelles des fiches concernées seront remplacées.</p>`,"Restaurer");
   if (!ok) return;
-  const entries=[...collectWorldEntries("all"), ...(await collectPackEntries({onlyManaged:false,unlockedOnly:true}))];
+  const entries=initial ? collectWorldEntries("all") : [...collectWorldEntries("all"), ...(await collectPackEntries({onlyManaged:false,unlockedOnly:true}))];
   let restored=0,errors=0;
   for (const entry of entries) {
-    const backups=clone(entry.doc.getFlag?.(MODULE_ID,BACKUP_KEY) || []);
-    const backup=[...backups].reverse().find(b=>b.runId === runId);
+    const backups=initial ? [] : clone(entry.doc.getFlag?.(MODULE_ID,BACKUP_KEY) || []);
+    const backup=initial ? entry.doc.getFlag?.(MODULE_ID,INITIAL_AUDIT_FLAG) : [...backups].reverse().find(b=>b.runId === runId);
     if (!backup?.props) continue;
     try {
       const update={"system.props":clone(backup.props)};
@@ -1641,6 +1672,12 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
 }
 
 async function auditWorld() {
+  // Cache des clés de composants par template : une seule traversée, même pour des centaines de fiches.
+  const sourceData=await Promise.all(TEMPLATE_INDEX.map(async entry=>{
+    const source=await loadTemplate(entry);
+    return [entry.id,{source,keys:componentKeySets(source)}];
+  }));
+  const sourceById=new Map(sourceData);
   const templateRows=[];
   for (const entry of TEMPLATE_INDEX) templateRows.push({...entry,status:await templateStatus(entry)});
   const legacy=game.items.get(LEGACY_TRAIT_ID);
@@ -1650,8 +1687,7 @@ async function auditWorld() {
     const tid=templateId(entry.doc);
     if (!MANAGED_IDS.has(tid)) continue;
     const tplEntry=TEMPLATE_INDEX.find(e=>e.id === tid);
-    const source=await loadTemplate(tplEntry);
-    const {inputs,all}=componentKeySets(source);
+    const {source,keys:{inputs,all}}=sourceById.get(tid);
     const props=entry.doc.system?.props || {};
     const missing=[...inputs].filter(k=>!has(props,k));
     const legacyProps=Object.keys(props).filter(k=>k.startsWith("H0D_") && !all.has(k));
@@ -1660,12 +1696,14 @@ async function auditWorld() {
     const currentPrototypeBar=entry.kind==="Actor" ? prototypeBarAttribute(entry.doc) : "";
     const prototypeBarStale=!!wantedPrototypeBar && currentPrototypeBar!==wantedPrototypeBar;
     const commonAttributeMissing=entry.kind==="Actor" ? missingCommonAttributeBars(entry.doc,source) : [];
+    const commonAttributeDifferent=entry.kind==="Actor" ? differingCommonAttributeBars(entry.doc,source) : [];
     const recovery=safeMissingRecoveryPlan(entry.doc,tplEntry.key,missing);
     const errors=[]; const warnings=[]; const info=[];
     if (missing.length) warnings.push({code:"missing-props",count:missing.length,keys:missing});
     if (stale) warnings.push({code:"stale-template-version",current:entry.doc.system?.templateSystemUniqueVersion,wanted:source.system?.templateSystemUniqueVersion});
     if (prototypeBarStale) warnings.push({code:"prototype-bar-mismatch",current:currentPrototypeBar,wanted:wantedPrototypeBar});
     if (commonAttributeMissing.length) warnings.push({code:"common-interface-missing",count:commonAttributeMissing.length,keys:commonAttributeMissing});
+    if (commonAttributeDifferent.length) warnings.push({code:"common-interface-different",count:commonAttributeDifferent.length,keys:commonAttributeDifferent});
     if (legacyProps.length) info.push({code:"legacy-props",count:legacyProps.length,keys:legacyProps});
     docs.push({
       uuid:entry.doc.uuid,name:entry.doc.name,documentName:entry.doc.documentName,scope:entry.scope,
@@ -1686,7 +1724,7 @@ async function auditWorld() {
       let ok=0,warnings=0,errors=0,managed=0;
       for (const doc of docsIn) {
         const tid=templateId(doc); if (!MANAGED_IDS.has(tid)) continue; managed++;
-        const tpl=TEMPLATE_INDEX.find(e=>e.id===tid); const source=await loadTemplate(tpl); const {inputs}=componentKeySets(source);
+        const {source,keys:{inputs}}=sourceById.get(tid);
         const miss=[...inputs].filter(k=>!has(doc.system?.props || {},k));
         const stale=Number(doc.system?.templateSystemUniqueVersion ?? 0)!==Number(source.system?.templateSystemUniqueVersion ?? 0);
         if (miss.length || stale) warnings++; else ok++;
@@ -1698,7 +1736,7 @@ async function auditWorld() {
   const armorReference=await auditArmors();
   const warningTriage=buildWarningTriage(docs,shared);
   const counts={templates:{ok:templateRows.filter(r=>r.status.code==="ok").length,update:templateRows.filter(r=>r.status.code==="update").length,absent:templateRows.filter(r=>r.status.code==="absent").length},documents:{ok:docs.filter(d=>d.status==="ok").length,warnings:docs.filter(d=>d.status==="warning").length,errors:docs.filter(d=>d.status==="error").length},legacyTraitUsages:legacyUsages.length};
-  const report={format:"H0D_TEMPLATE_MANAGER_INTEGRITY_REPORT",formatVersion:2,moduleVersion:MODULE_VERSION,createdAt:new Date().toISOString(),world:{id:game.world?.id,title:game.world?.title,system:game.system?.id,systemVersion:game.system?.version},registry:TEMPLATE_INDEX,templates:templateRows.map(r=>({key:r.key,id:r.id,name:r.name,version:r.version,status:r.status.code,label:r.status.label,installed:r.status.installed,wanted:r.status.wanted,prototypeBarCurrent:r.status.prototypeBarCurrent ?? null,prototypeBarWanted:r.status.prototypeBarWanted ?? null})),documents:docs,sharedCompendiums:shared,legacyTrait:{installed:!!legacy,usages:legacyUsages},weaponReference,armorReference,warningTriage,safeVersionMigration:H0DTemplateManagerState.lastSafeMigration,counts};
+  const report={format:"H0D_TEMPLATE_MANAGER_INTEGRITY_REPORT",formatVersion:2,moduleVersion:MODULE_VERSION,createdAt:new Date().toISOString(),world:{id:game.world?.id,title:game.world?.title,system:game.system?.id,systemVersion:game.system?.version},registry:TEMPLATE_INDEX,templates:templateRows.map(r=>({key:r.key,id:r.id,name:r.name,version:r.version,status:r.status.code,label:r.status.label,installed:r.status.installed,wanted:r.status.wanted,prototypeBarCurrent:r.status.prototypeBarCurrent ?? null,prototypeBarWanted:r.status.prototypeBarWanted ?? null,commonInterfaceDifferences:r.status.commonInterfaceDifferences ?? []})),documents:docs,sharedCompendiums:shared,legacyTrait:{installed:!!legacy,usages:legacyUsages},weaponReference,armorReference,warningTriage,safeVersionMigration:H0DTemplateManagerState.lastSafeMigration,counts};
   H0DTemplateManagerState.lastAudit=report;
   return report;
 }
@@ -1716,7 +1754,30 @@ async function exportAudit(report=null) {
   return current;
 }
 
-const H0DTemplateManagerState={lastAudit:null,lastSafeMigration:null,app:null,auditDirty:false,lastMutation:""};
+const H0DTemplateManagerState={lastAudit:null,lastSafeMigration:null,app:null,auditDirty:false,lastMutation:"",busy:false};
+
+async function captureInitialAuditState() {
+  if (game.settings.get(MODULE_ID,INITIAL_AUDIT_SETTING)) return false;
+  const entries=collectWorldEntries("all").filter(e=>MANAGED_IDS.has(templateId(e.doc)));
+  const stamp=new Date().toISOString();
+  // Conserver un état initial indépendant des cinq cycles de sauvegarde ordinaires.
+  // Réutiliser les flags déjà écrits si un précédent essai a été interrompu.
+  for (let offset=0;offset<entries.length;offset+=8) {
+    const batch=entries.slice(offset,offset+8);
+    const results=await Promise.allSettled(batch.map(async ({doc,scope})=>{
+      if (doc.getFlag?.(MODULE_ID,INITIAL_AUDIT_FLAG)) return;
+      await doc.setFlag(MODULE_ID,INITIAL_AUDIT_FLAG,{
+        createdAt:stamp,uuid:doc.uuid,scope,templateId:templateId(doc),
+        props:clone(doc.system?.props || {}),prototypeBar1:clone(doc.prototypeToken?.bar1 || null),
+        attributeBar:clone(doc.system?.attributeBar || {})
+      });
+    }));
+    const failed=results.filter(r=>r.status==="rejected");
+    if (failed.length) throw new Error(`Sauvegarde interne incomplète : ${failed.length} échec(s) sur le lot ${Math.floor(offset/8)+1}.`);
+  }
+  await game.settings.set(MODULE_ID,INITIAL_AUDIT_SETTING,stamp);
+  return true;
+}
 
 const {ApplicationV2,HandlebarsApplicationMixin}=foundry.applications.api;
 class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
@@ -1779,19 +1840,19 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       weaponSummary,
       armorSummary,
       hasEquipmentRepair:!!audit && (Number(weaponSummary.repairableWeapons||0)+Number(armorSummary.mismatch||0))>0,
+      hasInitialAudit:!!game.settings.get(MODULE_ID,INITIAL_AUDIT_SETTING),
+      hasRestorableCycle:!!game.settings.get(MODULE_ID,LAST_CYCLE_SETTING),
       lastCycle:game.settings.get(MODULE_ID,LAST_CYCLE_SETTING) || "—"
     },{inplace:false});
   }
   static async _audit() {
     const final=H0DTemplateManagerState.auditDirty;
     ui.notifications.info(final ? "H0D : audit final en cours…" : "H0D : audit en cours…");
-    // Snapshot de sécurité avant chaque audit global, y compris l’audit final.
-    // Si la sauvegarde échoue, ne pas annoncer un audit protégé.
-    try {
-      await createSnapshot(final ? "avant-audit-final" : "avant-audit-monde");
-    } catch(err) {
-      console.error("H0D Template Manager — snapshot préalable à l’audit",err);
-      ui.notifications.error(`H0D : snapshot préalable impossible, audit annulé (${String(err?.message || err)}).`);
+    // Aucun export JSON automatique : le premier audit sauvegarde seulement les fiches gérées dans les flags du monde.
+    try { await captureInitialAuditState(); }
+    catch(err) {
+      console.error("H0D Template Manager — état initial du premier audit",err);
+      ui.notifications.error(`H0D : sauvegarde interne initiale incomplète, audit annulé (${String(err?.message || err)}).`);
       return;
     }
     const report=await auditWorld();
@@ -1979,6 +2040,7 @@ async function migrateLegacyEnemyAttackMacro() {
 
 Hooks.once("init",()=>{
   game.settings.register(MODULE_ID,LAST_CYCLE_SETTING,{scope:"world",config:false,type:String,default:""});
+  game.settings.register(MODULE_ID,INITIAL_AUDIT_SETTING,{scope:"world",config:false,type:String,default:""});
   registerAmmoRecoverySettings();
 });
 
