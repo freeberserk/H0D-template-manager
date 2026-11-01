@@ -1,3 +1,10 @@
+## v1.7.28 — Snapshot avant audit et vérification du manager
+
+- L’audit global exporte un snapshot JSON avant de calculer son rapport (y compris audit final). Si le snapshot échoue, l’audit est annulé.
+- La barre d’actions place « Snapshot de sécurité » avant « Audit monde ».
+- « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
+- Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
+
 # H0D Template Manager — v1.7.26
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
@@ -144,7 +151,7 @@ La migration sûre conserve son réaudit interne existant et son rapport reste u
 
 ## v1.7.17 — Cycle de maintenance et audit final
 
-Le gestionnaire suit désormais un flux explicite : **Audit monde → Snapshot de sécurité → maintenance → Audit final**.
+Le gestionnaire suit désormais un flux explicite : **Snapshot de sécurité → Audit monde → maintenance → Audit final**.
 
 - **Audit monde** devient l'entrée principale. Une fois terminé, il propose immédiatement d'exporter le rapport JSON déjà calculé ; aucun second audit n'est relancé pour cet export.
 - Le bouton séparé **Exporter audit** est retiré de la barre. L'API `exportAudit` reste disponible pour compatibilité ; appelée seule, elle effectue toujours un audit frais avant export.
@@ -390,7 +397,7 @@ L'export du rapport n'est plus une action permanente de la barre : il est propos
 
 ## Sécurité
 
-Aucune migration au démarrage. Les snapshots JSON restent **manuels uniquement** via **Snapshot de sécurité** : aucun clic d’installation, audit, synchronisation ou réparation ne déclenche de sauvegarde externe automatique. Les documents synchronisés/réparés conservent jusqu'à 5 sauvegardes internes par fiche.
+Aucune migration au démarrage. Le bouton **Audit monde** exporte automatiquement un snapshot JSON **avant** l’audit ; le bouton **Snapshot de sécurité** permet aussi un export manuel. Installation, synchronisation et réparation ne déclenchent pas de snapshot externe automatique. Les documents synchronisés/réparés conservent jusqu'à 5 sauvegardes internes par fiche.
 
 Un audit est toujours en lecture seule. Lorsqu'une opération écrit réellement dans le monde, le bouton principal devient **Audit final recommandé**. Après synchronisation ou réparation, un réaudit silencieux remet immédiatement à jour les diagnostics nécessaires aux actions suivantes sans afficher de dialogue ni proposer d'export. L'export proposé à la fin d'un audit explicite ne relance pas le diagnostic.
 
