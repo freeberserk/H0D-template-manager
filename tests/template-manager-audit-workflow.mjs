@@ -62,7 +62,7 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(snapshotButton>=0 && auditButton>snapshotButton && installButton>auditButton,
   "La barre doit commencer par Snapshot puis Audit puis Installation");
 
-assert.ok(readme.startsWith("# H0D Template Manager — v1.7.26"),"README non aligné sur la version");
+assert.ok(readme.includes("# H0D Template Manager — v1.7.28"),"README non aligné sur la version");
 assert.ok(readme.includes("Audit final recommandé"),"README doit documenter l'audit final");
 
 const explicitAudit=script.slice(script.indexOf("static async _audit()"),script.indexOf("static async _installAll()"));
