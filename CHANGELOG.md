@@ -1,3 +1,9 @@
+## 1.7.28 — Snapshot avant audit et contrôles du manager
+- Snapshot JSON automatique avant l’audit global et l’audit final ; annulation de l’audit si la sauvegarde échoue.
+- Ordre des actions : Snapshot de sécurité → Audit monde → maintenance → Audit final.
+- Synchroniser le monde : ne remplace plus le cycle de restauration lorsqu’aucune fiche n’est sélectionnée.
+- Tests statiques renforcés sur le flux d’audit et les garanties de synchronisation. Test en conditions réelles Foundry restant nécessaire.
+
 ## 1.7.27
 - Template Manager épinglé en tête de la barre d'outils Tokens (order -1000), indépendamment des outils H0D Loot.
 
