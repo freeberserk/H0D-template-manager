@@ -24,7 +24,7 @@ assert.ok(hbs.includes("Snapshot de sécurité"),"Le snapshot doit être présen
 assert.ok(hbs.includes("Restaurer données"),"Le rollback doit décrire précisément ce qu'il restaure");
 
 assert.ok(script.includes("async function promptAuditExport(report,{final=false}={})"),"Le dialogue d'export post-audit est absent");
-assert.ok(script.includes("if (exportNow) await exportAudit(report);"),"L'export post-audit doit réutiliser le rapport calculé");
+assert.ok(script.includes("if (exportNow === true) await exportAudit(report);"),"L'export post-audit doit réutiliser le rapport calculé");
 assert.ok(script.includes("async function exportAudit(report=null)"),"L'API exportAudit doit rester compatible");
 assert.ok(script.includes("if (!current) {"),"L'API exportAudit seule doit pouvoir relancer un audit frais");
 assert.ok(script.includes("auditDirty:false"),"L'état auditDirty doit être initialisé");
