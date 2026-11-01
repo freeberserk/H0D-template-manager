@@ -8,8 +8,8 @@
   </header>
 
   <nav class="h0d-tm-actionbar">
-    <button type="button" data-action="audit" class="{{#if auditState.dirty}}audit-dirty{{else}}primary{{/if}}" title="{{auditState.hint}}"><i class="fa-solid fa-magnifying-glass-chart"></i> {{auditState.label}}</button>
     <button type="button" data-action="snapshot" title="Exporter une sauvegarde JSON complète avant une opération de maintenance."><i class="fa-solid fa-floppy-disk"></i> Snapshot de sécurité</button>
+    <button type="button" data-action="audit" class="{{#if auditState.dirty}}audit-dirty{{else}}primary{{/if}}" title="{{auditState.hint}}"><i class="fa-solid fa-magnifying-glass-chart"></i> {{auditState.label}}</button>
     <button type="button" data-action="installAll"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
     <button type="button" data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
     <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}} title="Disponible après audit lorsqu'un équipement référencé présente un écart mécanique."><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
@@ -164,7 +164,7 @@
 
     <section class="h0d-tm-note">
       <i class="fa-solid fa-circle-info"></i>
-      <div><strong>Cycle conseillé : Audit monde → Snapshot de sécurité → maintenance → Audit final.</strong><br>L’audit reste en lecture seule et propose son export JSON à la fin sans relancer un second audit. Toute opération qui modifie réellement le monde fait passer le bouton principal à « Audit final recommandé ». Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
+      <div><strong>Cycle conseillé : Snapshot de sécurité → Audit monde → maintenance → Audit final. L’audit global exporte automatiquement un snapshot préalable.</strong><br>L’audit reste en lecture seule et propose son export JSON à la fin sans relancer un second audit. Toute opération qui modifie réellement le monde fait passer le bouton principal à « Audit final recommandé ». Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
     </section>
   </div>
 </section>
