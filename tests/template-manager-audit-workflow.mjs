@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.28","Le manifest doit être en 1.7.28");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.28";'),"MODULE_VERSION doit être en 1.7.28");
+assert.equal(manifest.version,"1.7.29","Le manifest doit être en 1.7.29");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.29";'),"MODULE_VERSION doit être en 1.7.29");
 
 assert.ok(script.includes('order:-1000,button:true,visible:true,'),"Le Template Manager doit être le premier outil de Tokens.");
 
@@ -62,15 +62,21 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(snapshotButton>=0 && auditButton>snapshotButton && installButton>auditButton,
   "La barre doit commencer par Snapshot puis Audit puis Installation");
 
-assert.ok(readme.includes("# H0D Template Manager — v1.7.28"),"README non aligné sur la version");
+assert.ok(readme.includes("# H0D Template Manager — v1.7.29"),"README non aligné sur la version");
 assert.ok(readme.includes("Audit final recommandé"),"README doit documenter l'audit final");
 
 const explicitAudit=script.slice(script.indexOf("static async _audit()"),script.indexOf("static async _installAll()"));
-assert.ok(explicitAudit.indexOf("await createSnapshot(")>=0 && explicitAudit.indexOf("await createSnapshot(")<explicitAudit.indexOf("await auditWorld()"),"Snapshot avant l'audit global");
-assert.ok(explicitAudit.includes("audit annulé"),"Un échec de snapshot doit interrompre l'audit");
+assert.ok(explicitAudit.includes("await captureInitialAuditState()"),"Le premier audit doit créer un état initial interne");
+assert.equal(explicitAudit.includes("await createSnapshot("),false,"L’audit ne doit pas exporter de JSON automatiquement");
+assert.ok(explicitAudit.includes("audit annulé"),"Un échec de sauvegarde interne doit interrompre l’audit");
 const syncFn=script.slice(script.indexOf('async function synchronize('),script.indexOf('async function restoreLastCycle()'));
 assert.ok(syncFn.indexOf('if (!entries.length)')<syncFn.indexOf('await game.settings.set(MODULE_ID,LAST_CYCLE_SETTING,runId)'),"La sélection vide ne doit pas effacer le dernier cycle restaurable");
 assert.ok(syncFn.includes('await safeReload(e,runId)'),"La synchronisation doit appeler safeReload pour chaque fiche");
 assert.ok(script.includes('await pushBackup(doc,runId,entry.scope)'),"La synchronisation doit sauvegarder avant de recharger");
 assert.ok(script.includes('await doc.templateSystem.reloadTemplate()'),"La synchronisation doit recharger le template CSB");
-console.log("Template Manager audit workflow 1.7.28 OK");
+assert.ok(script.includes('const INITIAL_AUDIT_FLAG = "initialAuditBackup"'),"Backup initial indépendant des cycles ordinaires");
+assert.ok(script.includes('initial ? entry.doc.getFlag?.(MODULE_ID,INITIAL_AUDIT_FLAG)'),"La restauration initiale doit lire son propre backup");
+assert.ok(script.includes('const sourceById=new Map(sourceData)'),"L’audit doit mettre en cache les composants par template");
+assert.ok(script.includes('commonInterfaceDifferences:r.status.commonInterfaceDifferences ?? []'),"Le rapport doit détailler les différences Actor");
+assert.ok(script.includes('if (exportNow === true) await exportAudit(report)'),"L’export d’audit exige une confirmation explicite");
+console.log("Template Manager audit workflow 1.7.29 OK");
