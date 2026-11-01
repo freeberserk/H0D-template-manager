@@ -8,13 +8,13 @@
   </header>
 
   <nav class="h0d-tm-actionbar">
-    <button type="button" data-action="snapshot" title="Exporter une sauvegarde JSON complète avant une opération de maintenance."><i class="fa-solid fa-floppy-disk"></i> Snapshot de sécurité</button>
+    <button type="button" data-action="snapshot" title="Exporter manuellement un snapshot JSON du monde."><i class="fa-solid fa-floppy-disk"></i> Snapshot de sécurité</button>
     <button type="button" data-action="audit" class="{{#if auditState.dirty}}audit-dirty{{else}}primary{{/if}}" title="{{auditState.hint}}"><i class="fa-solid fa-magnifying-glass-chart"></i> {{auditState.label}}</button>
     <button type="button" data-action="installAll"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
     <button type="button" data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
     <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}} title="Disponible après audit lorsqu'un équipement référencé présente un écart mécanique."><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
     <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}} title="Disponible après audit pour les migrations explicitement considérées comme sûres."><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer données sûres</button>
-    <button type="button" data-action="restore" title="Restaure les system.props sauvegardées lors du dernier cycle de maintenance."><i class="fa-solid fa-clock-rotate-left"></i> Restaurer données</button>
+    <button type="button" data-action="restore" {{#unless hasInitialAudit}}{{#unless hasRestorableCycle}}disabled{{/unless}}{{/unless}} title="Restaurer les données depuis le premier audit ou le dernier cycle de maintenance."><i class="fa-solid fa-clock-rotate-left"></i> Restaurer données</button>
   </nav>
 
   <div class="h0d-tm-scroll">
@@ -164,7 +164,7 @@
 
     <section class="h0d-tm-note">
       <i class="fa-solid fa-circle-info"></i>
-      <div><strong>Cycle conseillé : Snapshot de sécurité → Audit monde → maintenance → Audit final. L’audit global exporte automatiquement un snapshot préalable.</strong><br>L’audit reste en lecture seule et propose son export JSON à la fin sans relancer un second audit. Toute opération qui modifie réellement le monde fait passer le bouton principal à « Audit final recommandé ». Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
+      <div><strong>Cycle conseillé : Audit monde (état initial interne, sans export) → maintenance → Audit final. Le snapshot JSON est uniquement manuel.</strong><br>L’audit reste en lecture seule et propose son export JSON à la fin sans relancer un second audit. Toute opération qui modifie réellement le monde fait passer le bouton principal à « Audit final recommandé ». Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
     </section>
   </div>
 </section>
