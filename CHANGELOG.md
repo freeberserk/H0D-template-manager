@@ -1,3 +1,10 @@
+## 1.7.29 — État initial interne et audit optimisé
+- Retire le snapshot JSON automatique de l'audit ; sauvegarde interne silencieuse des fiches H0D au premier audit.
+- Restauration au choix : état initial ou dernier cycle de maintenance.
+- Audit optimisé : composants préparés une seule fois par template.
+- Comparaison profonde des barres communes Actor et détails des divergences dans le rapport.
+- Export du rapport JSON uniquement après confirmation explicite.
+
 ## 1.7.28 — Snapshot avant audit et contrôles du manager
 - Snapshot JSON automatique avant l’audit global et l’audit final ; annulation de l’audit si la sauvegarde échoue.
 - Ordre des actions : Snapshot de sécurité → Audit monde → maintenance → Audit final.
