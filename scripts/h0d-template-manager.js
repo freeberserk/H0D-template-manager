@@ -15,7 +15,7 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.27";
+const MODULE_VERSION = "1.7.28";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -1081,10 +1081,11 @@ async function safeReload(entry, runId) {
 
 async function synchronize(mode="all", includePacks=false) {
   const runId=newRunId();
-  await game.settings.set(MODULE_ID,LAST_CYCLE_SETTING,runId);
   const entries=collectWorldEntries(mode).filter(e=>MANAGED_IDS.has(templateId(e.doc)));
   if (includePacks && (mode === "item" || mode === "all")) entries.push(...(await collectPackEntries({onlyManaged:true,unlockedOnly:true})).filter(e=>ITEM_IDS.has(templateId(e.doc))));
   if (!entries.length) { ui.notifications.warn("H0D : aucun document à synchroniser."); return []; }
+  // Une sélection vide ne doit pas écraser le cycle de restauration précédent.
+  await game.settings.set(MODULE_ID,LAST_CYCLE_SETTING,runId);
   const results=[];
   for (let i=0;i<entries.length;i++) {
     const e=entries[i];
@@ -1784,6 +1785,15 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static async _audit() {
     const final=H0DTemplateManagerState.auditDirty;
     ui.notifications.info(final ? "H0D : audit final en cours…" : "H0D : audit en cours…");
+    // Snapshot de sécurité avant chaque audit global, y compris l’audit final.
+    // Si la sauvegarde échoue, ne pas annoncer un audit protégé.
+    try {
+      await createSnapshot(final ? "avant-audit-final" : "avant-audit-monde");
+    } catch(err) {
+      console.error("H0D Template Manager — snapshot préalable à l’audit",err);
+      ui.notifications.error(`H0D : snapshot préalable impossible, audit annulé (${String(err?.message || err)}).`);
+      return;
+    }
     const report=await auditWorld();
     H0DTemplateManagerState.lastAudit=report;
     H0DTemplateManagerState.auditDirty=false;
