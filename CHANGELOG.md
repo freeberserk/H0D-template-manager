@@ -1,3 +1,11 @@
+## v1.7.30 — Template Actor Conteneur v1.0
+
+- Ajout du nouveau template canonique **H0D_Actor-template-conteneur v1.0** (ID stable `H0DContActor0001`) au registre du Template Manager, à son installation, à ses audits et à la synchronisation des Actors.
+- Fiche CSB indépendante des PJ, créatures et machines ; champs **Fonction du conteneur** (Butin / Marchand / Réserve), propriétaire narratif, état d'accès narratif et description.
+- Token lié par défaut à l'Actor afin de préparer un coffre réutilisable. **Aucune propriété d'encombrement**, aucun objet automatiquement injecté et aucune modification des fiches existantes.
+- **Limite de cette étape** : ce template est une base de données et d'interface. Les fonctions de récupération et d'achat des coffres seront apportées ensuite par H0D Loot ; les modes et états restent informatifs tant qu'ils ne sont pas pris en charge par ce module.
+- Création de nouvelles fiches et comportement du template CSB à tester dans Foundry v14. Les contrôles de schéma et de registre sont automatisés.
+
 ## 1.7.29 — État initial interne et audit optimisé
 - Retire le snapshot JSON automatique de l'audit ; sauvegarde interne silencieuse des fiches H0D au premier audit.
 - Restauration au choix : état initial ou dernier cycle de maintenance.
