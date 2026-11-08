@@ -13,6 +13,12 @@
   },
   {
     "kind": "Actor",
+    "id": "H0DContActor0001",
+    "name": "H0D_Actor-template-conteneur v1.0",
+    "file": "H0D_Actor-template-conteneur-v1.0.json"
+  },
+  {
+    "kind": "Actor",
     "id": "wRHfQ4gZbHTaYOsR",
     "name": "H0D_Actor-template-machine v3.18",
     "file": "H0D_Actor-template-machine-v3.18.json"
