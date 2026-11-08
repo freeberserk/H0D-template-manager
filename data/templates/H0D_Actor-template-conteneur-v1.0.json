@@ -1,0 +1,360 @@
+{
+  "folder": null,
+  "name": "H0D_Actor-template-conteneur v1.0",
+  "type": "_template",
+  "_id": "H0DContActor0001",
+  "img": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+  "system": {
+    "hidden": [],
+    "header": {
+      "type": "panel",
+      "key": "custom_header",
+      "contents": [
+        {
+          "key": "",
+          "colSpan": 1,
+          "rowSpan": 1,
+          "cssClass": "",
+          "role": "0",
+          "editRole": 0,
+          "permission": "0",
+          "tooltip": "",
+          "visibilityFormula": "",
+          "editableFormula": "",
+          "escapeHTML": false,
+          "type": "label",
+          "size": "auto",
+          "icon": "",
+          "value": "ZERO DAWN — CONTENEUR",
+          "prefix": "",
+          "suffix": "",
+          "rollMessage": "",
+          "altRollMessage": "",
+          "rollMessageToChat": true,
+          "altRollMessageToChat": true,
+          "style": "title",
+          "align": "center"
+        }
+      ]
+    },
+    "body": {
+      "type": "panel",
+      "key": "custom_body",
+      "contents": [
+        {
+          "key": "H0D_Conteneur_Onglets",
+          "colSpan": 1,
+          "rowSpan": 1,
+          "cssClass": "",
+          "role": "0",
+          "editRole": 0,
+          "permission": "0",
+          "tooltip": "",
+          "visibilityFormula": "",
+          "editableFormula": "",
+          "escapeHTML": false,
+          "type": "tabbedPanel",
+          "contents": [
+            {
+              "key": "H0D_Conteneur_Configuration_Tab",
+              "colSpan": 1,
+              "rowSpan": 1,
+              "cssClass": "",
+              "role": "0",
+              "editRole": 0,
+              "permission": "0",
+              "tooltip": "",
+              "visibilityFormula": "",
+              "editableFormula": "",
+              "escapeHTML": false,
+              "type": "tab",
+              "name": "Conteneur",
+              "contents": [
+                {
+                  "type": "panel",
+                  "key": "H0D_Conteneur_Donnees",
+                  "contents": [
+                    {
+                      "key": "",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "CONTENEUR — CONFIGURATION",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "title",
+                      "align": "center"
+                    },
+                    {
+                      "key": "H0D_Conteneur_Mode",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "select",
+                      "label": "Fonction du conteneur",
+                      "defaultValue": "Butin",
+                      "size": "auto",
+                      "options": [
+                        {
+                          "key": "Butin",
+                          "value": "Coffre de butin"
+                        },
+                        {
+                          "key": "Marchand",
+                          "value": "Stock marchand"
+                        },
+                        {
+                          "key": "Reserve",
+                          "value": "Réserve de faction"
+                        }
+                      ],
+                      "tableKey": null,
+                      "tableKeyColumn": null,
+                      "tableLabelColumn": null,
+                      "selectedOptionType": "custom",
+                      "align": "center"
+                    },
+                    {
+                      "key": "H0D_Conteneur_Proprietaire",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "textField",
+                      "size": "auto",
+                      "label": "Propriétaire / Marchand / Faction (narratif)",
+                      "defaultValue": "",
+                      "charList": "",
+                      "maxLength": "",
+                      "autocomplete": "",
+                      "align": "center"
+                    },
+                    {
+                      "key": "H0D_Conteneur_Etat",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "select",
+                      "label": "État de l'accès (narratif)",
+                      "defaultValue": "Ouvert",
+                      "size": "auto",
+                      "options": [
+                        {
+                          "key": "Ouvert",
+                          "value": "Ouvert"
+                        },
+                        {
+                          "key": "Ferme",
+                          "value": "Fermé"
+                        },
+                        {
+                          "key": "Verrouille",
+                          "value": "Verrouillé"
+                        }
+                      ],
+                      "tableKey": null,
+                      "tableKeyColumn": null,
+                      "tableLabelColumn": null,
+                      "selectedOptionType": "custom",
+                      "align": "center"
+                    },
+                    {
+                      "key": "H0D_Conteneur_Description",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "textArea",
+                      "size": "auto",
+                      "label": "Description et informations MJ",
+                      "defaultValue": "",
+                      "style": "dialog"
+                    },
+                    {
+                      "key": "",
+                      "colSpan": 1,
+                      "rowSpan": 1,
+                      "cssClass": "",
+                      "role": "0",
+                      "editRole": 0,
+                      "permission": "0",
+                      "tooltip": "",
+                      "visibilityFormula": "",
+                      "editableFormula": "",
+                      "escapeHTML": false,
+                      "type": "label",
+                      "size": "auto",
+                      "icon": "",
+                      "value": "Le stock est indépendant des objets portés par les PJ. Le fonctionnement de récupération / commerce sera assuré par H0D Loot.",
+                      "prefix": "",
+                      "suffix": "",
+                      "rollMessage": "",
+                      "altRollMessage": "",
+                      "rollMessageToChat": true,
+                      "altRollMessageToChat": true,
+                      "style": "label",
+                      "align": "center"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "display": {
+      "width": 660,
+      "height": 660,
+      "fix_size": false,
+      "pp_width": 125,
+      "pp_height": 125
+    },
+    "attributeBar": {},
+    "templateSystemUniqueVersion": 1070000001
+  },
+  "prototypeToken": {
+    "name": "Conteneur H0D",
+    "displayName": 0,
+    "actorLink": true,
+    "width": 1,
+    "height": 1,
+    "depth": 1,
+    "texture": {
+      "src": "icons/containers/chest/chest-reinforced-steel-brown.webp",
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+      "fit": "contain",
+      "scaleX": 1,
+      "scaleY": 1,
+      "tint": "#ffffff",
+      "alphaThreshold": 0.75
+    },
+    "lockRotation": false,
+    "rotation": 0,
+    "alpha": 1,
+    "disposition": 0,
+    "displayBars": 0,
+    "bar1": {
+      "attribute": null
+    },
+    "bar2": {
+      "attribute": null
+    },
+    "light": {
+      "negative": false,
+      "priority": 0,
+      "alpha": 0.5,
+      "angle": 360,
+      "bright": 0,
+      "color": null,
+      "coloration": 1,
+      "dim": 0,
+      "attenuation": 0.5,
+      "luminosity": 0.5,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "animation": {
+        "type": null,
+        "speed": 5,
+        "intensity": 5,
+        "reverse": false
+      },
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "sight": {
+      "enabled": false,
+      "range": 0,
+      "angle": 360,
+      "visionMode": "basic",
+      "color": null,
+      "attenuation": 0.1,
+      "brightness": 0,
+      "saturation": 0,
+      "contrast": 0
+    },
+    "detectionModes": {},
+    "occludable": {
+      "radius": 0
+    },
+    "ring": {
+      "enabled": false,
+      "colors": {
+        "ring": null,
+        "background": null
+      },
+      "effects": 1,
+      "subject": {
+        "scale": 1,
+        "texture": null
+      }
+    },
+    "turnMarker": {
+      "mode": 1,
+      "animation": null,
+      "src": null,
+      "disposition": false
+    },
+    "movementAction": null,
+    "flags": {},
+    "randomImg": false,
+    "appendNumber": false,
+    "prependAdjective": false
+  },
+  "items": [],
+  "effects": [],
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "custom-system-builder": {
+      "version": "6.0.2",
+      "templateHistory": "[]",
+      "templateHistoryRedo": "[]"
+    }
+  }
+}
