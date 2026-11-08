@@ -1,3 +1,11 @@
+## v1.7.30 — Template Actor Conteneur v1.0
+
+- Ajout du nouveau template canonique **H0D_Actor-template-conteneur v1.0** (ID stable `H0DContActor0001`) au registre du Template Manager, à son installation, à ses audits et à la synchronisation des Actors.
+- Fiche CSB indépendante des PJ, créatures et machines ; champs **Fonction du conteneur** (Butin / Marchand / Réserve), propriétaire narratif, état d'accès narratif et description.
+- Token lié par défaut à l'Actor afin de préparer un coffre réutilisable. **Aucune propriété d'encombrement**, aucun objet automatiquement injecté et aucune modification des fiches existantes.
+- **Limite de cette étape** : ce template est une base de données et d'interface. Les fonctions de récupération et d'achat des coffres seront apportées ensuite par H0D Loot ; les modes et états restent informatifs tant qu'ils ne sont pas pris en charge par ce module.
+- Création de nouvelles fiches et comportement du template CSB à tester dans Foundry v14. Les contrôles de schéma et de registre sont automatisés.
+
 ## v1.7.29 — Audit, sauvegardes internes et diagnostics
 - Le premier audit enregistre silencieusement un état initial des fiches H0D gérées dans des flags séparés des cycles de maintenance, sans export JSON. Cet état reste disponible après reconnexion ; les compendiums ne sont pas inclus dans cet état initial.
 - « Snapshot de sécurité » est le seul déclencheur d'export JSON de sauvegarde.
@@ -15,7 +23,7 @@
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.29
+# H0D Template Manager — v1.7.30
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
