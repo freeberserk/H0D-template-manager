@@ -43,6 +43,36 @@ assert.ok(automaticAudit.includes("H0DTemplateManagerState.auditDirty=false"),
   "Le résultat réaudité ne doit pas rester signalé comme obsolète.");
 assert.equal(/promptAuditExport|exportAudit\(|createSnapshot\(|saveDataToFile/.test(automaticAudit),false,
   "Aucun export, téléchargement ou dialogue d'export ne doit se produire pendant le réaudit automatique.");
+// Régression fonctionnelle : audit sans export et traitement des erreurs.
+const buildAutomaticAudit=new Function(
+  "auditWorld","captureInitialAuditState","H0DTemplateManagerState","markAuditFinalRecommended","ui","console",
+  automaticAudit+";return auditAfterTemplateUpdate;"
+);
+const autoState={lastAudit:null,auditDirty:true,lastMutation:"ancien état"};
+let backups=0,audits=0,notices=[];
+const reportExpected={counts:{templates:{ok:12,update:0,absent:0},documents:{warnings:19,errors:0}}};
+const markDirty=reason=>{autoState.lastAudit=null;autoState.auditDirty=true;autoState.lastMutation=reason;};
+const notifications={info:message=>notices.push(["info",message]),error:message=>notices.push(["error",message])};
+const autoAudit=buildAutomaticAudit(async()=>{audits++;return reportExpected;},
+  async()=>{backups++;},autoState,markDirty,{notifications}, {error:()=>{}});
+assert.equal(await autoAudit("mise à jour canonique"),reportExpected,
+  "Le réaudit doit renvoyer le dernier rapport.");
+assert.equal(backups,1,"Le réaudit doit vérifier la sauvegarde initiale interne.");
+assert.equal(audits,1,"Un seul audit du monde doit être exécuté.");
+assert.equal(autoState.lastAudit,reportExpected,"Le dernier rapport doit être immédiatement utilisable.");
+assert.equal(autoState.auditDirty,false,"L'audit doit être affiché comme actuel.");
+assert.equal(autoState.lastMutation,"","Le motif obsolète doit être effacé.");
+assert.equal(notices.filter(([type])=>type==="info").length,2,"Résultat de l'audit notifié sans boîte modale.");
+const failState={lastAudit:null,auditDirty:false,lastMutation:""};
+const failingAudit=buildAutomaticAudit(async()=>{throw new Error("Audit de test");},
+  async()=>{},failState,reason=>{failState.auditDirty=true;failState.lastMutation=reason;},
+  {notifications}, {error:()=>{}});
+assert.equal(await failingAudit("mise à jour canonique"),null,
+  "Un audit en échec ne doit pas être annoncé comme terminé.");
+assert.equal(failState.auditDirty,true,
+  "Après échec l'audit doit être recommandé manuellement.");
+assert.ok(notices.some(([type,message])=>type==="error"&&message.includes("Audit de test")),
+  "L'utilisateur doit être informé de l'erreur.");
 const installFn=script.slice(script.indexOf("static async _installAll()"),
   script.indexOf("static async _synchronize()"));
 assert.ok(installFn.includes('await auditAfterTemplateUpdate("installation / mise à jour des templates")'),
