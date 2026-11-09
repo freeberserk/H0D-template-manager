@@ -1,3 +1,15 @@
+H0D Template Manager v1.7.32 — BAC-à-SABLES
+1. Démarrer Foundry sans action de maintenance : Audit final doit être désactivé ; Refaire l'audit disponible.
+2. Installer/mettre à jour les templates seuls : audit automatique silencieux sans export ; Audit final reste désactivé.
+3. Lancer Synchroniser puis confirmer sur un monde de test : après au moins une fiche réellement modifiée, Audit final s'active.
+4. Recharger Foundry : Audit final reste actif. Cliquer sur Refaire l'audit ne doit pas désactiver Audit final.
+5. Cliquer Audit final : réaudit complet, compteurs à jour, proposition Export JSON oui/non, réutilisation du même rapport ; bouton redevenu inactif.
+6. Répéter le test avec Réparer équipements et Migrer données sûres : activation uniquement si modifications réelles. Annuler : pas d'activation.
+7. Désactiver H0D Catalogue : le Template Manager fonctionne sans exception et annonce Catalogue indisponible.
+8. Activer H0D Catalogue v0.1.9 : la section liste uniquement les Items identifiés par catalogKey exact. Les Items sans flags, homonymes ou non finalisés ne doivent jamais être réparés.
+9. Sur une copie d'équipement généré dont on modifie volontairement un champ mécanique allowlisté, « Actualiser depuis Catalogue » doit proposer la prévisualisation, sauvegarder avant écriture puis restaurer ce champ. Tester Annuler, et la conservation de quantité, équipement actif, améliorations, textes, tables de traits et bonus personnalisés.
+10. Vérifier le nouveau rapport JSON : catalogueReference.available/version/summary/records et l'absence d'export automatique.
+
 H0D Template Manager v1.7.31 — BAC-à-SABLES — réaudit à chaque installation canonique
 - Avec un monde de test, ouvrir Template Manager et lancer « Installer/mettre à jour ».
 - Après confirmation et installation, vérifier qu'un audit global est exécuté automatiquement, que les compteurs et candidats à migration sûre sont actualisés, et qu'aucune proposition d'export JSON ne s'ouvre.
