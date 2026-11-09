@@ -15,7 +15,7 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.30";
+const MODULE_VERSION = "1.7.31";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -362,6 +362,31 @@ async function refreshAuditSilently(reason="Maintenance du monde") {
   H0DTemplateManagerState.lastAudit=report;
   markAuditFinalRecommended(reason,{preserveReport:true});
   return report;
+}
+
+// Une installation des templates canoniques implique un réaudit complet du monde.
+// Même traitement qu'un premier audit manuel pour la sauvegarde interne, mais jamais
+// de dialogue, de rapport JSON exporté ou de téléchargement automatique.
+async function auditAfterTemplateUpdate(reason="mise à jour des templates canoniques") {
+  ui.notifications.info("H0D : réaudit automatique du monde en cours…");
+  try {
+    await captureInitialAuditState();
+    const report=await auditWorld();
+    H0DTemplateManagerState.lastAudit=report;
+    H0DTemplateManagerState.auditDirty=false;
+    H0DTemplateManagerState.lastMutation="";
+    const templates=report.counts?.templates||{};
+    const documents=report.counts?.documents||{};
+    ui.notifications.info(
+      `H0D : audit actualisé — templates ${templates.ok??0} OK, ${templates.update??0} à mettre à jour, ${templates.absent??0} absent(s) ; fiches ${documents.warnings??0} avertissement(s), ${documents.errors??0} erreur(s).`
+    );
+    return report;
+  } catch(err) {
+    console.error("H0D Template Manager — réaudit automatique après "+reason,err);
+    markAuditFinalRecommended(reason+" (audit automatique échoué)");
+    ui.notifications.error(`H0D : mise à jour effectuée, mais réaudit impossible (${String(err?.message||err)}). Relance « Audit monde ».`);
+    return null;
+  }
 }
 
 async function syncChoiceDialog() {
@@ -1049,7 +1074,7 @@ async function updateTemplate(entry) {
 }
 
 async function installAllTemplates() {
-  const ok=await confirmDialog("H0D — Installer / mettre à jour", `<p>Le manager va installer ou remplacer les <strong>${TEMPLATE_INDEX.length} templates canoniques</strong> par ID stable.</p><p>Les fiches existantes ne seront <strong>pas</strong> resynchronisées automatiquement. Aucun snapshot JSON n’est exporté automatiquement.</p>`,"Installer / mettre à jour");
+  const ok=await confirmDialog("H0D — Installer / mettre à jour", `<p>Le manager va installer ou remplacer les <strong>${TEMPLATE_INDEX.length} templates canoniques</strong> par ID stable.</p><p>Les fiches existantes ne seront <strong>pas</strong> resynchronisées automatiquement. Un audit complet sera lancé après la mise à jour, sans demande d'export JSON.</p>`,"Installer / mettre à jour");
   if (!ok) return;
   const results=[];
   for (const entry of TEMPLATE_INDEX) {
@@ -1866,7 +1891,8 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
   static async _installAll() {
     const results=await installAllTemplates();
-    if (results) markAuditFinalRecommended("installation / mise à jour des templates");
+    if (!results) return;
+    await auditAfterTemplateUpdate("installation / mise à jour des templates");
     await this.render({force:true});
   }
   static async _synchronize() {
@@ -1883,7 +1909,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
   static async _snapshot() { await createSnapshot("manuel"); }
   static async _openTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); const doc=entry&&installedTemplate(entry); if (!doc) return ui.notifications.warn("H0D : template absent."); doc.sheet?.render(true); }
-  static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Aucun snapshot JSON n’est exporté automatiquement.</p>`,"Mettre à jour"); if (!ok) return; await updateTemplate(entry); markAuditFinalRecommended(`mise à jour de ${entry.name}`); await this.render({force:true}); }
+  static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Un audit du monde sera relancé sans demande d'export JSON.</p>`,"Mettre à jour"); if (!ok) return; await updateTemplate(entry); await auditAfterTemplateUpdate(`mise à jour de ${entry.name}`); await this.render({force:true}); }
   static async _auditTemplate(event,target) { const key=target.dataset.key; const report=await auditWorld(); const entry=TEMPLATE_INDEX.find(e=>e.key===key); const docs=report.documents.filter(d=>d.templateId===entry?.id); const bad=docs.filter(d=>d.status!=="ok"); ui.notifications.info(`H0D : ${entry?.name || key} — ${docs.length} fiche(s), ${bad.length} à examiner.`); H0DTemplateManagerState.lastAudit=report; await this.render({force:true}); }
   static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) markAuditFinalRecommended("retrait du template legacy"); await this.render({force:true}); }
   static async _repairEquipment() {

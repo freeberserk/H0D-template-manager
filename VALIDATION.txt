@@ -1,3 +1,13 @@
+H0D Template Manager v1.7.31 — BAC-à-SABLES — réaudit à chaque installation canonique
+- Avec un monde de test, ouvrir Template Manager et lancer « Installer/mettre à jour ».
+- Après confirmation et installation, vérifier qu'un audit global est exécuté automatiquement, que les compteurs et candidats à migration sûre sont actualisés, et qu'aucune proposition d'export JSON ne s'ouvre.
+- Vérifier que l'opération ne télécharge aucun rapport/snapshot JSON et ne synchronise aucun Actor du monde.
+- Mettre à jour un template individuel : même réaudit silencieux et même actualisation.
+- Annuler l'opération : aucun réaudit ne doit se lancer.
+- « Audit monde » manuel doit continuer à proposer l'export sur confirmation explicite.
+- Un premier audit automatique doit sauvegarder uniquement l'état initial interne (flags), sans fichier externe.
+- Vérifier le cas d'erreur (pack illisible, erreur de lecture) : notification explicite et « Audit final recommandé », sans annoncer faussement un audit réussi.
+
 H0D Template Manager v1.7.26 — BAC — Dons / Artisanats
 
 - Installer les templates PJ v3.74 et Don/Talent v2.6, puis migrer les versions sûres et auditer.

@@ -1,3 +1,13 @@
+## v1.7.31 — Audit automatique après installation canonique
+
+Désormais, les actions **Installer/mettre à jour** (tous les templates) et **Mettre à jour** (un seul template) relancent immédiatement l'audit complet du monde après l'écriture, actualisent les compteurs et les candidats à migration sûre, et ne proposent **aucun export du rapport**.
+
+Les mises à jour restent distinctes de **Synchroniser le monde** : aucune valeur de PJ, de créature ou de machine n'est écrasée par une migration automatique. Si le premier audit interne n'existe pas encore, il est sauvegardé dans les flags des fiches (sans fichier JSON). Le bouton manuel **Audit monde / Refaire l'audit** conserve sa fenêtre de proposition d'export.
+
+En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale l'échec et invite à relancer l'audit manuellement. Tests automatisés présents ; validation BAC en Foundry v14 à effectuer.
+
+---
+
 ## v1.7.30 — Template Actor Conteneur v1.0
 
 - Ajout du nouveau template canonique **H0D_Actor-template-conteneur v1.0** (ID stable `H0DContActor0001`) au registre du Template Manager, à son installation, à ses audits et à la synchronisation des Actors.
@@ -23,7 +33,7 @@
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.30
+# H0D Template Manager — v1.7.31
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
