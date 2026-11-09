@@ -366,7 +366,7 @@ async function refreshAuditSilently(reason="Maintenance du monde") {
 
 // Une installation des templates canoniques implique un réaudit complet du monde.
 // Même traitement qu'un premier audit manuel pour la sauvegarde interne, mais jamais
-// de promptAuditExport, exportAudit, createSnapshot ou téléchargement automatique.
+// de dialogue, de rapport JSON exporté ou de téléchargement automatique.
 async function auditAfterTemplateUpdate(reason="mise à jour des templates canoniques") {
   ui.notifications.info("H0D : réaudit automatique du monde en cours…");
   try {
