@@ -1,3 +1,12 @@
+## v1.7.32 — Audit final distinct et vérification Catalogue
+- Deux boutons indépendants : **Refaire l'audit** (toujours disponible) et **Audit final** immédiatement après **Migrer données sûres**. Le second reste désactivé tant qu'aucune synchronisation, réparation ou migration n'a réellement modifié au moins une fiche. Le marqueur d'attente est enregistré dans les settings du monde et survit aux rechargements.
+- Après l'audit final, les compteurs sont actualisés, le marqueur est désactivé et une **proposition facultative d'export JSON** apparaît. L'export utilise exactement le rapport calculé : aucun deuxième audit ni export automatique. Les audits automatiques après installation des templates continuent sans dialogue d'export.
+- Intégration **facultative** de H0D Catalogue par son API `getDefinition(catalogKey)` : analyse uniquement des Items explicitement générés par Equipment Builder portant `catalogKey` et `sourceTemplateId` cohérents. Jamais de rapprochement approximatif par nom.
+- Nouvelle section Catalogue : références suivies, conformes, écarts mécaniques réparables, références absentes et cas exclus ; résultats détaillés dans l'export JSON.
+- **Actualiser depuis Catalogue**, action séparée et confirmée : prévisualisation des équipements et champs concernés, puis sauvegarde interne avant chaque écriture. Limité aux scalaires mécaniques allowlistés des armes/armures finalisées ; ne modifie ni noms, quantités, états, munitions restantes, bonus personnalisés, traits, ni améliorations. Équipements sans clé ou avec référence non finalisée ignorés.
+- Aucun lien obligatoire : si H0D Catalogue est désactivé ou en erreur, les contrôles et réparations historiques continuent de fonctionner.
+- Tests de régression (audit final, gating, mapping par clé, champs protégés) et validations GitHub Actions. Vérification réelle dans Foundry v14 BAC-à-SABLES toujours nécessaire.
+
 ## v1.7.31 — Réaudit automatique après mise à jour des templates
 - Après **Installer/mettre à jour** les templates canoniques, le manager lance immédiatement un **audit global complet en lecture seule** et actualise le tableau de bord (templates, fiches, avertissements, candidats de migration sûre).
 - Même comportement après mise à jour individuelle d'un template. Une opération annulée ne lance pas d'audit.

@@ -14,6 +14,7 @@
     <button type="button" data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
     <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}} title="Disponible après audit lorsqu'un équipement référencé présente un écart mécanique."><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
     <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}} title="Disponible après audit pour les migrations explicitement considérées comme sûres."><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer données sûres</button>
+    <button type="button" data-action="finalAudit" class="{{#if finalAuditState.enabled}}primary{{/if}}" {{#unless finalAuditState.enabled}}disabled{{/unless}} title="{{finalAuditState.hint}}"><i class="fa-solid fa-clipboard-check"></i> Audit final</button>
     <button type="button" data-action="restore" {{#unless hasInitialAudit}}{{#unless hasRestorableCycle}}disabled{{/unless}}{{/unless}} title="Restaurer les données depuis le premier audit ou le dernier cycle de maintenance."><i class="fa-solid fa-clock-rotate-left"></i> Restaurer données</button>
   </nav>
 
@@ -77,6 +78,23 @@
       </div>
     </section>
     {{/if}}
+
+    <section class="h0d-tm-section">
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-book-open"></i> H0D CATALOGUE — ÉQUIPEMENTS</h2><span>référence externe facultative · clés exactes</span></div>
+      {{#if catalogueReference.available}}
+      <div class="h0d-tm-weapon-grid">
+        <article><span>Références identifiées</span><strong>{{catalogueSummary.tracked}}</strong></article>
+        <article><span>Conformes</span><strong>{{catalogueSummary.ok}}</strong></article>
+        <article><span>À actualiser</span><strong>{{catalogueSummary.repairable}}</strong></article>
+        <article><span>Références absentes</span><strong>{{catalogueSummary.unmapped}}</strong></article>
+        <article><span>Exclus (prudence)</span><strong>{{catalogueSummary.excluded}}</strong></article>
+      </div>
+      <p>H0D Catalogue v{{catalogueReference.version}} : contrôle uniquement les Items créés par Equipment Builder avec une clé <code>catalogKey</code> explicite. Les noms similaires ne sont jamais rapprochés automatiquement. Seuls certains champs mécaniques d'armes et d'armures validées sont réparables ; quantités, munitions restantes, états, tables de traits et améliorations restent intacts.</p>
+      <button type="button" data-action="repairCatalogue" {{#unless hasCatalogueRepair}}disabled{{/unless}} title="Afficher les différences précises, demander confirmation et sauvegarder les données avant l'actualisation."><i class="fa-solid fa-screwdriver-wrench"></i> Actualiser depuis Catalogue ({{catalogueSummary.repairable}})</button>
+      {{else}}
+      <p>H0D Catalogue est absent, inactif ou non prêt. Les audits et les réparations historiques restent utilisables indépendamment.</p>
+      {{/if}}
+    </section>
 
     <section class="h0d-tm-section">
       <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-user-shield"></i> ACTORS</h2><span>4 templates</span></div>
@@ -164,7 +182,7 @@
 
     <section class="h0d-tm-note">
       <i class="fa-solid fa-circle-info"></i>
-      <div><strong>Cycle conseillé : Installer/mettre à jour (audit automatique sans export) → maintenance → Audit final. Le snapshot JSON est uniquement manuel.</strong><br>L’audit reste en lecture seule et propose son export JSON à la fin sans relancer un second audit. Toute opération qui modifie réellement le monde fait passer le bouton principal à « Audit final recommandé ». Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
+      <div><strong>Cycle conseillé : Installer/mettre à jour (audit automatique sans export) → Synchroniser / Réparer / Migrer → Audit final (avec proposition d'export JSON). Le snapshot JSON est uniquement manuel.</strong><br>L’audit final est désactivé tant qu'aucune des trois opérations de maintenance n'a modifié le monde. Le bouton « Refaire l'audit » reste disponible à tout moment et son export JSON demeure facultatif. Le marqueur d'audit final est conservé entre les rechargements de Foundry ; un audit final terminé le réinitialise. Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
     </section>
   </div>
 </section>

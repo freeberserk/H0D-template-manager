@@ -1,3 +1,15 @@
+## v1.7.32 — Audit final et H0D Catalogue
+
+La barre d'outils possède désormais un bouton distinct **Audit final**, situé après **Migrer données sûres**. Il est désactivé au lancement. Il devient disponible **uniquement après une synchronisation, réparation d'équipement ou migration sûre ayant réalisé au moins une modification**, et reste disponible après un rechargement du monde. Le clic lance un audit complet, puis propose facultativement l'**export du même rapport JSON**. Un « Refaire l'audit » classique ne consomme pas ce marqueur. L'installation des templates continue d'auditer silencieusement, sans demander de fichier.
+
+**H0D Catalogue est une source de contrôle optionnelle**, non une deuxième installation de template. Lorsque le module est actif, son API `getDefinition()` permet de vérifier les Items créés par H0D Equipment Builder qui possèdent les flags `generated`, `catalogKey` et `sourceTemplateId`. Aucun matching par nom n'est effectué. La section « H0D Catalogue — équipements » distingue les références exactes, les écarts et les cas exclus.
+
+Le bouton séparé **Actualiser depuis Catalogue** demande confirmation et détaille les propriétés ciblées. Il n'écrit que les champs mécaniques explicitement listés pour les armes et armures dont la référence est finalisée. Les fiches d'objets, ressources, stocks, les armes-machines et les références non validées restent en lecture seule ; aucune modification des équipements sans clé. Tous les champs individuels (PV/états, quantité, munitions restantes, emplacement, noms, bonus personnels, améliorations, traits) sont conservés. Sauvegarde interne avant écriture ; aucune exportation JSON automatique.
+
+Les référentiels historiques armes et armures restent accessibles pour les équipements qui n'ont pas été créés par Equipment Builder. Une valeur de Catalogue qui entre en conflit avec une personnalisation mécanique parmi les champs allowlistés n'est remplacée **qu'après confirmation explicite** ; contrôle d'abord dans BAC-à-SABLES.
+
+---
+
 ## v1.7.31 — Audit automatique après installation canonique
 
 Désormais, les actions **Installer/mettre à jour** (tous les templates) et **Mettre à jour** (un seul template) relancent immédiatement l'audit complet du monde après l'écriture, actualisent les compteurs et les candidats à migration sûre, et ne proposent **aucun export du rapport**.
@@ -33,7 +45,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.31
+# H0D Template Manager — v1.7.32
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 

@@ -20,6 +20,8 @@ jobs:
           node --check scripts/h0d-attacks.js
           node --check scripts/h0d-common-stats.js
           node --check scripts/h0d-ammo-recovery.js
+          node --check scripts/h0d-catalogue-audit.js
+          node tests/final-audit-catalogue.mjs
           node tests/template-manager-audit-workflow.mjs
           node tests/container-template.mjs
           node tests/ammo-recovery.mjs
