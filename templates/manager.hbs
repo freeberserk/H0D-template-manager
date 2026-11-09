@@ -21,7 +21,7 @@
     <section class="h0d-tm-summary-grid">
       <article class="h0d-tm-card">
         <span>Templates</span>
-        <strong>{{#if auditSummary.available}}{{auditSummary.templates.ok}} OK{{else}}11 actifs{{/if}}</strong>
+        <strong>{{#if auditSummary.available}}{{auditSummary.templates.ok}} OK{{else}}12 actifs{{/if}}</strong>
         <small>{{#if auditSummary.available}}{{auditSummary.templates.update}} MAJ · {{auditSummary.templates.absent}} absent(s){{else}}Audit non lancé{{/if}}</small>
       </article>
       <article class="h0d-tm-card">
@@ -79,7 +79,7 @@
     {{/if}}
 
     <section class="h0d-tm-section">
-      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-user-shield"></i> ACTORS</h2><span>3 templates</span></div>
+      <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-user-shield"></i> ACTORS</h2><span>4 templates</span></div>
       <div class="h0d-tm-table">
         <div class="h0d-tm-row header"><span>Template canonique</span><span>Installé</span><span>État</span><span>Actions</span></div>
         {{#each actorTemplates}}
@@ -164,7 +164,7 @@
 
     <section class="h0d-tm-note">
       <i class="fa-solid fa-circle-info"></i>
-      <div><strong>Cycle conseillé : Audit monde (état initial interne, sans export) → maintenance → Audit final. Le snapshot JSON est uniquement manuel.</strong><br>L’audit reste en lecture seule et propose son export JSON à la fin sans relancer un second audit. Toute opération qui modifie réellement le monde fait passer le bouton principal à « Audit final recommandé ». Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
+      <div><strong>Cycle conseillé : Installer/mettre à jour (audit automatique sans export) → maintenance → Audit final. Le snapshot JSON est uniquement manuel.</strong><br>L’audit reste en lecture seule et propose son export JSON à la fin sans relancer un second audit. Toute opération qui modifie réellement le monde fait passer le bouton principal à « Audit final recommandé ». Les sauvegardes internes par fiche restent limitées aux 5 derniers cycles.</div>
     </section>
   </div>
 </section>
