@@ -1,4 +1,5 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
+import {scanCatalogueEquipment,planCatalogueEquipment} from "./h0d-catalogue-audit.js";
 import {
   COMMON_ATTRIBUTE_KEYS,
   commonAttributeEntry,
@@ -15,13 +16,14 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.31";
+const MODULE_VERSION = "1.7.32";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
 const LAST_CYCLE_SETTING = "lastCycleId";
 const INITIAL_AUDIT_SETTING = "initialAuditId";
 const INITIAL_AUDIT_FLAG = "initialAuditBackup";
+const FINAL_AUDIT_PENDING_SETTING = "finalAuditPendingReason";
 
 const TEMPLATE_INDEX = [
   {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.74", version:"3.74", file:"H0D_Actor-template-PJ-v3.74.json"},
@@ -349,6 +351,14 @@ async function promptAuditExport(report,{final=false}={}) {
     no:{label:"Fermer",icon:"fa-solid fa-xmark"}
   });
   if (exportNow === true) await exportAudit(report);
+}
+
+// Le marqueur de l'audit final survit à un rechargement du monde.
+async function markFinalAuditPending(reason) {
+  await game.settings.set(MODULE_ID,FINAL_AUDIT_PENDING_SETTING,String(reason||"maintenance"));
+}
+function finalAuditPendingReason() {
+  return game.settings.get(MODULE_ID,FINAL_AUDIT_PENDING_SETTING)||"";
 }
 
 function markAuditFinalRecommended(reason="Modification du monde",{preserveReport=false}={}) {
@@ -1697,6 +1707,73 @@ function buildWarningTriage(docs, sharedCompendiums=[]) {
   };
 }
 
+// Source facultative : H0D Catalogue est consulté en lecture seule, jamais au chargement
+// des templates ni pendant une simple synchronisation CSB.
+async function catalogueApiIfReady() {
+  if(!game.modules?.get("h0d-catalogue")?.active)return null;
+  const api=game.h0dCatalogue||game.modules.get("h0d-catalogue")?.api;
+  if(!api?.getDefinition)return null;
+  try {
+    if(api.whenReady)await api.whenReady();
+    if(api.getStatus?.().ready===false)return null;
+    return api;
+  } catch(err) {
+    console.warn("H0D Template Manager — Catalogue indisponible",err);
+    return null;
+  }
+}
+function catalogueWorldItems() {
+  return [...game.items.contents,...game.actors.contents.flatMap(actor=>[...actor.items.contents])];
+}
+async function auditCatalogueEquipment() {
+  const api=await catalogueApiIfReady();
+  return scanCatalogueEquipment(api,catalogueWorldItems());
+}
+
+// Réparation expressément demandée, uniquement les scalaires mécaniques des
+// armes et armures authentifiées par flags Equipment Builder + référence exacte.
+// Jamais de quantité, munition restante, état, table de traits ou amélioration.
+async function repairCatalogueEquipment() {
+  const api=await catalogueApiIfReady();
+  if(!api){ui.notifications.warn("H0D : Catalogue inactif ou non prêt.");return null;}
+  const current=scanCatalogueEquipment(api,catalogueWorldItems());
+  const candidates=current.records.filter(record=>record.status==="repairable");
+  if(!candidates.length){ui.notifications.info("H0D : aucune différence mécanique réparable via Catalogue.");return null;}
+  const preview=candidates.slice(0,15).map(r=>`<li>${foundry.utils.escapeHTML(r.actorName? r.actorName+" — "+r.name : r.name)} : ${r.diffs.map(d=>foundry.utils.escapeHTML(d.key)).join(", ")}</li>`).join("");
+  const more=candidates.length>15?`<p>… et ${candidates.length-15} autre(s) équipements (détails dans l'export d'audit).</p>`:"";
+  const ok=await confirmDialog("H0D — Actualiser depuis Catalogue",
+    `<p><strong>${candidates.length} équipement(s)</strong> H0D ayant une référence par clé explicite présentent un écart mécanique.</p>
+    <p>Les différences ci-dessous concernent uniquement les champs autorisés : ${candidates.reduce((n,r)=>n+r.diffs.length,0)} propriété(s).</p>
+    <ul>${preview}</ul>${more}
+    <p><strong>Important :</strong> si tu as personnalisé un des champs mécaniques listés, il sera remplacé par la valeur du Catalogue. Le nom, les quantités, l'état, les munitions restantes, les améliorations, les traits et les autres champs restent intacts. Une sauvegarde interne est réalisée avant chaque écriture ; aucun export JSON n'est automatique.</p>
+    <p>Les objets sans catalogKey officiel, les références non finalisées et les autres familles sont exclus.</p>`,
+    "Actualiser ces équipements");
+  if(!ok)return null;
+  const runId=newRunId();
+  let done=0,errors=0,skipped=0;
+  // Le cycle n'est enregistré qu'en présence d'au moins une écriture validée.
+  for(const record of candidates) {
+    try {
+      const doc=await fromUuid(record.uuid);
+      if(!doc){skipped++;continue;}
+      const reference=api.getDefinition(record.catalogKey);
+      const plan=planCatalogueEquipment(doc,reference);
+      if(plan.status!=="repairable"){skipped++;continue;}
+      if(!done&&!errors)await game.settings.set(MODULE_ID,LAST_CYCLE_SETTING,runId);
+      await pushBackup(doc,runId,"Actualisation contrôlée depuis H0D Catalogue");
+      const update={};
+      for(const diff of plan.diffs)update["system.props."+diff.key]=clone(diff.expected);
+      await doc.update(update);
+      done++;
+    } catch(err) {
+      errors++;
+      console.error("H0D Template Manager — actualisation Catalogue",record.uuid,err);
+    }
+  }
+  ui.notifications[errors?"warn":"info"](`H0D Catalogue : ${done} équipement(s) actualisé(s), ${skipped} ignoré(s)${errors?", "+errors+" erreur(s)":""}.`);
+  return {done,skipped,errors};
+}
+
 async function auditWorld() {
   // Cache des clés de composants par template : une seule traversée, même pour des centaines de fiches.
   const sourceData=await Promise.all(TEMPLATE_INDEX.map(async entry=>{
@@ -1758,11 +1835,12 @@ async function auditWorld() {
       shared.push({collection:pack.collection,title:pack.metadata.label,locked:pack.locked,managed,ok,warnings,errors});
     } catch(err) { shared.push({collection:pack.collection,title:pack.metadata.label,locked:pack.locked,managed:0,ok:0,warnings:0,errors:1,error:String(err?.message || err)}); }
   }
+  const catalogueReference=await auditCatalogueEquipment();
   const weaponReference=await auditWeapons();
   const armorReference=await auditArmors();
   const warningTriage=buildWarningTriage(docs,shared);
   const counts={templates:{ok:templateRows.filter(r=>r.status.code==="ok").length,update:templateRows.filter(r=>r.status.code==="update").length,absent:templateRows.filter(r=>r.status.code==="absent").length},documents:{ok:docs.filter(d=>d.status==="ok").length,warnings:docs.filter(d=>d.status==="warning").length,errors:docs.filter(d=>d.status==="error").length},legacyTraitUsages:legacyUsages.length};
-  const report={format:"H0D_TEMPLATE_MANAGER_INTEGRITY_REPORT",formatVersion:2,moduleVersion:MODULE_VERSION,createdAt:new Date().toISOString(),world:{id:game.world?.id,title:game.world?.title,system:game.system?.id,systemVersion:game.system?.version},registry:TEMPLATE_INDEX,templates:templateRows.map(r=>({key:r.key,id:r.id,name:r.name,version:r.version,status:r.status.code,label:r.status.label,installed:r.status.installed,wanted:r.status.wanted,prototypeBarCurrent:r.status.prototypeBarCurrent ?? null,prototypeBarWanted:r.status.prototypeBarWanted ?? null,commonInterfaceDifferences:r.status.commonInterfaceDifferences ?? []})),documents:docs,sharedCompendiums:shared,legacyTrait:{installed:!!legacy,usages:legacyUsages},weaponReference,armorReference,warningTriage,safeVersionMigration:H0DTemplateManagerState.lastSafeMigration,counts};
+  const report={format:"H0D_TEMPLATE_MANAGER_INTEGRITY_REPORT",formatVersion:2,moduleVersion:MODULE_VERSION,createdAt:new Date().toISOString(),world:{id:game.world?.id,title:game.world?.title,system:game.system?.id,systemVersion:game.system?.version},registry:TEMPLATE_INDEX,templates:templateRows.map(r=>({key:r.key,id:r.id,name:r.name,version:r.version,status:r.status.code,label:r.status.label,installed:r.status.installed,wanted:r.status.wanted,prototypeBarCurrent:r.status.prototypeBarCurrent ?? null,prototypeBarWanted:r.status.prototypeBarWanted ?? null,commonInterfaceDifferences:r.status.commonInterfaceDifferences ?? []})),documents:docs,sharedCompendiums:shared,legacyTrait:{installed:!!legacy,usages:legacyUsages},catalogueReference,weaponReference,armorReference,warningTriage,safeVersionMigration:H0DTemplateManagerState.lastSafeMigration,counts};
   H0DTemplateManagerState.lastAudit=report;
   return report;
 }
@@ -1815,6 +1893,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     position:{width:1180,height:780},
     actions:{
       audit:H0DTemplateManagerApp._audit,
+      finalAudit:H0DTemplateManagerApp._finalAudit,
       installAll:H0DTemplateManagerApp._installAll,
       synchronize:H0DTemplateManagerApp._synchronize,
       restore:H0DTemplateManagerApp._restore,
@@ -1824,6 +1903,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       auditTemplate:H0DTemplateManagerApp._auditTemplate,
       retireTrait:H0DTemplateManagerApp._retireTrait,
       repairEquipment:H0DTemplateManagerApp._repairEquipment,
+      repairCatalogue:H0DTemplateManagerApp._repairCatalogue,
       migrateSafeVersions:H0DTemplateManagerApp._migrateSafeVersions
     }
   };
@@ -1844,6 +1924,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       referenceItems:"—",embeddedItems:"—",armors:"—",shields:"—",ok:"—",matched:"—",
       mechanicalDiffs:"—",mismatch:0,unreferenced:"—",sourceWarnings:"—"
     };
+    const catalogueSummary=audit?.catalogueReference?.summary||{tracked:0,ok:0,repairable:0,unmapped:0,excluded:0};
     const safeVersionCandidates=audit?.warningTriage
       ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.prototypeBarCandidates||0)+Number(audit.warningTriage.commonInterfaceCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
       : 0;
@@ -1856,11 +1937,21 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       auditState:{
         available:!!audit,
         dirty:auditDirty,
-        label:auditDirty ? "Audit final recommandé" : (audit ? "Refaire l’audit" : "Audit monde"),
+        label:audit ? "Refaire l’audit" : "Audit monde",
         hint:auditDirty
           ? `Le monde a été modifié${H0DTemplateManagerState.lastMutation ? ` : ${H0DTemplateManagerState.lastMutation}` : ""}. Relancer un audit global est recommandé.`
           : (audit ? "Relancer un audit global en lecture seule." : "Lancer l’audit global en lecture seule.")
       },
+      finalAuditState:{
+        enabled:!!finalAuditPendingReason(),
+        reason:finalAuditPendingReason(),
+        hint:finalAuditPendingReason()
+          ? "Vérifier le monde après : "+finalAuditPendingReason()+". Export JSON proposé en fin d'audit."
+          : "Disponible après une synchronisation, une réparation ou une migration réussie."
+      },
+      catalogueReference:audit?.catalogueReference||{available:false,summary:catalogueSummary,records:[]},
+      catalogueSummary,
+      hasCatalogueRepair:!!audit?.catalogueReference?.available&&catalogueSummary.repairable>0,
       warningTriage:audit?.warningTriage ? {available:true,...audit.warningTriage} : {available:false},
       safeVersionCandidates,
       weaponSummary,
@@ -1889,6 +1980,26 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     await this.render({force:true});
     await promptAuditExport(report,{final});
   }
+  static async _finalAudit() {
+    if(!finalAuditPendingReason()){
+      ui.notifications.warn("H0D : l'audit final se débloque après une maintenance réussie.");
+      return;
+    }
+    ui.notifications.info("H0D : audit final en cours…");
+    try {
+      await captureInitialAuditState();
+      const report=await auditWorld();
+      H0DTemplateManagerState.lastAudit=report;
+      H0DTemplateManagerState.auditDirty=false;
+      H0DTemplateManagerState.lastMutation="";
+      await game.settings.set(MODULE_ID,FINAL_AUDIT_PENDING_SETTING,"");
+      await this.render({force:true});
+      await promptAuditExport(report,{final:true});
+    } catch(err) {
+      console.error("H0D Template Manager — audit final",err);
+      ui.notifications.error("H0D : audit final impossible ; tu peux le relancer. "+String(err?.message||err));
+    }
+  }
   static async _installAll() {
     const results=await installAllTemplates();
     if (!results) return;
@@ -1899,7 +2010,10 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const choice=await syncChoiceDialog();
     if (!choice) return;
     const results=await synchronize(choice.mode,choice.packs);
-    if (results?.some(r=>r.ok)) await refreshAuditSilently("synchronisation du monde");
+    if (results?.some(r=>r.ok)) {
+      await markFinalAuditPending("synchronisation du monde");
+      await refreshAuditSilently("synchronisation du monde");
+    }
     await this.render({force:true});
   }
   static async _restore() {
@@ -1914,7 +2028,18 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) markAuditFinalRecommended("retrait du template legacy"); await this.render({force:true}); }
   static async _repairEquipment() {
     const result=await repairEquipment();
-    if (result && (result.weaponsDone+result.armorsDone)>0) await refreshAuditSilently("réparation des équipements");
+    if (result && (result.weaponsDone+result.armorsDone)>0) {
+      await markFinalAuditPending("réparation des équipements");
+      await refreshAuditSilently("réparation des équipements");
+    }
+    await this.render({force:true});
+  }
+  static async _repairCatalogue() {
+    const result=await repairCatalogueEquipment();
+    if(result?.done>0){
+      await markFinalAuditPending("actualisation des équipements depuis Catalogue");
+      await refreshAuditSilently("actualisation depuis Catalogue");
+    }
     await this.render({force:true});
   }
   static async _migrateSafeVersions() {
@@ -1933,6 +2058,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     const previousRunId=H0DTemplateManagerState.lastSafeMigration?.runId || null;
     await migrateSafeVersions();
     const migration=H0DTemplateManagerState.lastSafeMigration;
+    if(migration && migration.runId!==previousRunId && migration.ok>0)await markFinalAuditPending("migration des données sûres");
 
     // Annulation ou absence de candidat : ne pas afficher un ancien bilan comme s'il
     // venait d'être exécuté.
@@ -2068,6 +2194,7 @@ async function migrateLegacyEnemyAttackMacro() {
 Hooks.once("init",()=>{
   game.settings.register(MODULE_ID,LAST_CYCLE_SETTING,{scope:"world",config:false,type:String,default:""});
   game.settings.register(MODULE_ID,INITIAL_AUDIT_SETTING,{scope:"world",config:false,type:String,default:""});
+  game.settings.register(MODULE_ID,FINAL_AUDIT_PENDING_SETTING,{scope:"world",config:false,type:String,default:""});
   registerAmmoRecoverySettings();
 });
 
