@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.31","Le manifest doit être en 1.7.31");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.31";'),"MODULE_VERSION doit être en 1.7.31");
+assert.equal(manifest.version,"1.7.32","Le manifest doit être en 1.7.32");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.32";'),"MODULE_VERSION doit être en 1.7.32");
 
 assert.ok(script.includes('order:-1000,button:true,visible:true,'),"Le Template Manager doit être le premier outil de Tokens.");
 
@@ -28,7 +28,8 @@ assert.ok(script.includes("if (exportNow === true) await exportAudit(report);"),
 assert.ok(script.includes("async function exportAudit(report=null)"),"L'API exportAudit doit rester compatible");
 assert.ok(script.includes("if (!current) {"),"L'API exportAudit seule doit pouvoir relancer un audit frais");
 assert.ok(script.includes("auditDirty:false"),"L'état auditDirty doit être initialisé");
-assert.ok(script.includes('label:auditDirty ? "Audit final recommandé"'),"Le libellé final recommandé doit dépendre de l'état sale");
+assert.ok(script.includes('label:audit ? "Refaire l’audit" : "Audit monde"'),"Le bouton principal doit rester un audit classique");
+assert.ok(hbs.includes('data-action="finalAudit"'),"Le nouveau bouton Audit final est obligatoire");
 assert.ok(script.includes("async function refreshAuditSilently"),"Le réaudit silencieux de maintenance doit exister");
 // Mise à jour canonique : réaudit immédiat et silencieux, sans dialogue d'export.
 const automaticAudit=script.slice(script.indexOf("async function auditAfterTemplateUpdate("),
@@ -118,8 +119,8 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(snapshotButton>=0 && auditButton>snapshotButton && installButton>auditButton,
   "La barre doit commencer par Snapshot puis Audit puis Installation");
 
-assert.ok(readme.includes("# H0D Template Manager — v1.7.31"),"README non aligné sur la version");
-assert.ok(readme.includes("Audit final recommandé"),"README doit documenter l'audit final");
+assert.ok(readme.includes("# H0D Template Manager — v1.7.32"),"README non aligné sur la version");
+assert.ok(readme.includes("Audit final"),"README doit documenter le second bouton");
 
 const explicitAudit=script.slice(script.indexOf("static async _audit()"),script.indexOf("static async _installAll()"));
 assert.ok(explicitAudit.includes("await captureInitialAuditState()"),"Le premier audit doit créer un état initial interne");
@@ -135,4 +136,4 @@ assert.ok(script.includes('initial ? entry.doc.getFlag?.(MODULE_ID,INITIAL_AUDIT
 assert.ok(script.includes('const sourceById=new Map(sourceData)'),"L’audit doit mettre en cache les composants par template");
 assert.ok(script.includes('commonInterfaceDifferences:r.status.commonInterfaceDifferences ?? []'),"Le rapport doit détailler les différences Actor");
 assert.ok(script.includes('if (exportNow === true) await exportAudit(report)'),"L’export d’audit exige une confirmation explicite");
-console.log("Template Manager audit workflow 1.7.31 OK");
+console.log("Template Manager audit workflow 1.7.32 OK");
