@@ -24,6 +24,7 @@ jobs:
           node tests/final-audit-catalogue.mjs
           node tests/template-manager-audit-workflow.mjs
           node tests/container-template.mjs
+          node tests/jeton-resource-template.mjs
           node tests/ammo-recovery.mjs
           node tests/h0d-attacks-smoke.mjs
           node tests/gameplay-automation.mjs
