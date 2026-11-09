@@ -1,3 +1,8 @@
+## v1.7.33 — Type Jeton dans la fiche Ressource
+- Nouvelle version H0D_Ressource v2.6, identifiant conservé, choix `Jeton` ajouté à `H0D_Ressource_Type`.
+- Aucun champ existant ni valeur des ressources classiques modifié ; pas de migration implicite des inventaires.
+- Test statique du template et du registre ; validation manuelle Foundry nécessaire.
+
 ## v1.7.32 — Audit final distinct et vérification Catalogue
 - Deux boutons indépendants : **Refaire l'audit** (toujours disponible) et **Audit final** immédiatement après **Migrer données sûres**. Le second reste désactivé tant qu'aucune synchronisation, réparation ou migration n'a réellement modifié au moins une fiche. Le marqueur d'attente est enregistré dans les settings du monde et survit aux rechargements.
 - Après l'audit final, les compteurs sont actualisés, le marqueur est désactivé et une **proposition facultative d'export JSON** apparaît. L'export utilise exactement le rapport calculé : aucun deuxième audit ni export automatique. Les audits automatiques après installation des templates continuent sans dialogue d'export.
