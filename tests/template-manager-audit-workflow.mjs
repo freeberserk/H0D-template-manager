@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.32","Le manifest doit être en 1.7.32");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.32";'),"MODULE_VERSION doit être en 1.7.32");
+assert.equal(manifest.version,"1.7.33","Le manifest doit être en 1.7.33");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.33";'),"MODULE_VERSION doit être en 1.7.33");
 
 assert.ok(script.includes('order:-1000,button:true,visible:true,'),"Le Template Manager doit être le premier outil de Tokens.");
 
@@ -119,7 +119,7 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(snapshotButton>=0 && auditButton>snapshotButton && installButton>auditButton,
   "La barre doit commencer par Snapshot puis Audit puis Installation");
 
-assert.ok(readme.includes("# H0D Template Manager — v1.7.32"),"README non aligné sur la version");
+assert.ok(readme.includes("# H0D Template Manager — v1.7.33"),"README non aligné sur la version");
 assert.ok(readme.includes("Audit final"),"README doit documenter le second bouton");
 
 const explicitAudit=script.slice(script.indexOf("static async _audit()"),script.indexOf("static async _installAll()"));
@@ -136,4 +136,4 @@ assert.ok(script.includes('initial ? entry.doc.getFlag?.(MODULE_ID,INITIAL_AUDIT
 assert.ok(script.includes('const sourceById=new Map(sourceData)'),"L’audit doit mettre en cache les composants par template");
 assert.ok(script.includes('commonInterfaceDifferences:r.status.commonInterfaceDifferences ?? []'),"Le rapport doit détailler les différences Actor");
 assert.ok(script.includes('if (exportNow === true) await exportAudit(report)'),"L’export d’audit exige une confirmation explicite");
-console.log("Template Manager audit workflow 1.7.32 OK");
+console.log("Template Manager audit workflow 1.7.33 OK");
