@@ -6,7 +6,7 @@ const hbs=await readFile(new URL("../templates/manager.hbs",import.meta.url),"ut
 const helper=await readFile(new URL("../scripts/h0d-catalogue-audit.js",import.meta.url),"utf8");
 const manifest=JSON.parse(await readFile(new URL("../module.json",import.meta.url),"utf8"));
 
-assert.equal(manifest.version,"1.7.32");
+assert.equal(manifest.version,"1.7.33");
 assert.match(main,/const FINAL_AUDIT_PENDING_SETTING = "finalAuditPendingReason"/);
 assert.match(main,/game.settings.register\(MODULE_ID,FINAL_AUDIT_PENDING_SETTING/);
 assert.match(hbs,/data-action="migrateSafeVersions"[\s\S]*?data-action="finalAudit"/);
