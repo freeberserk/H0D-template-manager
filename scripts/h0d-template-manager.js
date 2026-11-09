@@ -1727,7 +1727,11 @@ function catalogueWorldItems() {
 }
 async function auditCatalogueEquipment() {
   const api=await catalogueApiIfReady();
-  return scanCatalogueEquipment(api,catalogueWorldItems());
+  try { return scanCatalogueEquipment(api,catalogueWorldItems()); }
+  catch(err) {
+    console.warn("H0D Template Manager — échec facultatif de l'audit Catalogue",err);
+    return scanCatalogueEquipment(null,[]);
+  }
 }
 
 // Réparation expressément demandée, uniquement les scalaires mécaniques des
@@ -1736,7 +1740,9 @@ async function auditCatalogueEquipment() {
 async function repairCatalogueEquipment() {
   const api=await catalogueApiIfReady();
   if(!api){ui.notifications.warn("H0D : Catalogue inactif ou non prêt.");return null;}
-  const current=scanCatalogueEquipment(api,catalogueWorldItems());
+  let current;
+  try { current=scanCatalogueEquipment(api,catalogueWorldItems()); }
+  catch(err) { ui.notifications.error("H0D : Catalogue inaccessible : "+String(err?.message||err)); return null; }
   const candidates=current.records.filter(record=>record.status==="repairable");
   if(!candidates.length){ui.notifications.info("H0D : aucune différence mécanique réparable via Catalogue.");return null;}
   const preview=candidates.slice(0,15).map(r=>`<li>${foundry.utils.escapeHTML(r.actorName? r.actorName+" — "+r.name : r.name)} : ${r.diffs.map(d=>foundry.utils.escapeHTML(d.key)).join(", ")}</li>`).join("");
