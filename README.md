@@ -51,7 +51,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.32
+# H0D Template Manager — v1.7.33
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
