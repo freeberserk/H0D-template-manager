@@ -1,3 +1,11 @@
+## v1.7.31 — Réaudit automatique après mise à jour des templates
+- Après **Installer/mettre à jour** les templates canoniques, le manager lance immédiatement un **audit global complet en lecture seule** et actualise le tableau de bord (templates, fiches, avertissements, candidats de migration sûre).
+- Même comportement après mise à jour individuelle d'un template. Une opération annulée ne lance pas d'audit.
+- **Aucune demande d'export JSON** pour ces audits automatiques, aucun téléchargement/snapshot déclenché, aucune resynchronisation des Actors ni migration implicite.
+- Le premier audit automatique préserve le comportement de **sauvegarde interne initiale** des fiches gérées dans les flags du monde ; il n'exporte pas ce backup.
+- Le bouton **Audit monde / Refaire l'audit** manuel conserve sa fenêtre optionnelle d'export. En cas d'erreur de réaudit, la mise à jour n'est pas annulée, le tableau de bord reste marqué à vérifier et une notification d'erreur l'indique.
+- Vérifications automatisées du flux, de l'absence d'export et des contrôles de syntaxe. Validation avec Foundry v14 sur BAC nécessaire.
+
 ## v1.7.30 — Template Actor Conteneur v1.0
 
 - Ajout du nouveau template canonique **H0D_Actor-template-conteneur v1.0** (ID stable `H0DContActor0001`) au registre du Template Manager, à son installation, à ses audits et à la synchronisation des Actors.
