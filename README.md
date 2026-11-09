@@ -1,3 +1,9 @@
+## v1.7.33 — Jetons de Reconnaissance (type Ressource)
+
+- Ajout du type `Jeton` au sélecteur `H0D_Ressource_Type` du template Ressource v2.6 (ID stable `H0DResTpl0000001`).
+- Un jeton reste une Ressource empilable avec quantité et charge nulles ; son paiement est géré par H0D Loot, sans conversion automatique en matériaux.
+- Aucun Item existant ni stock marchand n'est modifié automatiquement par l'installation. Vérifier le template dans Foundry v14 BAC-à-SABLES avant déploiement en campagne.
+
 ## v1.7.32 — Audit final et H0D Catalogue
 
 La barre d'outils possède désormais un bouton distinct **Audit final**, situé après **Migrer données sûres**. Il est désactivé au lancement. Il devient disponible **uniquement après une synchronisation, réparation d'équipement ou migration sûre ayant réalisé au moins une modification**, et reste disponible après un rechargement du monde. Le clic lance un audit complet, puis propose facultativement l'**export du même rapport JSON**. Un « Refaire l'audit » classique ne consomme pas ce marqueur. L'installation des templates continue d'auditer silencieusement, sans demander de fichier.
@@ -45,7 +51,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.32
+# H0D Template Manager — v1.7.33
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
