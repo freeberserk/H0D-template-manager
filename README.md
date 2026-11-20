@@ -1,3 +1,11 @@
+## v1.7.38 — PJ v3.79 : jets de compétences et bandeau horizontal
+
+- Corrige les 23 déclencheurs de jets de compétences, Artisanats, Connaissances, raccourcis et Focus : les deux saisies CSB (mode d20 / Faire 10 / Faire 20 et bonus/malus) sont désormais des prompts autonomes, avec des délimiteurs valides.
+- Corrige la structure incorrecte des expressions historiques sans toucher aux calculs de total et aux cartes de jet.
+- Regroupe PV / DEF / INIT / PA restantes / FOCUS dans un unique bandeau **horizontal**, en pleine largeur juste avant les onglets, avec repli automatique sur fenêtre étroite.
+- Version canonique PJ v3.79, identifiant CSB inchangé, anciennes versions conservées. Installation via Template Manager v1.7.38.
+- Contrôle statique dans GitHub Actions ; **test réel Foundry v14 + CSB 6.0.2 nécessaire** dans BAC-à-SABLES avant toute synchronisation des fiches en campagne. Voir `VALIDATION.txt`.
+
 ## v1.7.37 — PJ v3.78 : barème de repos proportionnel
 
 - Mauvaise nuit : maximum du DV du **dernier niveau acquis** dans l'historique ; nuit normale : **1/3 des PV max** ; camp sûr : **1/2 des PV max** (fractions arrondies vers le bas) ; refuge véritable : PV restaurés au maximum.
@@ -88,7 +96,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.37
+# H0D Template Manager — v1.7.38
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
