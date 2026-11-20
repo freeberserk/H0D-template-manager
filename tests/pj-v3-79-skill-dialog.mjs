@@ -33,12 +33,12 @@ assert.equal(before.length,23,"23 jets modifies attendus");
 assert.equal(after.length,23,"23 jets conserves attendus");
 const byKey=new Map(after.map(node=>[node.key,node]));
 assert.equal(byKey.size,23,"Cle de jet dupliquee");
-const invalidPrefix=/^.\{#concat\((\?\{H0D_Test_Mode:.*?\}),(\?\{H0D_Test_Mod:.*?\})\)\}/;
+const invalidPrefix=/^\$\{#concat\((\?\{H0D_Test_Mode:.*?\}),(\?\{H0D_Test_Mod:.*?\})\)\}(\$*)(?=\$\{#H0D_Test_Formule)/s;
 for(const old of before){
   const found=old.rollMessage.match(invalidPrefix);
   assert.ok(found,"Ancienne erreur de syntaxe non retrouvee pour "+old.key);
   const corrected="$"+"{#"+found[1]+"}$"+"$"+"{#"+found[2]+"}$";
-  const expected=old.rollMessage.replace(invalidPrefix,corrected);
+  const expected=corrected+old.rollMessage.slice(found[0].length);
   const next=byKey.get(old.key);
   assert.ok(next,"Jet absent : "+old.key);
   assert.equal(next.rollMessage,expected,"Tout le calcul suivant les prompts doit rester intact : "+old.key);
