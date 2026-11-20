@@ -1,3 +1,15 @@
+## v1.7.38 — Template PJ v3.79 : jets de compétences réparés et bandeau horizontal
+
+- **Correction du défaut de jet :** les 23 messages de compétence / Artisanat / Connaissance / raccourci / Focus possédaient une séquence de prompts `concat(?{...},?{...})` et des délimiteurs CSB incomplets (ainsi qu'un séparateur excédentaire pour Focus). Les deux saisies sont désormais appelées explicitement par des expressions CSB distinctes et complètement fermées.
+- **Choix conservés :** Lancer le d20, Faire 10, Faire 20 et bonus/malus situationnel. Les formules de calcul des totaux, les cartes et les autres jets sont préservés.
+- **Bandeau :** PV, DEF, INIT, PA restantes/max et FOCUS sont présentés horizontalement dans un seul Label, placé sur toute la largeur au-dessus des onglets. Les 5 valeurs sont les anciennes formules, sans nouveau champ persistant. Retour à la ligne automatique si l'espace manque.
+- **Compatibilité :** l'identifiant CSB `uympqkQiS6MHHmIx` est conservé. Les anciennes versions PJ, dont la v3.78, restent disponibles. Le Template Manager référence la v3.79, version technique `2730116407`.
+- **Tests :** nouveau contrôle `node tests/pj-v3-79-skill-dialog.mjs` intégré à GitHub Actions ; contrôle de l'intégrité des autres jets, des 419 clés et des onglets.
+- **Limite :** validation statique seulement. Avant synchronisation dans la campagne, tester en BAC-à-SABLES dans Foundry v14 / CSB 6.0.2 l'ouverture des deux saisies, les trois modes de jet, la carte de résultat, les permissions MJ/joueur et le bandeau à différentes largeurs.
+
+---
+
+
 ## v1.7.37 — Template PJ v3.78 : nouveau système de repos
 
 - **Mauvaise nuit** : récupération égale au **maximum du DV de la classe du dernier niveau** inscrit dans l'historique `H0D_Skill_Progression`. Le dernier niveau est identifié par `H0D_PJ_Niveau_Calc` et la classe par `find()` de Custom System Builder. Fort/Rapide : d8 ; Robuste : d10 ; Intelligent/Dévoué/Charismatique : d6. Dans le multiclassage, c'est le **dernier niveau acquis**, et non la classe majoritaire, qui compte.
