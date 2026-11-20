@@ -1,3 +1,15 @@
+## v1.7.34 — Fiche PJ v3.75 : jets uniformisés
+
+- **Compétences, Artisanats et Connaissances** : clic sur « Total / jet » (ou le résultat du raccourci) → un seul dialogue CSB avec **Mode de test** (Lancer le d20 / Faire 10 / Faire 20) et **Bonus / malus situationnel** (signé, défaut 0).
+- Le mode choisi détermine la base réellement évaluée : **1d20**, **10** ou **20**. Faire 10/20 n'effectue aucun jet de d20 et ne crée pas de 20 naturel. Le bonus/malus temporaire n'est **pas enregistré** sur la fiche.
+- Suppression des **46 boutons** Faire 10 / Faire 20 dans les raccourcis, compétences principales, huit Artisanats et tableau dynamique des Connaissances. Les quatre en-têtes 10/20 des tableaux fixes sont également retirés pour laisser la colonne **Total / jet** accessible.
+- Ajout d'un jet direct à la ligne **Focus** du tableau des compétences ; les actions de scan conservent leurs propres jets et formules.
+- Cartes de chat existantes conservées, avec affichage du mode, de la base et du modificateur situationnel. Rappel des restrictions de Faire 10/20 sur la carte ; le MJ décide si les conditions sont réunies.
+- Les formules de compétence, les rangs, les bonus d'origine, les dons, les équipements et les bonus divers existants sont conservés ; identifiant du template PJ inchangé (`uympqkQiS6MHHmIx`). Version CSB du template : **3.75**.
+- Installation sur Foundry v14 / CSB 6.0.2 : effectuer un **Snapshot de sécurité**, installer le template, puis valider sur BAC-à-SABLES les jets avec un compte joueur (en particulier les lignes de Connaissances dynamiques et les modes Faire 10/20). Validation en jeu **non encore effectuée**.
+
+---
+
 ## v1.7.33 — Jetons de Reconnaissance (type Ressource)
 
 - Ajout du type `Jeton` au sélecteur `H0D_Ressource_Type` du template Ressource v2.6 (ID stable `H0DResTpl0000001`).
@@ -51,7 +63,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.33
+# H0D Template Manager — v1.7.34
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
