@@ -67,7 +67,18 @@ assert.equal(banner.cssClass,"h0d-pj-status-banner");
 assert.equal(banner.rollMessage,"");
 assert.equal((banner.value.match(/class="h0d-pj-status-cell"/g)||[]).length,5,"Les 5 statistiques doivent etre sur la meme ligne");
 for(const stat of oldStatus)assert.ok(banner.value.includes(stat.value),"Stat perdue : "+stat.tooltip);
-assert.deepEqual(current.system.body.contents[1],previous.system.body.contents[0],"Onglets de la fiche modifies");
+// Les onglets sont inchangés hors 23 rollMessages vérifiés textuellement plus haut.
+const normalizeSkillPrompts=object=>{
+  const n=structuredClone(object);
+  const visit=value=>{
+    if(!value||typeof value!=="object")return;
+    if(Array.isArray(value)){value.forEach(visit);return;}
+    if(value.type==="label"&&value.rollMessage?.includes("H0D_Test_Mode"))value.rollMessage="[PROMPT_COMPETENCE_VERIFIE]";
+    for(const child of Object.values(value))if(child&&typeof child==="object")visit(child);
+  };
+  visit(n);return n;
+};
+assert.deepEqual(normalizeSkillPrompts(current.system.body.contents[1]),normalizeSkillPrompts(previous.system.body.contents[0]),"Structure des onglets modifiée au-delà des 23 prompts");
 assert.match(css,/h0d-pj-status-banner \.h0d-pj-status-inline/,"CSS horizontal manquant");
 assert.match(css,/flex-direction: row !important/,"Le bandeau doit etre horizontal");
 
