@@ -5,10 +5,10 @@ const src=await readFile(new URL("../scripts/h0d-ammo-recovery.js",import.meta.u
 const main=await readFile(new URL("../scripts/h0d-template-manager.js",import.meta.url),"utf8");
 const manifest=JSON.parse(await readFile(new URL("../module.json",import.meta.url),"utf8"));
 
-assert.equal(manifest.version,"1.7.33");
-assert.ok(main.includes('const MODULE_VERSION = "1.7.33";'),"MODULE_VERSION non alignée");
+assert.equal(manifest.version,"1.7.35");
+assert.ok(main.includes('const MODULE_VERSION = "1.7.35";'),"MODULE_VERSION non alignée");
 
-for(const family of ["Fleche","Carreau","Projectile"])
+for(const family of ["Fleche","Carreau","Projectile","Javelot"])
   assert.ok(src.includes('"'+family+'"'),"Famille récupérable absente : "+family);
 
 assert.ok(src.includes("Faune:      {standard:75, reinforced:90}"),"Taux Faune incorrects");
@@ -32,4 +32,4 @@ assert.ok(main.includes("registerAmmoRecoverySettings"),"Réglage récupération
 assert.ok(main.includes("registerAmmoRecoveryHooks"),"Hooks récupération non enregistrés");
 assert.ok(main.includes("recoverAmmo:openPendingAmmoRecovery"),"API de reprise d'une récupération en attente absente");
 
-console.log("Ammo recovery workflow 1.7.33 OK");
+console.log("Ammo recovery workflow 1.7.35 OK");

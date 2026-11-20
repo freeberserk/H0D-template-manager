@@ -1,7 +1,7 @@
 const MODULE_ID = "h0d-template-manager";
 const SETTING = "ammoRecoveryState";
 
-const RECOVERABLE_AMMO_TYPES = new Set(["Fleche","Carreau","Projectile"]);
+const RECOVERABLE_AMMO_TYPES = new Set(["Fleche","Carreau","Projectile","Javelot"]);
 
 const RECOVERY_RATES = Object.freeze({
   Faune:      {standard:75, reinforced:90},
