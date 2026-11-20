@@ -1,3 +1,10 @@
+## v1.7.35 — Compatibilité distincte des javelots
+
+- Ajout de `Javelot` aux sélecteurs de familles de munitions d'Arme v2.9 et Objet v3.0, sans remplacement des anciens types `Projectile`, `Fleche`, etc.
+- Maintien de la récupération de projectiles au titre des règles existantes, y compris pour les javelots nouvellement classés.
+- Synchronisation contrôlée des modèles ; aucune modification silencieuse de l'inventaire ou des valeurs de Fronde de chasse.
+- Test d'intégrité des sélecteurs, du registre et du moteur de récupération.
+
 ## v1.7.33 — Type Jeton dans la fiche Ressource
 - Nouvelle version H0D_Ressource v2.6, identifiant conservé, choix `Jeton` ajouté à `H0D_Ressource_Type`.
 - Aucun champ existant ni valeur des ressources classiques modifié ; pas de migration implicite des inventaires.
