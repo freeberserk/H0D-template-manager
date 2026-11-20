@@ -1,3 +1,16 @@
+H0D Template Manager v1.7.36 — PJ v3.77 — vérification BAC-à-SABLES
+1. Mettre à jour le module vers v1.7.36 et vérifier la présence du template PJ v3.77 dans le gestionnaire.
+2. En BAC, faire un snapshot/export des Actors avant installation et synchronisation.
+3. Installer/mettre à jour le template PJ v3.77. Ne pas synchroniser les Actors existants avant d'avoir vérifié une fiche test.
+4. Vérifier les cinq valeurs du bandeau (PV, DEF, initiative, PA restantes, Focus) en changeant au moins une valeur d'origine pour chacune.
+5. Contrôler les quatre onglets et leur ordre, puis les raccourcis d'attaque, de dégâts et les quatre actions Focus.
+6. Compétences, 8 Artisanats, Connaissances standards/personnalisées : ouvrir le dialogue de jet, vérifier d20 / Faire 10 / Faire 20 avec bonus et malus, et les cartes de chat.
+7. Vérifier les 10 panneaux repliables, leurs ouvertures, changements d'onglets et la lisibilité à petite largeur.
+8. Inventaire, statut des armes/armures, munitions, charges, ressources et transferts vers/depuis la monture.
+9. Avec un joueur propriétaire de sa fiche, confirmer qu'il ne peut pas modifier les 31 champs techniques ni utiliser les actions Synchroniser/Annuler ; tester ensuite avec le MJ.
+10. Sur une copie de PJ après sauvegarde, vérifier la migration des anciennes données, le passage de niveau, le retour arrière et les calculs de repos. Les règles de repos, charge et PA n'ont pas été changées.
+11. Seulement ensuite, décider de synchroniser les Actors existants. Les tests GitHub sont statiques : la validation réelle sur Foundry reste à effectuer.
+
 H0D Template Manager v1.7.32 — BAC-à-SABLES
 1. Démarrer Foundry sans action de maintenance : Audit final doit être désactivé ; Refaire l'audit disponible.
 2. Installer/mettre à jour les templates seuls : audit automatique silencieux sans export ; Audit final reste désactivé.
