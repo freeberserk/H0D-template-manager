@@ -1,3 +1,11 @@
+## v1.7.35 — Famille de munition Javelot distincte
+
+- Modèles H0D_Arme **v2.9** et H0D_Objet **v3.0** : nouveau choix `Javelot` pour ne plus mélanger les javelots, les flèches et les billes de fronde.
+- Identifiants de modèles inchangés. Nouvelle option uniquement : aucun champ, dégât, classe d'arme ou Actor existant n'est remplacé par l'installation.
+- Le suivi de récupération après combat reconnaît aussi la famille `Javelot`, avec les taux déjà utilisés pour les autres projectiles, sans nouvelle probabilité.
+- Après installation des nouveaux modèles, **migrer explicitement** les valeurs de l'arme Javelot de chasse et du lot de javelots sur les acteurs concernés, après sauvegarde. Le module ne migre pas automatiquement les inventaires.
+- Les paramètres de la Fronde de chasse restent **inchangés**, car les versions Fer-Hom et Catalogue divergent et nécessitent une décision MJ.
+
 ## v1.7.34 — Fiche PJ v3.75 : jets uniformisés
 
 - **Compétences, Artisanats et Connaissances** : clic sur « Total / jet » (ou le résultat du raccourci) → un seul dialogue CSB avec **Mode de test** (Lancer le d20 / Faire 10 / Faire 20) et **Bonus / malus situationnel** (signé, défaut 0).
