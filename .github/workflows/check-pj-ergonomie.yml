@@ -1,0 +1,20 @@
+name: Vérification statique PJ — proposition ergonomique
+on:
+  pull_request:
+    paths:
+      - 'proposals/H0D_Actor-template-PJ_v3.75.json'
+      - 'tests/test-pj-ergonomie.cjs'
+      - '.github/workflows/check-pj-ergonomie.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pj-ergonomie:
+    name: Contrôler les clés, jets et tableaux PJ
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exécuter les tests statiques
+        run: node tests/test-pj-ergonomie.cjs
