@@ -735,3 +735,54 @@
   word-break: normal;
   overflow-wrap: anywhere;
 }
+
+
+/* Proposition BAC PJ 3.75 : ergonomie des données (sans règles nouvelles) */
+.h0d-pj-status-strip {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 5px;
+  align-items: center;
+  padding: 5px 1px;
+}
+.h0d-pj-status-strip .h0d-pj-status-cell {
+  display: block;
+  padding: 6px 5px;
+  text-align: center;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid rgba(119,214,220,.32);
+  border-radius: 5px;
+  background: rgba(18,28,32,.86);
+  color: #e9e5de;
+}
+.h0d-pj-status-strip .h0d-pj-status-cell strong {
+  color: #b5f4f3;
+  margin-right: 5px;
+}
+@media (max-width: 900px) {
+  .h0d-pj-status-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 590px) {
+  .h0d-pj-status-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* La colonne de jet apparaît immédiatement après le nom, sans supprimer les champs. */
+.h0d-pj-sheet .h0d-skills-detailed table { table-layout: fixed; min-width: 880px; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(1) { width: 20%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(2) { width: 10%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(3) { width: 6%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(4) { width: 5%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(5) { width: 15%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(6) { width: 9%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(7) { width: 13%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(8) { width: 12%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(9) { width: 10%; }
+.h0d-pj-sheet .h0d-craft-table { table-layout: fixed; }
+.h0d-pj-sheet .h0d-craft-table tr > :nth-child(1) { width: 24%; }
+.h0d-pj-sheet .h0d-craft-table tr > :nth-child(2) { width: 11%; }
+.h0d-pj-sheet .h0d-craft-table tr > :nth-child(3) { width: 6%; }
+.h0d-pj-sheet .h0d-craft-table tr > :nth-child(4) { width: 6%; }
+.h0d-pj-sheet .h0d-craft-table tr > :nth-child(5) { width: 15%; }
+.h0d-pj-sheet .h0d-craft-table tr > :nth-child(6) { width: 10%; }
+.h0d-pj-sheet .h0d-craft-table tr > :nth-child(7) { width: 14%; }
+.h0d-pj-sheet .h0d-craft-table tr > :nth-child(8) { width: 14%; }
