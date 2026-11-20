@@ -786,3 +786,41 @@
 .h0d-pj-sheet .h0d-craft-table tr > :nth-child(6) { width: 10%; }
 .h0d-pj-sheet .h0d-craft-table tr > :nth-child(7) { width: 14%; }
 .h0d-pj-sheet .h0d-craft-table tr > :nth-child(8) { width: 14%; }
+
+/* PJ v3.79 — bandeau principal sur toute la largeur du corps de fiche.
+   Un seul Label CSB contient les cinq valeurs afin de ne pas dépendre
+   de l'empilement interne des panneaux d'en-tête. */
+.h0d-pj-status-banner {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 0 8px;
+}
+.h0d-pj-status-banner .h0d-pj-status-inline {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 100%;
+  gap: 6px;
+}
+.h0d-pj-status-banner .h0d-pj-status-inline > .h0d-pj-status-cell {
+  display: flex;
+  flex: 1 1 112px;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  white-space: nowrap;
+  text-align: center;
+  padding: 7px 8px;
+  font-weight: 700;
+  border: 1px solid rgba(119,214,220,.32);
+  border-radius: 5px;
+  background: rgba(18,28,32,.86);
+  color: #e9e5de;
+}
+.h0d-pj-status-banner .h0d-pj-status-inline > .h0d-pj-status-cell strong {
+  color: #b5f4f3;
+  margin-right: 5px;
+}
