@@ -1,3 +1,11 @@
+## v1.7.37 — PJ v3.78 : barème de repos proportionnel
+
+- Mauvaise nuit : maximum du DV du **dernier niveau acquis** dans l'historique ; nuit normale : **1/3 des PV max** ; camp sûr : **1/2 des PV max** (fractions arrondies vers le bas) ; refuge véritable : PV restaurés au maximum.
+- Aucun DV valide dans l'historique : aucun soin pour la mauvaise nuit, et avertissement explicite au joueur/MJ plutôt qu'un DV supposé.
+- Boutons de repos, PV max, règles de progression, attaques, Focus et inventaire préservés. Le template PJ v3.78 est dans le registre canonique ; v3.77 conservée.
+- **Installer** H0D Template Manager v1.7.37 puis **Installer/mettre à jour** le template PJ v3.78 dans le gestionnaire. Tester sur une copie BAC et sauvegarder avant toute synchronisation des personnages existants.
+- Le barème peut faire récupérer davantage en mauvaise nuit qu'en nuit normale à bas niveau : non ajusté sans accord.
+
 ## v1.7.36 — PJ v3.77 : refonte ergonomique distribuée dans Foundry
 
 - Fiche PJ v3.77 désormais **canonique** (registres/ZIP/Release) ; anciennes versions v3.74 et v3.75 conservées.
@@ -80,7 +88,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.36
+# H0D Template Manager — v1.7.37
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 

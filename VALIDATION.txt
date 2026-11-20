@@ -1,3 +1,15 @@
+H0D Template Manager v1.7.37 — PJ v3.78 — récupération des PV
+1. Dans BAC-à-SABLES, exporter un snapshot et mettre à jour le module puis le template PJ v3.78.
+2. Vérifier les quatre gains de repos : mauvaise nuit = DV max du dernier niveau, nuit normale = floor(PV max/3), camp sûr = floor(PV max/2), refuge = PV complets.
+3. Vérifier toutes les classes de dernier niveau : Robuste (10 PV), Fort/Rapide (8 PV), Intelligent/Dévoué/Charismatique (6 PV). Tester un PJ multiclasse dont le dernier niveau diffère de sa classe initiale.
+4. Avec 30 PV maximum et 4 PV actuels : dernier DV d8 => 12 PV après mauvaise nuit ; nuit normale => 14 PV ; camp sûr => 19 PV ; refuge => 30 PV (tester sur des copies indépendantes).
+5. Avec un historique de niveaux absent ou incohérent : le bouton Mauvaise nuit ne doit pas appliquer de soins arbitraires et doit afficher un avertissement.
+6. Avec 31 PV max, vérifier les arrondis : normale = 10 PV et camp sûr = 15 PV.
+7. Avec un PJ à 1 PV du maximum, les quatre actions doivent s'arrêter au plafond et ne jamais le dépasser.
+8. Vérifier que les boutons de repos mettent à jour H0D_PV_Actuels, sans changer l'historique, les rangs, les PA, le Focus, l'inventaire ou les autres ressources.
+9. Tester un PJ existant après sauvegarde/synchronisation volontaire ; confirmer que les données de sa fiche sont préservées.
+10. Aucun test GitHub ne garantit le résultat réel du moteur CSB ; valider le résultat affiché et les quatre clics dans Foundry.
+
 H0D Template Manager v1.7.36 — PJ v3.77 — vérification BAC-à-SABLES
 1. Mettre à jour le module vers v1.7.36 et vérifier la présence du template PJ v3.77 dans le gestionnaire.
 2. En BAC, faire un snapshot/export des Actors avant installation et synchronisation.
