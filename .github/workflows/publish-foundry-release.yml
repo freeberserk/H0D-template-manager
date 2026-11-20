@@ -1,0 +1,76 @@
+name: Publier le module Foundry H0D
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "module.json"
+      - "scripts/**"
+      - "styles/**"
+      - "templates/**"
+      - "data/**"
+      - "reference/**"
+      - ".github/workflows/publish-foundry-release.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: h0d-template-manager-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Construire et publier la Release Foundry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lire la version du module
+        id: manifest
+        shell: bash
+        run: |
+          VERSION="$(node -p "JSON.parse(require('node:fs').readFileSync('module.json','utf8')).version")"
+          test -n "$VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Contrôler le template PJ
+        shell: bash
+        run: |
+          node tests/test-pj-skill-dialog.cjs
+
+      - name: Préparer les deux fichiers de distribution
+        shell: bash
+        run: |
+          test -f module.json
+          test -f data/templates/H0D_Actor-template-PJ-v3.75.json
+          zip -q -r "$RUNNER_TEMP/h0d-template-manager.zip" module.json scripts styles templates data reference
+          cp module.json "$RUNNER_TEMP/module.json"
+          unzip -l "$RUNNER_TEMP/h0d-template-manager.zip" | grep -F "data/templates/H0D_Actor-template-PJ-v3.75.json"
+
+      - name: Créer ou actualiser la Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.manifest.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.manifest.outputs.version }}
+        run: |
+          set -euo pipefail
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG existante : remplacement des deux assets Foundry."
+            gh release upload "$RELEASE_TAG" \
+              "$RUNNER_TEMP/module.json#module.json" \
+              "$RUNNER_TEMP/h0d-template-manager.zip#h0d-template-manager.zip" \
+              --clobber
+          else
+            gh release create "$RELEASE_TAG" \
+              "$RUNNER_TEMP/module.json#module.json" \
+              "$RUNNER_TEMP/h0d-template-manager.zip#h0d-template-manager.zip" \
+              --target "$GITHUB_SHA" \
+              --title "H0D Template Manager v$RELEASE_VERSION" \
+              --notes "Mise à jour du module Foundry : template PJ v3.75. Jets d20, Faire 10 et Faire 20 réunis avec le bonus/malus situationnel ; accès restauré à tous les jets." \
+              --latest
+          fi
