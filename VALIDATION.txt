@@ -1,3 +1,15 @@
+H0D Template Manager v1.7.38 — PJ v3.79 — CORRECTION DES JETS ET BANDEAU
+1. Dans BAC-à-SABLES, sauvegarder les Actors et installer le Template Manager v1.7.38 puis le PJ v3.79, sans synchroniser directement les fiches de campagne.
+2. Ouvrir une fiche PJ en tant que joueur propriétaire. Cliquer le Total / jet d'une compétence principale : vérifier que le choix de mode apparaît.
+3. Répéter le contrôle pour un Artisanat, une Connaissance dynamique, un raccourci de compétence et le test Focus.
+4. Pour chacun, tester Lancer le d20, Faire 10 et Faire 20, plus un bonus/malus négatif et positif ; vérifier le total et la carte dans le chat.
+5. Tester un compte MJ. Vérifier que l'en-tête Jet d20 libre et les autres macros d'attaque restent fonctionnels.
+6. Vérifier visuellement PV / DEF / INIT / PA / FOCUS sur une même ligne au-dessus des onglets à largeur normale, puis le retour à la ligne sur fenêtre étroite.
+7. Contrôler l'inventaire, les 4 repos, l'historique de progression et les permissions techniques. Après réussite seulement, synchroniser les PJ existants.
+8. IMPORTANT : GitHub Actions valide la structure ; l'exécution dans Foundry / CSB reste à confirmer sur le BAC.
+
+---
+
 H0D Template Manager v1.7.37 — PJ v3.78 — récupération des PV
 1. Dans BAC-à-SABLES, exporter un snapshot et mettre à jour le module puis le template PJ v3.78.
 2. Vérifier les quatre gains de repos : mauvaise nuit = DV max du dernier niveau, nuit normale = floor(PV max/3), camp sûr = floor(PV max/2), refuge = PV complets.
