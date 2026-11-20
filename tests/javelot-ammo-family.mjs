@@ -35,5 +35,5 @@ for(const [name,newTemplate,oldTemplate,key,id,newPath] of [
   assert.ok(script.includes('file:"'+newPath+'"'));
 }
 assert.match(recover,/RECOVERABLE_AMMO_TYPES = new Set\(\["Fleche","Carreau","Projectile","Javelot"\]\)/);
-assert.match(script,/const MODULE_VERSION = "1\.7\.35";/);
+assert.match(script,/const MODULE_VERSION = "1\.7\.36";/);
 console.log("Famille Javelot isolée, sélecteurs et récupération : OK");
