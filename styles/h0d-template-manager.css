@@ -227,7 +227,18 @@
 .h0d-pj-sheet .h0d-ammo-subpanel { margin-top: 8px; }
 
 .h0d-pj-sheet .h0d-skills-detailed { overflow-x: auto; }
-.h0d-pj-sheet .h0d-skills-detailed table { min-width: 920px; }
+.h0d-pj-sheet .h0d-skills-detailed table { min-width: 850px; table-layout: fixed; }
+/* PJ v3.75 — maintenir la colonne Total / jet dans la zone visible après suppression des colonnes 10 / 20. */
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(1) { width: 19%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(2) { width: 6%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(3) { width: 5%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(4) { width: 13%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(5) { width: 10%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(6) { width: 13%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(7) { width: 11%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(8) { width: 10%; }
+.h0d-pj-sheet .h0d-skills-detailed table tr > :nth-child(9) { width: 13%; }
+.h0d-pj-sheet .h0d-skills-detailed table input { min-width: 0; max-width: 100%; }
 .h0d-pj-sheet .h0d-skill-take-note {
   display: block;
   margin: 0 0 7px;
