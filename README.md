@@ -1,3 +1,12 @@
+## v1.7.36 — PJ v3.77 : refonte ergonomique distribuée dans Foundry
+
+- Fiche PJ v3.77 désormais **canonique** (registres/ZIP/Release) ; anciennes versions v3.74 et v3.75 conservées.
+- Bandeau compact PV / DEF / Initiative / PA restantes / Focus ; raccourcis d'attaque et actions Focus prioritaires.
+- Totaux cliquables des compétences, Artisanats et Connaissances placés près de leurs noms. Les modes d20, Faire 10 et Faire 20 de v3.75 restent disponibles dans la fenêtre de jet.
+- Panneaux secondaires repliables ; monture refermée par défaut ; champs techniques réservés à l'édition MJ.
+- **Installation :** mettre à jour H0D Template Manager v1.7.36 dans Foundry, installer le template PJ v3.77 avec le gestionnaire, puis tester le rendu et les permissions en BAC-à-SABLES. Synchroniser les Actors existants **uniquement après snapshot de sécurité** et confirmation des tests.
+- Aucun changement des règles de PV, charge, repos, dépense de PA ni de progression. Voir `proposals/RAPPORT-PJ-v3.75-ergonomie.md` pour l'audit détaillé, les risques et les tests.
+
 ## v1.7.35 — Famille de munition Javelot distincte
 
 - Modèles H0D_Arme **v2.9** et H0D_Objet **v3.0** : nouveau choix `Javelot` pour ne plus mélanger les javelots, les flèches et les billes de fronde.
