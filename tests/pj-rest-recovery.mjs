@@ -14,8 +14,8 @@ const get=(o,key)=>{let item=null;walk(o.system,n=>{if(n.key===key){assert(!item
 assert.equal(previous._id,updated._id);
 assert.equal(updated.name,"H0D_Actor-template-PJ v3.78");
 assert.equal(updated.system.templateSystemUniqueVersion,previous.system.templateSystemUniqueVersion+1);
-assert.equal(register.version,"1.7.37");
-assert.match(manager,/name:"H0D_Actor-template-PJ v3\.78", version:"3\.78", file:"H0D_Actor-template-PJ-v3\.78\.json"/);
+assert.equal(register.version,"1.7.38");
+assert.match(manager,/name:"H0D_Actor-template-PJ v3\.79", version:"3\.79", file:"H0D_Actor-template-PJ-v3\.79\.json"/);
 
 const classes={Robuste:10,Fort:8,Rapide:8,Intelligent:6,Devoue:6,Charismatique:6};
 const poor=get(updated,"H0D_Repos_Danger_Gain_Calc");
