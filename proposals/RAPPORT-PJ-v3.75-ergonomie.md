@@ -1,12 +1,12 @@
 # Proposition ergonomique — template PJ v3.75 (BAC uniquement)
 
-**État : prototype importable / validation statique réalisée / validation Foundry non effectuée.**
+**État : intégration au package Foundry v1.7.36 / template PJ officiel v3.77 ; validation statique réalisée / validation Foundry non effectuée.**
 
 ## Sources et gestion des versions
 
 - Source de référence : `data/templates/H0D_Actor-template-PJ-v3.74.json`, conservée intacte.
 - Base effectivement modifiée : `data/templates/H0D_Actor-template-PJ-v3.75.json` déjà publiée (corrections des jets d20 / Faire 10 / Faire 20 conservées).
-- Proposition autonome : `proposals/H0D_Actor-template-PJ_v3.75.json`, sans modification du registre du Template Manager.
+- Archive conservée : `proposals/H0D_Actor-template-PJ_v3.75.json`. Version **officielle distribuée** : `data/templates/H0D_Actor-template-PJ-v3.77.json`, enregistrée dans le Template Manager v1.7.36.
 - Feuille de style complémentaire : `styles/h0d-template-manager.css` sur la branche de proposition uniquement.
 - **La v3.75 existante de `main` n'a pas été remplacée.** Un numéro de version de production supérieur à 3.75 sera nécessaire avant fusion et publication, après validation.
 
@@ -68,4 +68,4 @@
 - **Implémenté** : JSON ergonomique complet, feuille CSS sur branche séparée, tests statiques.
 - **Vérifié statiquement** : structure JSON, clés, 4 onglets, conteneurs, formules, messages de jet et permissions configurées.
 - **À tester dans Foundry** : rendu, saisies, repli des panneaux, permissions effectives, actions Focus/combat, import de template et migration des fiches existantes.
-- **Bloqué volontairement** : fusion dans `main` et Release Foundry tant que la proposition n'a pas reçu une validation BAC.
+- **Distribué sur `main` / Release Foundry** : v1.7.36 avec le template canonique PJ v3.77. **Non validé en jeu** : effectuer les tests BAC avant de synchroniser les fiches de campagne.
