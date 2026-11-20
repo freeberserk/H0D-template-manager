@@ -2,7 +2,7 @@ name: Vérification statique PJ — proposition ergonomique
 on:
   pull_request:
     paths:
-      - 'proposals/H0D_Actor-template-PJ_v3.75.json'
+      - 'data/templates/H0D_Actor-template-PJ-v3.77.json'
       - 'tests/test-pj-ergonomie.cjs'
       - '.github/workflows/check-pj-ergonomie.yml'
   workflow_dispatch:
