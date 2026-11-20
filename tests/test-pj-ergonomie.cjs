@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const read = name => JSON.parse(fs.readFileSync(path.join(__dirname,"..",name),"utf8"));
 const old = read("data/templates/H0D_Actor-template-PJ-v3.75.json");
-const next = read("proposals/H0D_Actor-template-PJ_v3.75.json");
+const next = read("data/templates/H0D_Actor-template-PJ-v3.77.json");
 const walk = (n,fn) => {
   if (!n || typeof n !== "object") return;
   if (Array.isArray(n)) { n.forEach(v => walk(v,fn)); return; }
@@ -28,6 +28,7 @@ function index(o) {
 }
 const A=index(old), B=index(next);
 assert.equal(next.type,"_template");
+assert.equal(next.name,"H0D_Actor-template-PJ v3.77");
 assert.equal(old._id,next._id,"Identifiant du template");
 assert.deepEqual(old.system.attributeBar,next.system.attributeBar,"Interface Actor commune");
 assert.deepEqual(A.keys,B.keys,"Clés supprimées, ajoutées ou renommées");
@@ -75,4 +76,4 @@ walk(tabs[3],n=>{
 });
 assert.equal(techFieldCount,31);
 assert.equal(protectedActions,2);
-console.log("OK : onglets, 419 clés, 67 rollMessages, 14 itemContainers, 2 tableaux dynamiques, protections techniques et 5 stats.");
+console.log("OK : PJ 3.77 distribué, onglets, 419 clés, 67 rollMessages, 14 itemContainers, 2 tableaux dynamiques, protections techniques et 5 stats.");
