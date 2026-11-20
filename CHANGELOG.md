@@ -1,3 +1,14 @@
+## v1.7.37 — Template PJ v3.78 : nouveau système de repos
+
+- **Mauvaise nuit** : récupération égale au **maximum du DV de la classe du dernier niveau** inscrit dans l'historique `H0D_Skill_Progression`. Le dernier niveau est identifié par `H0D_PJ_Niveau_Calc` et la classe par `find()` de Custom System Builder. Fort/Rapide : d8 ; Robuste : d10 ; Intelligent/Dévoué/Charismatique : d6. Dans le multiclassage, c'est le **dernier niveau acquis**, et non la classe majoritaire, qui compte.
+- Si le niveau/la classe n'est pas retrouvable dans l'historique, le gain est **0** et le bouton Mauvaise nuit avertit sans modifier les PV : pas d'estimation inventée.
+- **Nuit normale** : `floor(H0D_PV_Max_Calc / 3)` PV ; **camp sûr** : `floor(H0D_PV_Max_Calc / 2)` PV ; **refuge véritable** : retour à tous les PV maximum (inchangé).
+- Les soins sont plafonnés au maximum de PV existant ; les boutons `H0D_Repos_Danger`, `H0D_Repos_Normal`, `H0D_Repos_CampSur` et `H0D_Repos_Refuge` conservent leurs clés et leur action de mise à jour des PV.
+- Aucun autre calcul de combat, ressource, inventaire ou progression n'est changé. Template PJ v3.77 et versions antérieures conservés. Identifiant du template inchangé `uympqkQiS6MHHmIx`.
+- Test de non-régression `node tests/pj-rest-recovery.mjs` ajouté à GitHub Actions, avec simulation de boutons, des plafonds et du cas sans historique.
+- **Attention :** dans certaines configurations de bas niveau, le dernier DV maximal peut être supérieur au tiers des PV max ; cette particularité du barème est volontairement conservée, sans arbitrage implicite.
+- À vérifier dans **Foundry v14 / CSB 6.0.2** avant synchronisation des fiches de campagne : formule `find()`, historique de progression (y compris multi-classe), affichage des gains et application des quatre boutons.
+
 ## v1.7.36 — Template PJ v3.77 : refonte ergonomique et accès rapide
 
 - Le **template PJ canonique v3.77** est ajouté à `data/templates/` et référencé dans le registre officiel. La v3.74 et la v3.75 restent disponibles et intactes.
