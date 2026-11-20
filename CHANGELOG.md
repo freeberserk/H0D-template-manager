@@ -1,3 +1,15 @@
+## v1.7.36 — Template PJ v3.77 : refonte ergonomique et accès rapide
+
+- Le **template PJ canonique v3.77** est ajouté à `data/templates/` et référencé dans le registre officiel. La v3.74 et la v3.75 restent disponibles et intactes.
+- **En-tête** : PV actuels/max, DEF, initiative, points d'action *restants*/max et niveau du Focus, sans création de nouveau champ persistant. Le jet d20 libre est conservé.
+- **Personnage** : ordre des sections modifié en faveur des attaques rapides, du Focus et des compétences favorites. Caractéristiques et repos repliables.
+- **Compétences & progression** : colonne « Total / jet » rapprochée du nom pour les compétences, les artisanats et les connaissances ; aides à la progression et notes regroupées en panneaux repliables.
+- **Inventaire & monture** : titres distinguant le contenu sur le PJ, monture repliée par défaut, équipements et règles de transfert inchangés.
+- **Technique** : 31 champs de saisie configurés pour l'édition MJ (`editRole=4`) ; deux actions sensibles configurées pour une visibilité MJ (`role=4`). Comportement réel à confirmer avec des comptes joueur et MJ dans Foundry.
+- **Contrôle statique** : 4 onglets, 419 clés inchangées, 67 messages de jet conservés, 14 `itemContainer` inchangés, 2 tableaux dynamiques conservés. Aucun changement des formules et règles de jeu existantes.
+- La refonte est intégrée au **module officiel et à l'archive Foundry** : mettre à jour H0D Template Manager puis installer le template PJ v3.77 depuis son interface. **La synchronisation des PJ existants reste une opération distincte et volontaire.**
+- **Tests Foundry v14 / CSB 6.0.2 nécessaires** avant adoption en campagne. Dossier de suivi : `proposals/RAPPORT-PJ-v3.75-ergonomie.md`.
+
 ## v1.7.35 — Compatibilité distincte des javelots
 
 - Ajout de `Javelot` aux sélecteurs de familles de munitions d'Arme v2.9 et Objet v3.0, sans remplacement des anciens types `Projectile`, `Fleche`, etc.
