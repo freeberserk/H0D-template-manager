@@ -38,6 +38,7 @@ jobs:
           node tests/pj-skill-take-10-20.mjs
           node tests/test-pj-skill-dialog.cjs
           node tests/pj-v3-79-skill-dialog.mjs
+          node tests/pj-v3-80-roll-restore.mjs
           node tests/test-pj-ergonomie.cjs
           node tests/pj-rest-recovery.mjs
           node tests/creature-ability-rolls.mjs
