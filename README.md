@@ -1,3 +1,11 @@
+## v1.7.39 — Hotfix PJ v3.80 : compétences de nouveau au clic d20
+
+- Les versions v3.75 à v3.79 avaient introduit un sélecteur de mode dans les 23 jets de compétence et Focus, bloquant les clics constatés dans BAC.
+- Le template PJ v3.80 rétablit **exactement** les 22 rollMessages d20 directs de la v3.74, plus un jet Focus direct. Il retire provisoirement le dialogue Faire 10 / Faire 20 des boutons pour privilégier des jets fiables.
+- Huit boutons Artisanat récupèrent l'icône de dé `dice-d20`.
+- Les autres fonctions et le bandeau horizontal restent inchangés.
+- Le Template Manager 1.7.39 installe le PJ 3.80 ; il faut le tester sur un PJ en BAC avant synchronisation globale. Voir `VALIDATION.txt`.
+
 ## v1.7.38 — PJ v3.79 : jets de compétences et bandeau horizontal
 
 - Corrige les 23 déclencheurs de jets de compétences, Artisanats, Connaissances, raccourcis et Focus : les deux saisies CSB (mode d20 / Faire 10 / Faire 20 et bonus/malus) sont désormais des prompts autonomes, avec des délimiteurs valides.
@@ -96,7 +104,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.38
+# H0D Template Manager — v1.7.39
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
