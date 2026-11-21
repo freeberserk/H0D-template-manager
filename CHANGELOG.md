@@ -1,3 +1,15 @@
+## v1.7.39 — HOTFIX : PJ v3.80, retour des jets de compétences fiables
+
+- Régression bloquante observée en Foundry : les clics sur les compétences ne lançaient plus rien dans les templates v3.75 à v3.79 après l'intégration des choix d20 / Faire 10 / Faire 20.
+- Rétablissement **exact** des 22 `rollMessage` de jets d20 de la fiche PJ v3.74 (compétences, raccourcis, Artisanats, Connaissances) ; le jet de Focus nouvellement cliquable utilise lui aussi le format d20 simple.
+- Suppression des `?{...}`, du calcul de mode dynamique et de l'usage de `H0D_Test_Mode` dans ces 23 boutons : d20 **direct au clic**, sans dialogue Faire 10 / Faire 20. Les options devront être repensées séparément et testées en Foundry avant réactivation.
+- Ajout de l'icône `dice-d20` aux 8 totaux d'Artisanat qui en étaient dépourvus.
+- Identifiant CSB, clés, calculs, classes, données, inventaire, combats, repos, progression et mise en page du bandeau horizontal inchangés.
+- Test non-régression `tests/pj-v3-80-roll-restore.mjs` : comparaison des 22 messages historiques et de toutes les structures autres que ces 23 actions / 8 icônes. CI exécutée par GitHub Actions.
+- **Validation nécessaire** dans le BAC Foundry v14 + CSB 6.0.2 : clic sur les compétences, résultat de chat, d20 et icône. Les tests statiques ne prouvent pas le fonctionnement des clics dans Foundry.
+
+---
+
 ## v1.7.38 — Template PJ v3.79 : jets de compétences réparés et bandeau horizontal
 
 - **Correction du défaut de jet :** les 23 messages de compétence / Artisanat / Connaissance / raccourci / Focus possédaient une séquence de prompts `concat(?{...},?{...})` et des délimiteurs CSB incomplets (ainsi qu'un séparateur excédentaire pour Focus). Les deux saisies sont désormais appelées explicitement par des expressions CSB distinctes et complètement fermées.
