@@ -1,3 +1,15 @@
+H0D Template Manager v1.7.39 / Template PJ v3.80 — HOTFIX JETS BLOQUANTS
+1. Dans BAC-à-SABLES, sauvegarder les fiches avant installation. Mettre à jour le module en v1.7.39 et installer le template PJ v3.80.
+2. Ouvrir une fiche PJ en compte joueur propriétaire ; cliquer sur une compétence (par exemple Perception). Le d20 doit être lancé DIRECTEMENT et une carte de résultat doit apparaître dans le chat.
+3. Tester un second jet (Acrobaties), les raccourcis, les huit Artisanats, une Connaissance dynamique et Focus ; vérifier les bonus existants.
+4. Vérifier que les huit Artisanats affichent l'icône dice-d20 et que les autres icônes de jet sont conservées.
+5. Vérifier que PV / DEF / INIT / PA / FOCUS restent disposés horizontalement sur une fenêtre large.
+6. Les modes Faire 10 / Faire 20 n'apparaissent plus dans ces commandes pendant ce hotfix : leur syntaxe avait rompu le fonctionnement des clics. Ne pas les considérer perdus dans les règles, seulement non automatisés.
+7. Tester hors combat une attaque, les points de vie, le repos et le passage de niveau pour repérer une régression.
+8. Une fois le test BAC concluant et le snapshot effectué, synchroniser les fiches du monde de campagne.
+9. Si les clics ne fonctionnent toujours pas, relever les erreurs de console F12 ainsi que la version du template réellement appliquée à l'Actor. Ne pas déclarer le problème résolu sans test Foundry.
+
+---
 H0D Template Manager v1.7.38 — PJ v3.79 — CORRECTION DES JETS ET BANDEAU
 1. Dans BAC-à-SABLES, sauvegarder les Actors et installer le Template Manager v1.7.38 puis le PJ v3.79, sans synchroniser directement les fiches de campagne.
 2. Ouvrir une fiche PJ en tant que joueur propriétaire. Cliquer le Total / jet d'une compétence principale : vérifier que le choix de mode apparaît.
