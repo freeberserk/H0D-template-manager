@@ -10,8 +10,8 @@ const [script,hbs,moduleText,readme] = await Promise.all([
 ]);
 const manifest=JSON.parse(moduleText);
 
-assert.equal(manifest.version,"1.7.41","Le manifest doit être en 1.7.41");
-assert.ok(script.includes('const MODULE_VERSION = "1.7.41";'),"MODULE_VERSION doit être en 1.7.41");
+assert.equal(manifest.version,"1.7.42","Le manifest doit être en 1.7.42");
+assert.ok(script.includes('const MODULE_VERSION = "1.7.42";'),"MODULE_VERSION doit être en 1.7.42");
 
 assert.ok(script.includes('order:-1000,button:true,visible:true,'),"Le Template Manager doit être le premier outil de Tokens.");
 
@@ -46,7 +46,7 @@ assert.equal(/promptAuditExport|exportAudit\(|createSnapshot\(|saveDataToFile/.t
   "Aucun export, téléchargement ou dialogue d'export ne doit se produire pendant le réaudit automatique.");
 // Régression fonctionnelle : audit sans export et traitement des erreurs.
 const buildAutomaticAudit=new Function(
-  "auditWorld","captureInitialAuditState","H0DTemplateManagerState","markAuditFinalRecommended","ui","console",
+  "auditWorld","captureInitialAuditState","H0DTemplateManagerState","markAuditFinalRecommended","ui","console","updateMaintenanceStage",
   automaticAudit+";return auditAfterTemplateUpdate;"
 );
 const autoState={lastAudit:null,auditDirty:true,lastMutation:"ancien état"};
@@ -55,7 +55,7 @@ const reportExpected={counts:{templates:{ok:12,update:0,absent:0},documents:{war
 const markDirty=reason=>{autoState.lastAudit=null;autoState.auditDirty=true;autoState.lastMutation=reason;};
 const notifications={info:message=>notices.push(["info",message]),error:message=>notices.push(["error",message])};
 const autoAudit=buildAutomaticAudit(async()=>{audits++;return reportExpected;},
-  async()=>{backups++;},autoState,markDirty,{notifications}, {error:()=>{}});
+  async()=>{backups++;},autoState,markDirty,{notifications}, {error:()=>{}},()=>{});
 assert.equal(await autoAudit("mise à jour canonique"),reportExpected,
   "Le réaudit doit renvoyer le dernier rapport.");
 assert.equal(backups,1,"Le réaudit doit vérifier la sauvegarde initiale interne.");
@@ -67,7 +67,7 @@ assert.equal(notices.filter(([type])=>type==="info").length,2,"Résultat de l'au
 const failState={lastAudit:null,auditDirty:false,lastMutation:""};
 const failingAudit=buildAutomaticAudit(async()=>{throw new Error("Audit de test");},
   async()=>{},failState,reason=>{failState.auditDirty=true;failState.lastMutation=reason;},
-  {notifications}, {error:()=>{}});
+  {notifications}, {error:()=>{}},()=>{});
 assert.equal(await failingAudit("mise à jour canonique"),null,
   "Un audit en échec ne doit pas être annoncé comme terminé.");
 assert.equal(failState.auditDirty,true,
@@ -90,7 +90,7 @@ assert.ok(updateFn.indexOf("await updateTemplate(entry)") < updateFn.indexOf("aw
 assert.ok(script.includes('await refreshAuditSilently("synchronisation du monde")'),"La synchronisation doit relancer un audit silencieux");
 assert.ok(script.includes('await refreshAuditSilently("réparation des équipements")'),"La réparation doit rafraîchir l'audit silencieusement");
 assert.ok(script.includes('markAuditFinalRecommended("migration des données sûres",{preserveReport:true})'),"La migration doit conserver son réaudit interne tout en recommandant l'audit final");
-assert.ok(script.includes('markAuditFinalRecommended("restauration des données")'),"La restauration doit recommander l'audit final");
+assert.ok(script.includes('await refreshAuditSilently("restauration des données")'),"La restauration doit réauditer le monde et recommander l'audit final");
 assert.ok(script.includes("const safeVersionCandidates=audit?.warningTriage"),"Les candidats de migration doivent rester disponibles sur un audit silencieux");
 assert.ok(script.includes("hasEquipmentRepair:!!audit && ("),"La réparation doit rester disponible sur un audit silencieux");
 assert.equal(script.includes("safeVersionCandidates=(!auditDirty && audit?.warningTriage)"),false,"auditDirty ne doit plus désactiver les migrations si un rapport courant existe");
@@ -119,7 +119,7 @@ const installButton=hbs.indexOf('data-action="installAll"');
 assert.ok(snapshotButton>=0 && auditButton>snapshotButton && installButton>auditButton,
   "La barre doit commencer par Snapshot puis Audit puis Installation");
 
-assert.ok(readme.includes("# H0D Template Manager — v1.7.41"),"README non aligné sur la version");
+assert.ok(readme.includes("# H0D Template Manager — v1.7.42"),"README non aligné sur la version");
 assert.ok(readme.includes("Audit final"),"README doit documenter le second bouton");
 
 const explicitAudit=script.slice(script.indexOf("static async _audit()"),script.indexOf("static async _installAll()"));
@@ -136,4 +136,4 @@ assert.ok(script.includes('initial ? entry.doc.getFlag?.(MODULE_ID,INITIAL_AUDIT
 assert.ok(script.includes('const sourceById=new Map(sourceData)'),"L’audit doit mettre en cache les composants par template");
 assert.ok(script.includes('commonInterfaceDifferences:r.status.commonInterfaceDifferences ?? []'),"Le rapport doit détailler les différences Actor");
 assert.ok(script.includes('if (exportNow === true) await exportAudit(report)'),"L’export d’audit exige une confirmation explicite");
-console.log("Template Manager audit workflow 1.7.41 OK");
+console.log("Template Manager audit workflow 1.7.42 OK");

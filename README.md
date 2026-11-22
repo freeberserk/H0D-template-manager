@@ -1,3 +1,13 @@
+## v1.7.42 — Tableau de bord de maintenance progressive (proposition BAC)
+
+- Conserve la **barre d'actions permanente** mais remplace la lecture figée des résultats par des catégories repliables, ordonnées automatiquement par le dernier audit : templates, fiches/compendiums, H0D Catalogue, équipements historiques, héritage. Les anomalies remontent en tête ; les catégories devenues conformes sont repliées et déplacées en bas, sans masquer leurs informations.
+- Après **Audit monde**, affiche un état des lieux des problèmes connus par l'audit ; les avertissements Catalogue restent séparés des écarts de structure CSB et des équipements historiques.
+- Toutes les opérations du manager disposent d'un **verrou anti-concurrence** avec un bandeau visible « en cours », le nom de l'étape, puis pour les longs traitements un compteur de progression (fiches, templates, armes/armures, actualisation Catalogue). Ne bloque pas la fenêtre et n'invente pas de pourcentage.
+- Après l'opération, le bandeau conserve **un bilan lisible** : traitement réussi/échoué, chiffres effectivement traités, nombre de signalements en moins/restants **si un nouvel audit a bien été effectué**. Annulation et erreur sont distinguées d'une réparation réussie.
+- **Installer / mettre à jour** ne réécrit plus indistinctement les 12 templates : seuls les templates absents ou non canoniques sont candidats ; audit silencieux automatique comme avant, avec mise à jour de l'ordre des sections.
+- La vérification des formules CSB en console reste un contrôle manuel séparé : l'audit d'intégrité n'exécute pas math.js/CSB.
+- Aucun changement de système de jets, de données d'Actor/Item, de migration sûre, de champs Catalogue ou de sauvegarde. Version candidate basée sur la branche de la PR #32 (Arme v3.0). **Tests réels BAC avant fusion/publication**.
+
 ## v1.7.41 — Arme v3.0 : correction des conditions de visibilité des traits (BAC)
 
 - Retour BAC du 22 novembre : ouverture de l'Arc lourd amélioré d'Aloy sous CSB 6.1.2 provoque `SyntaxError: Unexpected operator { (char 2)` pour les conditions `H0D_Arme_Traits_Table.*.H0D_Arme_Trait_Valeur.visibilityFormula` et `H0D_Arme_Trait_Parametre.visibilityFormula`.
@@ -119,7 +129,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.41
+# H0D Template Manager — v1.7.42
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 

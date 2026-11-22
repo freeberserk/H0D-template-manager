@@ -1,3 +1,12 @@
+## v1.7.42 — Fenêtre de maintenance progressive (BAC)
+
+- Barre de boutons fixe et affichage des résultats par catégorie, tri automatique selon l'audit et accordéons repliés pour les catégories résolues.
+- Suivi visible des opérations en cours (étape, progression lorsqu'il y a un total fiable), interdiction de lancer deux opérations simultanées.
+- Bilan après action : opérations effectives, erreurs et écarts restant au nouvel audit, sans confondre action annulée, succès d'écriture et conformité du monde.
+- Installer/mettre à jour : seuls les templates absents ou à mettre à jour sont modifiés ; réaudit silencieux et classement actualisé.
+- Préservation des mécanismes existants : migrations, comparaisons Catalogue, backups, restaurations, compendiums, règles de combat et templates identiques à la version précédente.
+- PR séparée et dépendante de la PR #32 (H0D_Arme v3.0 / v1.7.41) ; tests structurels + validations BAC obligatoires.
+
 ## v1.7.41 — H0D_Arme v3.0 : correction ciblée des visibilityFormula CSB
 
 - Symptôme : `SyntaxError: Unexpected operator { (char 2)` en ouvrant l'arc amélioré d'Aloy (BAC, CSB 6.1.2).

@@ -14,7 +14,7 @@ const get=(o,key)=>{let item=null;walk(o.system,n=>{if(n.key===key){assert(!item
 assert.equal(previous._id,updated._id);
 assert.equal(updated.name,"H0D_Actor-template-PJ v3.78");
 assert.equal(updated.system.templateSystemUniqueVersion,previous.system.templateSystemUniqueVersion+1);
-assert.equal(register.version,"1.7.41");
+assert.equal(register.version,"1.7.42");
 assert.match(manager,/name:"H0D_Actor-template-PJ v3\.81", version:"3\.81", file:"H0D_Actor-template-PJ-v3\.81\.json"/);
 
 const classes={Robuste:10,Fort:8,Rapide:8,Intelligent:6,Devoue:6,Charismatique:6};

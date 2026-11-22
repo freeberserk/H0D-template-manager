@@ -24,7 +24,7 @@ const collect=(root,fn)=>{
 assert.equal(previous._id,current._id,"Ne pas changer l'ID CSB stable");
 assert.equal(current.name,"H0D_Actor-template-PJ v3.79");
 assert.equal(current.system.templateSystemUniqueVersion,previous.system.templateSystemUniqueVersion+1);
-assert.equal(manifest.version,"1.7.41");
+assert.equal(manifest.version,"1.7.42");
 assert.match(manager,/name:"H0D_Actor-template-PJ v3\.81", version:"3\.81", file:"H0D_Actor-template-PJ-v3\.81\.json"/);
 
 const before=collect(previous.system,n=>n.type==="label"&&n.rollMessage?.includes("H0D_Test_Mode"));

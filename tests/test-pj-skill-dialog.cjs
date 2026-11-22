@@ -46,8 +46,8 @@ assert(quickTable.contents.every(row => row.length === 2),"Colonnes des raccourc
 assert.equal(knowledgeTable.rowLayout.length,12,"Colonnes de Connaissances");
 assert.equal(sheet._id,old._id,"L'identifiant CSB doit rester stable");
 assert.equal(sheet.name,"H0D_Actor-template-PJ v3.75");
-assert.equal(manifest.version,"1.7.41");
-assert.match(manager, /const MODULE_VERSION = "1\.7\.41";/);
+assert.equal(manifest.version,"1.7.42");
+assert.match(manager, /const MODULE_VERSION = "1\.7\.42";/);
 assert.match(manager, /file:"H0D_Actor-template-PJ-v3\.81\.json"/);
 const oldStable = structuredClone(old.system);
 const newStable = structuredClone(sheet.system);
