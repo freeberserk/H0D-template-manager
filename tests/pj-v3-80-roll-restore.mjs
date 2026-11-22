@@ -18,7 +18,7 @@ const collect=(o,fn)=>{const a=[];walk(o,n=>{if(fn(n))a.push(n);});return a;};
 assert.equal(after._id,before._id,"ID CSB du personnage modifie");
 assert.equal(after.name,"H0D_Actor-template-PJ v3.80");
 assert.equal(after.system.templateSystemUniqueVersion,before.system.templateSystemUniqueVersion+1);
-assert.equal(manifest.version,"1.7.40");
+assert.equal(manifest.version,"1.7.41");
 assert.match(manager,/name:"H0D_Actor-template-PJ v3\.81", version:"3\.81", file:"H0D_Actor-template-PJ-v3\.81\.json"/);
 assert.equal(index.find(x=>x.id===after._id)?.file,"H0D_Actor-template-PJ-v3.81.json");
 const historical=collect(reference.system,n=>n.type==="label"&&n.key&&typeof n.rollMessage==="string"&&

@@ -1,3 +1,10 @@
+## v1.7.41 — H0D_Arme v3.0 : correction ciblée des visibilityFormula CSB
+
+- Symptôme : `SyntaxError: Unexpected operator { (char 2)` en ouvrant l'arc amélioré d'Aloy (BAC, CSB 6.1.2).
+- Fix du format de trois conditions de visibilité de la table des traits d'arme : `H0D_Arme_Trait_Perso`, `H0D_Arme_Trait_Valeur` et `H0D_Arme_Trait_Parametre`. Retrait de `${` et `}$` (l'expression d'origine est conservée).
+- Nouveau template Arme v3.0, ancien v2.9 maintenu comme historique ; identifiant CSB et toutes les mécaniques inchangés.
+- Test de régression ajouté, contrôle CI et procédure BAC dans VALIDATION.txt. Ne pas assimiler l'audit de structure à une preuve d'exécution des formules dans Foundry.
+
 ## v1.7.40 — PJ v3.81 : corriger les types des formules de lecture des équipements
 
 - La console CSB signalait `addScalar` (opérandes `undefined`) et `larger` (opérandes `undefined` ou `string`) dans les tableaux de raccourcis armes/armures du PJ v3.80.

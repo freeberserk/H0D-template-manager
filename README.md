@@ -1,3 +1,11 @@
+## v1.7.41 — Arme v3.0 : correction des conditions de visibilité des traits (BAC)
+
+- Retour BAC du 22 novembre : ouverture de l'Arc lourd amélioré d'Aloy sous CSB 6.1.2 provoque `SyntaxError: Unexpected operator { (char 2)` pour les conditions `H0D_Arme_Traits_Table.*.H0D_Arme_Trait_Valeur.visibilityFormula` et `H0D_Arme_Trait_Parametre.visibilityFormula`.
+- Nouveau template **H0D_Arme v3.0** : sur les trois colonnes conditionnelles de la table de traits (`Perso`, `Valeur`, `Parametre`), suppression **uniquement** des délimiteurs `${...}$`, conservant exactement les prédicats `sameRow`, `equalText` et `switchCase`.
+- Ni paramètres de dégâts, ni portée, ni cooldown, ni caractéristiques, ni contenu des traits, ni sauvegarde d'Items existants ne sont modifiés par ce patch. Identifiant CSB du template stable ; version canonique incrémentée.
+- Les autres champs de visibilité hors table et les templates Armure/Objet/Machine ne sont pas modifiés : leur comportement devra être observé séparément si de nouvelles erreurs surviennent.
+- Tests structurels GitHub et test réel BAC requis ; ne pas synchroniser les armes du monde tant qu'une fiche test ne s'ouvre pas sans erreurs ciblées et que les conditions de visibilité des trois champs n'ont pas été vérifiées.
+
 ## v1.7.40 — PJ v3.81 : types numériques sécurisés dans les tableaux d'équipement (BAC)
 
 - Corrige quatre expressions de lecture dans le raccourci des armes et l'inventaire d'armures : portée (allonge), cooldown, bonus DEF actif et seuil de FOR du trait Lourd. CSB 6.1.2 pouvait recevoir `undefined` ou une chaîne dans ses opérations numériques (`addScalar` / `larger`).
@@ -111,7 +119,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.40
+# H0D Template Manager — v1.7.41
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 
