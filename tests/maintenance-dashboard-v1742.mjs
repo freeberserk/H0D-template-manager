@@ -70,4 +70,15 @@ for(const action of ["audit","installAll","synchronize","repairEquipment","repai
 }
 assert.ok(css.includes(".h0d-tm-workflow-group[open]"));
 assert.ok(!main.includes("localStorage."));
+const missingCatalogue=sample("2026-11-22T00:03:00Z",0,0,0);
+missingCatalogue.catalogueReference.available=false;
+assert.equal(buildMaintenanceFlow(missingCatalogue).groups.catalogue.state,"unavailable");
+const snapshot=maintenanceResult({action:"snapshot",label:"Snapshot",before,after:before,
+ executed:{actors:[],items:[]}});
+assert.equal(snapshot.state,"info");
+assert.match(snapshot.detail,/Snapshot JSON préparé/);
+const first=maintenanceResult({action:"audit",label:"Audit monde",before:null,after:before,executed:before});
+assert.match(first.headline,/Premier état des lieux/);
+assert.ok(!read("scripts/h0d-maintenance-dashboard.js").includes(".update("),
+  "Le calcul de présentation ne doit pas modifier les documents.");
 console.log("Maintenance progressive v1.7.42 : classification, ordre, bilans et UI OK.");
