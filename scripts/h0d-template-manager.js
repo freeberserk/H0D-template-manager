@@ -2112,7 +2112,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   }
   static async _restore() {
     const result=await restoreLastCycle();
-    if (result?.restored>0) markAuditFinalRecommended("restauration des données");
+    if (result?.restored>0) await refreshAuditSilently("restauration des données");
     await this.render({force:true});
     return result;
   }
@@ -2120,7 +2120,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static async _openTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); const doc=entry&&installedTemplate(entry); if (!doc) return ui.notifications.warn("H0D : template absent."); doc.sheet?.render(true); }
   static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Un audit du monde sera relancé sans demande d'export JSON.</p>`,"Mettre à jour"); if (!ok) return; const result=await updateTemplate(entry); await auditAfterTemplateUpdate(`mise à jour de ${entry.name}`); await this.render({force:true}); return result; }
   static async _auditTemplate(event,target) { const key=target.dataset.key; const report=await auditWorld(); const entry=TEMPLATE_INDEX.find(e=>e.key===key); const docs=report.documents.filter(d=>d.templateId===entry?.id); const bad=docs.filter(d=>d.status!=="ok"); ui.notifications.info(`H0D : ${entry?.name || key} — ${docs.length} fiche(s), ${bad.length} à examiner.`); H0DTemplateManagerState.lastAudit=report; await this.render({force:true}); return report; }
-  static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) markAuditFinalRecommended("retrait du template legacy"); await this.render({force:true}); return {removed}; }
+  static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) await refreshAuditSilently("retrait du template legacy"); await this.render({force:true}); return {removed}; }
   static async _repairEquipment() {
     const result=await repairEquipment();
     if (result && (result.weaponsDone+result.armorsDone)>0) {
