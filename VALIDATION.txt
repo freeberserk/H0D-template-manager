@@ -1,3 +1,17 @@
+H0D Template Manager v1.7.40 / Template PJ v3.81 — FORMULES NUMÉRIQUES (BAC)
+1. Sauvegarder le BAC et les fiches PJ ; mettre à jour le module puis installer uniquement le nouveau template PJ v3.81.
+2. Sur une copie de PJ, relever le nombre de nouvelles erreurs CSB Logger.js:39 lors de l'ouverture de l'inventaire et des raccourcis d'armes/armures. Les quatre expressions ciblées ne doivent plus émettre addScalar/larger.
+3. Arme simple à portée 9 m et sans trait Allonge : le raccourci doit afficher 9 m ; avec Allonge +3 m il doit afficher 12 m ; portée nulle ou absente => « — ».
+4. Arme sans cooldown : le raccourci affiche « — » ; avec un trait Surchauffe de durée positive : affiche « Gérer ». Vérifier que l'action de cooldown continue de fonctionner normalement.
+5. Armure inactive : bonus DEF actif = 0 ; armure active : bonus DEF de base + amélioration éventuelle (ex. 3+1=4). Les valeurs de la fiche et la DEF générale ne doivent pas changer sans cause.
+6. Armure active à trait Lourd, valeur de seuil éventuellement stockée en chaîne « 12 » : FOR 10 => insuffisant (1) ; FOR 14 => pas d'insuffisance (0). Vérifier également une armure sans trait Lourd.
+7. Ouvrir un ancien Item de PJ généré avant la nouvelle version : vérifier les affichages manquants, sans réécrire automatiquement ses champs.
+8. Retester les jets d20 des compétences/Artisanats/Focus, les attaques, munitions, charge et repos ; aucun des boutons ne doit avoir changé de fonctionnement.
+9. Faire l'audit après installation puis seulement, si les contrôles BAC réussissent, proposer la synchronisation volontaire des fiches du monde de campagne. Ne pas lancer de migration globale pour ces messages de console.
+10. S'il reste des erreurs, envoyer le texte des formules et les valeurs des propriétés de l'Item concerné ; les tests GitHub sont statiques et ne remplacent pas l'exécution réelle par CSB.
+
+---
+
 H0D Template Manager v1.7.39 / Template PJ v3.80 — HOTFIX JETS BLOQUANTS
 1. Dans BAC-à-SABLES, sauvegarder les fiches avant installation. Mettre à jour le module en v1.7.39 et installer le template PJ v3.80.
 2. Ouvrir une fiche PJ en compte joueur propriétaire ; cliquer sur une compétence (par exemple Perception). Le d20 doit être lancé DIRECTEMENT et une carte de résultat doit apparaître dans le chat.
