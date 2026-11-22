@@ -1,3 +1,19 @@
+H0D Template Manager v1.7.42 — TABLEAU DE BORD & ÉTAT DES OPÉRATIONS (BAC)
+
+1. Sauvegarder le BAC, puis installer le module de test issu de la PR de maintenance après validation de sa dépendance PR #32. Conserver la production intacte.
+2. À l'ouverture, vérifier que la barre d'actions est en haut, qu'aucune opération n'est présentée comme accomplie et que les catégories sont disponibles.
+3. Lancer Audit monde. Contrôler les compteurs de templates canoniques/non canoniques, Actors/Items, compendiums, Catalogue et équipements historiques. Vérifier que les sections à traiter sont ouvertes et prioritaires, et les conformes repliées en bas.
+4. Lancer Installer/mettre à jour si une version est réellement absente / dépassée. Vérifier la confirmation avec le nombre exact de modèles à corriger, la progression et le verrou sur les autres boutons.
+5. À la fin, vérifier le nouveau bilan et le réaudit automatique sans nouvelle boîte de dialogue ni export automatique. La catégorie Templates doit passer en bas et se replier UNIQUEMENT si le réaudit indique zéro anomalie de template.
+6. Sur une copie volontairement en retard de version, essayer Synchroniser le monde puis Migrer données sûres. Vérifier statut visible et compteurs fiables, les sauvegardes existantes et les résultats exacts. Ne jamais interpréter les quatre avertissements d'interface commune comme des données de PV erronées.
+7. Tester Annuler dans une modale. Aucun succès ne doit être annoncé ; le monde doit rester intact.
+8. Tester Réparer équipements / Actualiser depuis Catalogue seulement sur une copie et avec clés de référence validées. Vérifier la protection des traits, textes, améliorations, munitions et la classification après audit.
+9. Déplier manuellement une section conforme pour vérifier l'accès aux détails historiques. Tester l'accès au snapshot et au dernier cycle de restauration.
+10. Console F12 : vérifier l'absence de nouvelle erreur introduite par le manager. Tester séparément l'Arc lourd amélioré d'Aloy avec la nouvelle fiche Arme et les jets d20 PJ ; les tests GitHub ne prouvent pas l'exécution du moteur CSB.
+11. Signaler toute anomalie dans les bilans, les sections, le statut d'opération ou les données d'Actors. Garder les deux PR séparées jusqu'à validation BAC.
+
+---
+
 H0D Template Manager v1.7.41 / Template Arme v3.0 — VISIBILITÉ TRAITS (BAC)
 1. Sauvegarder BAC et exporter l'arme test (arc lourd amélioré d'Aloy) et son Actor avant toute installation ; installer uniquement le nouveau template H0D_Arme v3.0.
 2. Console F12 vidée ; ouvrir l'arc d'Aloy. Vérifier que les erreurs `Unexpected operator { (char 2)` associées aux trois `H0D_Arme_Traits_Table.*.visibilityFormula` corrigées ne réapparaissent plus.

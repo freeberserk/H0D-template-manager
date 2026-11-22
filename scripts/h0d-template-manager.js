@@ -1,5 +1,6 @@
 import { openH0DAttacks } from "./h0d-attacks.js";
 import {scanCatalogueEquipment,planCatalogueEquipment} from "./h0d-catalogue-audit.js";
+import {buildMaintenanceFlow,maintenanceResult} from "./h0d-maintenance-dashboard.js";
 import {
   COMMON_ATTRIBUTE_KEYS,
   commonAttributeEntry,
@@ -16,7 +17,7 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.41";
+const MODULE_VERSION = "1.7.42";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -378,6 +379,7 @@ async function refreshAuditSilently(reason="Maintenance du monde") {
 // Même traitement qu'un premier audit manuel pour la sauvegarde interne, mais jamais
 // de dialogue, de rapport JSON exporté ou de téléchargement automatique.
 async function auditAfterTemplateUpdate(reason="mise à jour des templates canoniques") {
+  updateMaintenanceStage("Réanalyse silencieuse du monde après installation…");
   ui.notifications.info("H0D : réaudit automatique du monde en cours…");
   try {
     await captureInitialAuditState();
@@ -991,6 +993,7 @@ async function migrateSafeVersions() {
     const current=await collectSafeVersionCandidates();
     const candidate=current.find(c=>!failed.has(safeCandidateKey(c)));
     if (!candidate) break;
+    updateMaintenanceStage("Migration des données sûres…",Math.min(results.length+1,initialCandidates.length),initialCandidates.length);
     console.log(`H0D Template Manager — migration sûre ${results.length+1} — ${candidate.name}`);
     const result=await safeVersionReload(candidate,runId);
     results.push(result);
@@ -1084,15 +1087,29 @@ async function updateTemplate(entry) {
 }
 
 async function installAllTemplates() {
-  const ok=await confirmDialog("H0D — Installer / mettre à jour", `<p>Le manager va installer ou remplacer les <strong>${TEMPLATE_INDEX.length} templates canoniques</strong> par ID stable.</p><p>Les fiches existantes ne seront <strong>pas</strong> resynchronisées automatiquement. Un audit complet sera lancé après la mise à jour, sans demande d'export JSON.</p>`,"Installer / mettre à jour");
-  if (!ok) return;
-  const results=[];
-  for (const entry of TEMPLATE_INDEX) {
-    try { results.push(await updateTemplate(entry)); }
-    catch(err) { console.error(`H0D Template Manager — ${entry.name}`,err); results.push({state:"error",name:entry.name,error:String(err?.message || err)}); }
+  const candidates=[];
+  for(const entry of TEMPLATE_INDEX){
+    const status=await templateStatus(entry);
+    if(status.code!=="ok")candidates.push(entry);
   }
-  const errors=results.filter(r=>r.state === "error");
-  ui.notifications[errors.length ? "warn" : "info"](`H0D : templates traités (${results.length-errors.length} OK, ${errors.length} erreur(s)).`);
+  if(!candidates.length){
+    ui.notifications.info("H0D : les 12 templates sont déjà canoniques.");
+    return [];
+  }
+  const ok=await confirmDialog("H0D — Installer / mettre à jour",
+    `<p><strong>${candidates.length} template(s) à corriger</strong> sur ${TEMPLATE_INDEX.length} modèles gérés.</p>
+    <p>Seuls les modèles absents ou non canoniques seront installés / mis à jour. Les fiches existantes ne seront pas synchronisées automatiquement.</p>
+    <p>Un audit silencieux vérifiera ensuite le résultat ; aucun export JSON automatique.</p>`,
+    "Installer / mettre à jour");
+  if(!ok)return null;
+  const results=[];
+  for(const [i,entry] of candidates.entries()){
+    updateMaintenanceStage("Installation des templates…",i+1,candidates.length);
+    try { results.push(await updateTemplate(entry)); }
+    catch(err){ console.error(`H0D Template Manager — ${entry.name}`,err); results.push({state:"error",name:entry.name,error:String(err?.message||err)}); }
+  }
+  const errors=results.filter(r=>r.state==="error");
+  ui.notifications[errors.length?"warn":"info"](`H0D : ${results.length-errors.length} modèle(s) installé(s) ou actualisé(s), ${errors.length} erreur(s).`);
   return results;
 }
 
@@ -1144,6 +1161,7 @@ async function synchronize(mode="all", includePacks=false) {
   const results=[];
   for (let i=0;i<entries.length;i++) {
     const e=entries[i];
+    updateMaintenanceStage("Synchronisation des fiches…",i+1,entries.length);
     console.log(`H0D Template Manager — ${i+1}/${entries.length} — [${e.kind}] ${e.doc.name}`);
     results.push(await safeReload(e,runId));
   }
@@ -1591,7 +1609,8 @@ async function repairEquipment() {
   const armorRefs=armorReference.armorShieldReferences || [];
   let weaponsDone=0,armorsDone=0,errors=0;
 
-  for (const rec of repairableWeapons) {
+  for (const [index,rec] of repairableWeapons.entries()) {
+    updateMaintenanceStage("Réparation des armes…",index+1,total);
     try {
       const doc=await fromUuid(rec.uuid);
       if (!doc) throw new Error("Document introuvable");
@@ -1613,7 +1632,8 @@ async function repairEquipment() {
     } catch(err) { errors++; console.error("H0D Template Manager — réparation arme",rec,err); }
   }
 
-  for (const rec of repairableArmors) {
+  for (const [index,rec] of repairableArmors.entries()) {
+    updateMaintenanceStage("Réparation des armures…",repairableWeapons.length+index+1,total);
     try {
       const doc=await fromUuid(rec.uuid);
       if (!doc) throw new Error("Document introuvable");
@@ -1758,7 +1778,8 @@ async function repairCatalogueEquipment() {
   const runId=newRunId();
   let done=0,errors=0,skipped=0;
   // Le cycle n'est enregistré qu'en présence d'au moins une écriture validée.
-  for(const record of candidates) {
+  for(const [index,record] of candidates.entries()) {
+    updateMaintenanceStage("Actualisation depuis Catalogue…",index+1,candidates.length);
     try {
       const doc=await fromUuid(record.uuid);
       if(!doc){skipped++;continue;}
@@ -1781,6 +1802,7 @@ async function repairCatalogueEquipment() {
 }
 
 async function auditWorld() {
+  updateMaintenanceStage("Analyse des templates, fiches, compendiums et du Catalogue…");
   // Cache des clés de composants par template : une seule traversée, même pour des centaines de fiches.
   const sourceData=await Promise.all(TEMPLATE_INDEX.map(async entry=>{
     const source=await loadTemplate(entry);
@@ -1864,7 +1886,58 @@ async function exportAudit(report=null) {
   return current;
 }
 
-const H0DTemplateManagerState={lastAudit:null,lastSafeMigration:null,app:null,auditDirty:false,lastMutation:"",busy:false};
+const H0DTemplateManagerState={lastAudit:null,lastSafeMigration:null,app:null,auditDirty:false,lastMutation:"",busy:false,operation:null,lastMaintenanceResult:null};
+
+// Une seule maintenance à la fois ; l'état reste consultable en temps réel.
+// Les modales de confirmation existantes, l'écriture et les backups sont inchangés.
+const MAINTENANCE_LABELS={
+  audit:"Audit monde",finalAudit:"Audit final",installAll:"Installer / mettre à jour",
+  updateTemplate:"Mise à jour d'un template",auditTemplate:"Audit d'un template",
+  synchronize:"Synchroniser le monde",repairEquipment:"Réparer équipements",
+  repairCatalogue:"Actualiser depuis Catalogue",migrateSafeVersions:"Migrer données sûres",
+  restore:"Restaurer données",snapshot:"Snapshot de sécurité",retireTrait:"Retirer l'ancien template"
+};
+function updateMaintenanceStage(stage,done=null,total=null){
+  const operation=H0DTemplateManagerState.operation;
+  if(!operation)return;
+  operation.stage=String(stage);
+  if(done!==null)operation.done=done;
+  if(total!==null)operation.total=total;
+  const suffix=operation.total>0 ? ` (${operation.done}/${operation.total})` : "";
+  // Ne pas déclencher un nouveau rendu pendant la mutation des Items : seulement
+  // mettre à jour le texte ARIA de l'opération déjà affichée.
+  const node=H0DTemplateManagerState.app?.element?.querySelector?.("[data-h0d-operation-live]");
+  if(node)node.textContent=operation.stage+suffix;
+}
+async function withMaintenance(app,action,fn){
+  if(H0DTemplateManagerState.busy){
+    ui.notifications.warn("H0D : une opération est déjà en cours. Attend son bilan.");
+    return;
+  }
+  const before=H0DTemplateManagerState.lastAudit;
+  const label=MAINTENANCE_LABELS[action]||action;
+  H0DTemplateManagerState.busy=true;
+  H0DTemplateManagerState.operation={action,label,stage:"Préparation / confirmation…",done:0,total:0,startedAt:new Date().toISOString()};
+  try {
+    await app.render({force:true});
+    const result=await fn();
+    H0DTemplateManagerState.lastMaintenanceResult=maintenanceResult({
+      action,label,before,after:H0DTemplateManagerState.lastAudit,executed:result
+    });
+    return result;
+  } catch(err) {
+    console.error("H0D Template Manager — maintenance "+action,err);
+    H0DTemplateManagerState.lastMaintenanceResult=maintenanceResult({
+      action,label,before,after:H0DTemplateManagerState.lastAudit,thrown:err
+    });
+    ui.notifications.error("H0D : opération interrompue — "+String(err?.message||err));
+  } finally {
+    H0DTemplateManagerState.busy=false;
+    H0DTemplateManagerState.operation=null;
+    try { await app.render({force:true}); }
+    catch(renderErr){console.error("H0D Template Manager — rendu du bilan",renderErr);}
+  }
+}
 
 async function captureInitialAuditState() {
   if (game.settings.get(MODULE_ID,INITIAL_AUDIT_SETTING)) return false;
@@ -1898,19 +1971,19 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     window:{title:"H0D — Template Manager",icon:"fa-solid fa-shield-halved",resizable:true},
     position:{width:1180,height:780},
     actions:{
-      audit:H0DTemplateManagerApp._audit,
-      finalAudit:H0DTemplateManagerApp._finalAudit,
-      installAll:H0DTemplateManagerApp._installAll,
-      synchronize:H0DTemplateManagerApp._synchronize,
-      restore:H0DTemplateManagerApp._restore,
-      snapshot:H0DTemplateManagerApp._snapshot,
+      audit:H0DTemplateManagerApp._managedAction,
+      finalAudit:H0DTemplateManagerApp._managedAction,
+      installAll:H0DTemplateManagerApp._managedAction,
+      synchronize:H0DTemplateManagerApp._managedAction,
+      restore:H0DTemplateManagerApp._managedAction,
+      snapshot:H0DTemplateManagerApp._managedAction,
       openTemplate:H0DTemplateManagerApp._openTemplate,
-      updateTemplate:H0DTemplateManagerApp._updateTemplate,
-      auditTemplate:H0DTemplateManagerApp._auditTemplate,
-      retireTrait:H0DTemplateManagerApp._retireTrait,
-      repairEquipment:H0DTemplateManagerApp._repairEquipment,
-      repairCatalogue:H0DTemplateManagerApp._repairCatalogue,
-      migrateSafeVersions:H0DTemplateManagerApp._migrateSafeVersions
+      updateTemplate:H0DTemplateManagerApp._managedAction,
+      auditTemplate:H0DTemplateManagerApp._managedAction,
+      retireTrait:H0DTemplateManagerApp._managedAction,
+      repairEquipment:H0DTemplateManagerApp._managedAction,
+      repairCatalogue:H0DTemplateManagerApp._managedAction,
+      migrateSafeVersions:H0DTemplateManagerApp._managedAction
     }
   };
   static PARTS={main:{template:`modules/${MODULE_ID}/templates/manager.hbs`}};
@@ -1931,11 +2004,15 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       mechanicalDiffs:"—",mismatch:0,unreferenced:"—",sourceWarnings:"—"
     };
     const catalogueSummary=audit?.catalogueReference?.summary||{tracked:0,ok:0,repairable:0,unmapped:0,excluded:0};
+    const maintenanceFlow=buildMaintenanceFlow(audit);
     const safeVersionCandidates=audit?.warningTriage
       ? Number(audit.warningTriage.versionOnlyCandidates||0)+Number(audit.warningTriage.prototypeBarCandidates||0)+Number(audit.warningTriage.commonInterfaceCandidates||0)+Number(audit.warningTriage.additiveSafeCandidates||0)
       : 0;
     return foundry.utils.mergeObject(context,{
       moduleVersion:MODULE_VERSION,
+      maintenanceFlow,
+      maintenanceState:{busy:H0DTemplateManagerState.busy,operation:H0DTemplateManagerState.operation},
+      maintenanceResult:H0DTemplateManagerState.lastMaintenanceResult,
       actorTemplates:templates.filter(e=>e.kind==="Actor"),
       itemTemplates:templates.filter(e=>e.kind==="Item"),
       legacy:{installed:!!legacy,name:legacy?.name || "H0D_Trait v2.6",usages:legacyUsages.length,canRemove:!!legacy && legacyUsages.length===0},
@@ -1968,6 +2045,13 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       lastCycle:game.settings.get(MODULE_ID,LAST_CYCLE_SETTING) || "—"
     },{inplace:false});
   }
+  static async _managedAction(event,target) {
+    const action=target?.dataset?.action;
+    const actions={audit:"_audit",finalAudit:"_finalAudit",installAll:"_installAll",synchronize:"_synchronize",restore:"_restore",snapshot:"_snapshot",updateTemplate:"_updateTemplate",auditTemplate:"_auditTemplate",retireTrait:"_retireTrait",repairEquipment:"_repairEquipment",repairCatalogue:"_repairCatalogue",migrateSafeVersions:"_migrateSafeVersions"};
+    const handler=H0DTemplateManagerApp[actions[action]];
+    if(!handler)return;
+    return withMaintenance(this,action,()=>handler.call(this,event,target));
+  }
   static async _audit() {
     const final=H0DTemplateManagerState.auditDirty;
     ui.notifications.info(final ? "H0D : audit final en cours…" : "H0D : audit en cours…");
@@ -1985,6 +2069,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     ui.notifications.info(final ? "H0D : audit final terminé." : "H0D : audit terminé (lecture seule).");
     await this.render({force:true});
     await promptAuditExport(report,{final});
+    return report;
   }
   static async _finalAudit() {
     if(!finalAuditPendingReason()){
@@ -2001,6 +2086,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       await game.settings.set(MODULE_ID,FINAL_AUDIT_PENDING_SETTING,"");
       await this.render({force:true});
       await promptAuditExport(report,{final:true});
+      return report;
     } catch(err) {
       console.error("H0D Template Manager — audit final",err);
       ui.notifications.error("H0D : audit final impossible ; tu peux le relancer. "+String(err?.message||err));
@@ -2011,6 +2097,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!results) return;
     await auditAfterTemplateUpdate("installation / mise à jour des templates");
     await this.render({force:true});
+    return results;
   }
   static async _synchronize() {
     const choice=await syncChoiceDialog();
@@ -2021,17 +2108,19 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       await refreshAuditSilently("synchronisation du monde");
     }
     await this.render({force:true});
+    return results;
   }
   static async _restore() {
     const result=await restoreLastCycle();
     if (result?.restored>0) markAuditFinalRecommended("restauration des données");
     await this.render({force:true});
+    return result;
   }
-  static async _snapshot() { await createSnapshot("manuel"); }
+  static async _snapshot() { return createSnapshot("manuel"); }
   static async _openTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); const doc=entry&&installedTemplate(entry); if (!doc) return ui.notifications.warn("H0D : template absent."); doc.sheet?.render(true); }
-  static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Un audit du monde sera relancé sans demande d'export JSON.</p>`,"Mettre à jour"); if (!ok) return; await updateTemplate(entry); await auditAfterTemplateUpdate(`mise à jour de ${entry.name}`); await this.render({force:true}); }
-  static async _auditTemplate(event,target) { const key=target.dataset.key; const report=await auditWorld(); const entry=TEMPLATE_INDEX.find(e=>e.key===key); const docs=report.documents.filter(d=>d.templateId===entry?.id); const bad=docs.filter(d=>d.status!=="ok"); ui.notifications.info(`H0D : ${entry?.name || key} — ${docs.length} fiche(s), ${bad.length} à examiner.`); H0DTemplateManagerState.lastAudit=report; await this.render({force:true}); }
-  static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) markAuditFinalRecommended("retrait du template legacy"); await this.render({force:true}); }
+  static async _updateTemplate(event,target) { const entry=TEMPLATE_INDEX.find(e=>e.key===target.dataset.key); if (!entry) return; const ok=await confirmDialog("H0D — Mettre à jour un template",`<p>Mettre à jour <strong>${entry.name}</strong> uniquement ?</p><p>Les fiches utilisant ce template ne seront pas resynchronisées automatiquement. Un audit du monde sera relancé sans demande d'export JSON.</p>`,"Mettre à jour"); if (!ok) return; const result=await updateTemplate(entry); await auditAfterTemplateUpdate(`mise à jour de ${entry.name}`); await this.render({force:true}); return result; }
+  static async _auditTemplate(event,target) { const key=target.dataset.key; const report=await auditWorld(); const entry=TEMPLATE_INDEX.find(e=>e.key===key); const docs=report.documents.filter(d=>d.templateId===entry?.id); const bad=docs.filter(d=>d.status!=="ok"); ui.notifications.info(`H0D : ${entry?.name || key} — ${docs.length} fiche(s), ${bad.length} à examiner.`); H0DTemplateManagerState.lastAudit=report; await this.render({force:true}); return report; }
+  static async _retireTrait() { const removed=await retireLegacyTrait(); if (removed) markAuditFinalRecommended("retrait du template legacy"); await this.render({force:true}); return {removed}; }
   static async _repairEquipment() {
     const result=await repairEquipment();
     if (result && (result.weaponsDone+result.armorsDone)>0) {
@@ -2039,6 +2128,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       await refreshAuditSilently("réparation des équipements");
     }
     await this.render({force:true});
+    return result;
   }
   static async _repairCatalogue() {
     const result=await repairCatalogueEquipment();
@@ -2047,6 +2137,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
       await refreshAuditSilently("actualisation depuis Catalogue");
     }
     await this.render({force:true});
+    return result;
   }
   static async _migrateSafeVersions() {
     const liveCandidates=await collectSafeVersionCandidates();
@@ -2111,6 +2202,7 @@ class H0DTemplateManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
     markAuditFinalRecommended("migration des données sûres",{preserveReport:true});
     await this.render({force:true});
+    return migration;
   }
 }
 

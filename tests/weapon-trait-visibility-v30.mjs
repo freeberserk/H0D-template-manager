@@ -18,7 +18,7 @@ function collect(root,key){
  walk(root);assert.equal(res.length,1,key+" : cle absente ou multiple");
  return res[0];
 }
-assert.equal(moduleManifest.version,"1.7.41");
+assert.equal(moduleManifest.version,"1.7.42");
 assert.equal(after._id,before._id);
 assert.equal(after.name,"H0D_Arme v3.0");
 assert.equal(after.system.templateSystemUniqueVersion,before.system.templateSystemUniqueVersion+1);

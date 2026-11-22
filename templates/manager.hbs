@@ -8,14 +8,14 @@
   </header>
 
   <nav class="h0d-tm-actionbar">
-    <button type="button" data-action="snapshot" title="Exporter manuellement un snapshot JSON du monde."><i class="fa-solid fa-floppy-disk"></i> Snapshot de sécurité</button>
-    <button type="button" data-action="audit" class="{{#if auditState.dirty}}audit-dirty{{else}}primary{{/if}}" title="{{auditState.hint}}"><i class="fa-solid fa-magnifying-glass-chart"></i> {{auditState.label}}</button>
-    <button type="button" data-action="installAll"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
-    <button type="button" data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
-    <button type="button" data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}} title="Disponible après audit lorsqu'un équipement référencé présente un écart mécanique."><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
-    <button type="button" data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}} title="Disponible après audit pour les migrations explicitement considérées comme sûres."><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer données sûres</button>
-    <button type="button" data-action="finalAudit" class="{{#if finalAuditState.enabled}}primary{{/if}}" {{#unless finalAuditState.enabled}}disabled{{/unless}} title="{{finalAuditState.hint}}"><i class="fa-solid fa-clipboard-check"></i> Audit final</button>
-    <button type="button" data-action="restore" {{#unless hasInitialAudit}}{{#unless hasRestorableCycle}}disabled{{/unless}}{{/unless}} title="Restaurer les données depuis le premier audit ou le dernier cycle de maintenance."><i class="fa-solid fa-clock-rotate-left"></i> Restaurer données</button>
+    <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="snapshot" title="Exporter manuellement un snapshot JSON du monde."><i class="fa-solid fa-floppy-disk"></i> Snapshot de sécurité</button>
+    <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="audit" class="{{#if auditState.dirty}}audit-dirty{{else}}primary{{/if}}" title="{{auditState.hint}}"><i class="fa-solid fa-magnifying-glass-chart"></i> {{auditState.label}}</button>
+    <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="installAll"><i class="fa-solid fa-download"></i> Installer/mettre à jour</button>
+    <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="synchronize"><i class="fa-solid fa-arrows-rotate"></i> Synchroniser le monde</button>
+    <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="repairEquipment" {{#unless hasEquipmentRepair}}disabled{{/unless}} title="Disponible après audit lorsqu'un équipement référencé présente un écart mécanique."><i class="fa-solid fa-wrench"></i> Réparer équipements</button>
+    <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="migrateSafeVersions" {{#unless safeVersionCandidates}}disabled{{/unless}} title="Disponible après audit pour les migrations explicitement considérées comme sûres."><i class="fa-solid fa-arrow-up-right-dots"></i> Migrer données sûres</button>
+    <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="finalAudit" class="{{#if finalAuditState.enabled}}primary{{/if}}" {{#unless finalAuditState.enabled}}disabled{{/unless}} title="{{finalAuditState.hint}}"><i class="fa-solid fa-clipboard-check"></i> Audit final</button>
+    <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="restore" {{#unless hasInitialAudit}}{{#unless hasRestorableCycle}}disabled{{/unless}}{{/unless}} title="Restaurer les données depuis le premier audit ou le dernier cycle de maintenance."><i class="fa-solid fa-clock-rotate-left"></i> Restaurer données</button>
   </nav>
 
   <div class="h0d-tm-scroll">
@@ -47,7 +47,39 @@
       </article>
     </section>
 
+    <div class="h0d-tm-status-panel" role="status" aria-live="polite">
+      {{#if maintenanceState.busy}}
+      <div class="h0d-tm-operation running" aria-busy="true">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <div><strong>{{maintenanceState.operation.label}} — en cours</strong>
+        <p data-h0d-operation-live>{{maintenanceState.operation.stage}}</p>
+        <small>Une seule opération à la fois. Le bilan s'affichera à la fin de la vérification.</small></div>
+      </div>
+      {{else}}
+        {{#if maintenanceResult}}
+        <div class="h0d-tm-operation {{maintenanceResult.state}}" aria-busy="false">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <div><strong>{{maintenanceResult.label}} — {{maintenanceResult.headline}}</strong>
+          <p>{{maintenanceResult.detail}}</p>
+          <small>Dernier résultat : {{maintenanceResult.createdAt}} · {{#if maintenanceResult.verified}}Vérifié par réaudit{{else}}Aucun nouveau réaudit confirmé{{/if}}</small></div>
+        </div>
+        {{else}}
+        <p class="h0d-tm-first-audit"><i class="fa-solid fa-circle-info"></i> Lance <strong>Audit monde</strong> pour obtenir le premier état des lieux, classé par type d'intervention.</p>
+        {{/if}}
+      {{/if}}
+    </div>
+    <div class="h0d-tm-workflow-title">
+      <h2>État des lieux et maintenance progressive</h2>
+      <span>{{#if maintenanceFlow.available}}{{maintenanceFlow.openCount}} catégorie(s) à traiter · {{maintenanceFlow.attentionCount}} à examiner · {{maintenanceFlow.resolvedCount}} conforme(s){{else}}En attente du premier audit{{/if}}</span>
+    </div>
+    <p class="h0d-tm-workflow-hint">Les catégories non résolues restent en haut. Après une opération, le réaudit actualise les compteurs ; les catégories conformes passent en bas et sont repliées. Clique sur un titre pour afficher les détails.</p>
+    <div class="h0d-tm-workflow">
     {{#if warningTriage.available}}
+    <details class="h0d-tm-workflow-group {{maintenanceFlow.groups.documents.state}}" style="order:{{maintenanceFlow.groups.documents.order}}" {{#if maintenanceFlow.groups.documents.open}}open{{/if}}>
+      <summary class="h0d-tm-workflow-heading">
+        <span><i class="fa-solid fa-chevron-right"></i><strong>Fiches et compendiums</strong><small>Versions, synchronisation et anomalies du monde</small></span>
+        <span class="h0d-tm-workflow-tag">{{maintenanceFlow.groups.documents.label}}</span>
+      </summary>
     <section class="h0d-tm-section">
       <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-list-check"></i> TRIAGE DES AVERTISSEMENTS</h2><span>migration contrôlée · évolutions additives allowlistées</span></div>
       <div class="h0d-tm-weapon-grid">
@@ -77,8 +109,14 @@
         {{#if warningTriage.topMissingProps.length}}<p>Les propriétés manquantes les plus fréquentes sont incluses dans l’export d’audit sous <code>warningTriage.topMissingProps</code>.</p>{{/if}}
       </div>
     </section>
-    {{/if}}
 
+    </details>
+    {{/if}}
+    <details class="h0d-tm-workflow-group {{maintenanceFlow.groups.catalogue.state}}" style="order:{{maintenanceFlow.groups.catalogue.order}}" {{#if maintenanceFlow.groups.catalogue.open}}open{{/if}}>
+      <summary class="h0d-tm-workflow-heading">
+        <span><i class="fa-solid fa-chevron-right"></i><strong>Compatibilité H0D Catalogue</strong><small>Références d'articles et divergences mécaniques</small></span>
+        <span class="h0d-tm-workflow-tag">{{maintenanceFlow.groups.catalogue.label}}</span>
+      </summary>
     <section class="h0d-tm-section">
       <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-book-open"></i> H0D CATALOGUE — ÉQUIPEMENTS</h2><span>référence externe facultative · clés exactes</span></div>
       {{#if catalogueReference.available}}
@@ -90,12 +128,19 @@
         <article><span>Exclus (prudence)</span><strong>{{catalogueSummary.excluded}}</strong></article>
       </div>
       <p>H0D Catalogue v{{catalogueReference.version}} : contrôle uniquement les Items créés par Equipment Builder avec une clé <code>catalogKey</code> explicite. Les noms similaires ne sont jamais rapprochés automatiquement. Seuls certains champs mécaniques d'armes et d'armures validées sont réparables ; quantités, munitions restantes, états, tables de traits et améliorations restent intacts.</p>
-      <button type="button" data-action="repairCatalogue" {{#unless hasCatalogueRepair}}disabled{{/unless}} title="Afficher les différences précises, demander confirmation et sauvegarder les données avant l'actualisation."><i class="fa-solid fa-screwdriver-wrench"></i> Actualiser depuis Catalogue ({{catalogueSummary.repairable}})</button>
+      <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="repairCatalogue" {{#unless hasCatalogueRepair}}disabled{{/unless}} title="Afficher les différences précises, demander confirmation et sauvegarder les données avant l'actualisation."><i class="fa-solid fa-screwdriver-wrench"></i> Actualiser depuis Catalogue ({{catalogueSummary.repairable}})</button>
       {{else}}
       <p>H0D Catalogue est absent, inactif ou non prêt. Les audits et les réparations historiques restent utilisables indépendamment.</p>
       {{/if}}
     </section>
 
+
+    </details>
+    <details class="h0d-tm-workflow-group {{maintenanceFlow.groups.templates.state}}" style="order:{{maintenanceFlow.groups.templates.order}}" {{#if maintenanceFlow.groups.templates.open}}open{{/if}}>
+      <summary class="h0d-tm-workflow-heading">
+        <span><i class="fa-solid fa-chevron-right"></i><strong>Templates canoniques</strong><small>Installation, mise à jour et contrôles CSB</small></span>
+        <span class="h0d-tm-workflow-tag">{{maintenanceFlow.groups.templates.label}}</span>
+      </summary>
     <section class="h0d-tm-section">
       <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-user-shield"></i> ACTORS</h2><span>4 templates</span></div>
       <div class="h0d-tm-table">
@@ -106,9 +151,9 @@
           <span>{{status.installed}}</span>
           <span class="status {{status.code}}"><i class="{{status.icon}}"></i> {{status.label}}</span>
           <span class="actions">
-            <button type="button" data-action="openTemplate" data-key="{{key}}" title="Ouvrir"><i class="fa-solid fa-up-right-from-square"></i> Ouvrir</button>
-            <button type="button" data-action="updateTemplate" data-key="{{key}}"><i class="fa-solid fa-download"></i> {{#if status.doc}}Mettre à jour{{else}}Installer{{/if}}</button>
-            <button type="button" data-action="auditTemplate" data-key="{{key}}"><i class="fa-solid fa-stethoscope"></i> Auditer</button>
+            <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="openTemplate" data-key="{{key}}" title="Ouvrir"><i class="fa-solid fa-up-right-from-square"></i> Ouvrir</button>
+            <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="updateTemplate" data-key="{{key}}"><i class="fa-solid fa-download"></i> {{#if status.doc}}Mettre à jour{{else}}Installer{{/if}}</button>
+            <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="auditTemplate" data-key="{{key}}"><i class="fa-solid fa-stethoscope"></i> Auditer</button>
           </span>
         </div>
         {{/each}}
@@ -125,22 +170,29 @@
           <span>{{status.installed}}</span>
           <span class="status {{status.code}}"><i class="{{status.icon}}"></i> {{status.label}}</span>
           <span class="actions">
-            <button type="button" data-action="openTemplate" data-key="{{key}}"><i class="fa-solid fa-up-right-from-square"></i> Ouvrir</button>
-            <button type="button" data-action="updateTemplate" data-key="{{key}}"><i class="fa-solid fa-download"></i> {{#if status.doc}}Mettre à jour{{else}}Installer{{/if}}</button>
-            <button type="button" data-action="auditTemplate" data-key="{{key}}"><i class="fa-solid fa-stethoscope"></i> Auditer</button>
+            <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="openTemplate" data-key="{{key}}"><i class="fa-solid fa-up-right-from-square"></i> Ouvrir</button>
+            <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="updateTemplate" data-key="{{key}}"><i class="fa-solid fa-download"></i> {{#if status.doc}}Mettre à jour{{else}}Installer{{/if}}</button>
+            <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="auditTemplate" data-key="{{key}}"><i class="fa-solid fa-stethoscope"></i> Auditer</button>
           </span>
         </div>
         {{/each}}
       </div>
     </section>
 
+
+    </details>
+    <details class="h0d-tm-workflow-group {{maintenanceFlow.groups.legacy.state}}" style="order:{{maintenanceFlow.groups.legacy.order}}" {{#if maintenanceFlow.groups.legacy.open}}open{{/if}}>
+      <summary class="h0d-tm-workflow-heading">
+        <span><i class="fa-solid fa-chevron-right"></i><strong>Héritage et compatibilité</strong><small>Anciennes données à conserver ou à vérifier</small></span>
+        <span class="h0d-tm-workflow-tag">{{maintenanceFlow.groups.legacy.label}}</span>
+      </summary>
     <section class="h0d-tm-section h0d-tm-legacy">
       <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-box-archive"></i> LEGACY / COMPATIBILITÉ</h2></div>
       <div class="h0d-tm-legacy-line">
         <div><strong>{{legacy.name}}</strong><small>{{#if legacy.installed}}{{legacy.usages}} utilisation(s) détectée(s){{else}}Déjà retiré du monde{{/if}}</small></div>
         {{#if legacy.installed}}
           {{#if legacy.canRemove}}
-          <button type="button" data-action="retireTrait" class="danger"><i class="fa-solid fa-trash"></i> Retirer (inutilisé)</button>
+          <button type="button" {{#if maintenanceState.busy}}disabled{{/if}} data-action="retireTrait" class="danger"><i class="fa-solid fa-trash"></i> Retirer (inutilisé)</button>
           {{else}}
           <span class="status warning"><i class="fa-solid fa-triangle-exclamation"></i> Conservé : encore utilisé</span>
           {{/if}}
@@ -148,6 +200,13 @@
       </div>
     </section>
 
+
+    </details>
+    <details class="h0d-tm-workflow-group {{maintenanceFlow.groups.equipment.state}}" style="order:{{maintenanceFlow.groups.equipment.order}}" {{#if maintenanceFlow.groups.equipment.open}}open{{/if}}>
+      <summary class="h0d-tm-workflow-heading">
+        <span><i class="fa-solid fa-chevron-right"></i><strong>Référentiel historique des équipements</strong><small>Armes, armures et boucliers des PJ</small></span>
+        <span class="h0d-tm-workflow-tag">{{maintenanceFlow.groups.equipment.label}}</span>
+      </summary>
     <section class="h0d-tm-section">
       <div class="h0d-tm-section-title"><h2><i class="fa-solid fa-crosshairs"></i> CONFORMITÉ DES ARMES</h2><span>référentiel testé v0.5.2</span></div>
       <div class="h0d-tm-weapon-grid">
@@ -179,6 +238,10 @@
         <p>Audit des armures/boucliers embarqués sur les Actors utilisant le template PJ. Les équipements inconnus restent intacts. MAX DEX et la résistance texte restent informatifs tant que le template Armure ne possède pas de champ dédié. La réparation ne touche que les mécaniques validées et conserve les traits locaux supplémentaires non couverts par le référentiel.</p>
       </div>
     </section>
+
+
+    </details>
+    </div>
 
     <section class="h0d-tm-note">
       <i class="fa-solid fa-circle-info"></i>
