@@ -46,7 +46,7 @@ assert.equal(/promptAuditExport|exportAudit\(|createSnapshot\(|saveDataToFile/.t
   "Aucun export, téléchargement ou dialogue d'export ne doit se produire pendant le réaudit automatique.");
 // Régression fonctionnelle : audit sans export et traitement des erreurs.
 const buildAutomaticAudit=new Function(
-  "auditWorld","captureInitialAuditState","H0DTemplateManagerState","markAuditFinalRecommended","ui","console",
+  "auditWorld","captureInitialAuditState","H0DTemplateManagerState","markAuditFinalRecommended","ui","console","updateMaintenanceStage",
   automaticAudit+";return auditAfterTemplateUpdate;"
 );
 const autoState={lastAudit:null,auditDirty:true,lastMutation:"ancien état"};
@@ -55,7 +55,7 @@ const reportExpected={counts:{templates:{ok:12,update:0,absent:0},documents:{war
 const markDirty=reason=>{autoState.lastAudit=null;autoState.auditDirty=true;autoState.lastMutation=reason;};
 const notifications={info:message=>notices.push(["info",message]),error:message=>notices.push(["error",message])};
 const autoAudit=buildAutomaticAudit(async()=>{audits++;return reportExpected;},
-  async()=>{backups++;},autoState,markDirty,{notifications}, {error:()=>{}});
+  async()=>{backups++;},autoState,markDirty,{notifications}, {error:()=>{}},()=>{});
 assert.equal(await autoAudit("mise à jour canonique"),reportExpected,
   "Le réaudit doit renvoyer le dernier rapport.");
 assert.equal(backups,1,"Le réaudit doit vérifier la sauvegarde initiale interne.");
@@ -67,7 +67,7 @@ assert.equal(notices.filter(([type])=>type==="info").length,2,"Résultat de l'au
 const failState={lastAudit:null,auditDirty:false,lastMutation:""};
 const failingAudit=buildAutomaticAudit(async()=>{throw new Error("Audit de test");},
   async()=>{},failState,reason=>{failState.auditDirty=true;failState.lastMutation=reason;},
-  {notifications}, {error:()=>{}});
+  {notifications}, {error:()=>{}},()=>{});
 assert.equal(await failingAudit("mise à jour canonique"),null,
   "Un audit en échec ne doit pas être annoncé comme terminé.");
 assert.equal(failState.auditDirty,true,
