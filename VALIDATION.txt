@@ -1,3 +1,15 @@
+H0D Template Manager v1.7.41 / Template Arme v3.0 — VISIBILITÉ TRAITS (BAC)
+1. Sauvegarder BAC et exporter l'arme test (arc lourd amélioré d'Aloy) et son Actor avant toute installation ; installer uniquement le nouveau template H0D_Arme v3.0.
+2. Console F12 vidée ; ouvrir l'arc d'Aloy. Vérifier que les erreurs `Unexpected operator { (char 2)` associées aux trois `H0D_Arme_Traits_Table.*.visibilityFormula` corrigées ne réapparaissent plus.
+3. Dans une ligne de la table des traits, sélectionner `précis`, `allonge`, `portée`, `lourd`, `anti_blindage`, `surchauffe` : le champ Valeur doit être visible. Choisir un type non concerné : Valeur doit se masquer. Ne pas modifier les valeurs réelles de l'arc d'Aloy : utiliser une copie de test.
+4. Pour `polyvalent`, le champ Paramètre doit être visible, puis masqué avec un autre trait. Pour `autre`, le champ Perso doit être visible, puis masqué avec un autre trait.
+5. Tester le changement d'un trait et le retour à sa valeur initiale sur une copie ; vérifier que les valeurs des traits et les effets mécaniques (attaque, portée, cooldown, dégâts, munitions) restent les mêmes.
+6. Contrôler un item Arme historique déjà embarqué chez un autre PJ ainsi que les accès en lecture seule pour un joueur, puis vérifier l'absence d'effets sur armures/objets.
+7. Si d'autres erreurs CSB surviennent, noter la formule complète, son chemin source et la version du template ; ne pas activer de migration globale sans contrôle.
+8. Les tests GitHub sont structurels. Seuls les essais sous CSB 6.1.2 dans le BAC peuvent confirmer la résolution en jeu. Synchronisation du monde de campagne uniquement après validation.
+
+---
+
 H0D Template Manager v1.7.40 / Template PJ v3.81 — FORMULES NUMÉRIQUES (BAC)
 1. Sauvegarder le BAC et les fiches PJ ; mettre à jour le module puis installer uniquement le nouveau template PJ v3.81.
 2. Sur une copie de PJ, relever le nombre de nouvelles erreurs CSB Logger.js:39 lors de l'ouverture de l'inventaire et des raccourcis d'armes/armures. Les quatre expressions ciblées ne doivent plus émettre addScalar/larger.

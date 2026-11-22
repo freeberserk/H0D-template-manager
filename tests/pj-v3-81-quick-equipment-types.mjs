@@ -23,7 +23,7 @@ const expected=new Map([
  ["H0D_Armure_Bonus_Actif","value"],
  ["H0D_EQ_Armure_Lourd_Insuffisant_Hid","formula"]
 ]);
-assert.equal(manifest.version,"1.7.40");
+assert.equal(manifest.version,"1.7.41");
 assert.equal(after._id,before._id);
 assert.equal(after.name,"H0D_Actor-template-PJ v3.81");
 assert.equal(after.system.templateSystemUniqueVersion,before.system.templateSystemUniqueVersion+1);
