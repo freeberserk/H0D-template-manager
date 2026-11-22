@@ -1,7 +1,6 @@
 // Read-only view model for the progressive maintenance dashboard.
 // No Foundry API, document mutation or side effects: safe to test in Node.
 const num=value=>Number.isFinite(Number(value))?Math.max(0,Number(value)):0;
-const count=(report,path)=>path.reduce((v,key)=>v?.[key],report);
 const metric=(report,name)=>{
   if(!report)return null;
   const warningDocs=(report.documents||[]).filter(d=>d.status==="warning"||d.status==="error").length;
@@ -91,7 +90,7 @@ export function maintenanceResult({action,label,before,after,thrown=null,execute
  const fresh=before!==after&&before.createdAt!==after.createdAt;
  if(!fresh){
   return {action,label,state:"info",headline:"Aucun changement vérifié par un nouvel audit",
-   detail:"L'opération a pu être annulée ou n'avoir nécessité aucune écriture. Les valeurs de l'audit précédent sont conservées.",
+   detail:execution.message+" Aucun nouvel état du monde n’a été confirmé ; les chiffres restent ceux du dernier audit.",
    createdAt:now,verified:false,remaining:null,corrected:null};
  }
  if(!target){
