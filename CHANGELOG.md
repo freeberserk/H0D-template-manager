@@ -1,3 +1,11 @@
+## v1.7.40 — PJ v3.81 : corriger les types des formules de lecture des équipements
+
+- La console CSB signalait `addScalar` (opérandes `undefined`) et `larger` (opérandes `undefined` ou `string`) dans les tableaux de raccourcis armes/armures du PJ v3.80.
+- Quatre champs sécurisés : `H0D_Quick_Arme_Portee`, `H0D_Quick_Arme_Cooldown`, `H0D_Armure_Bonus_Actif`, `H0D_EQ_Armure_Lourd_Insuffisant_Hid`.
+- Convertit explicitement les valeurs numériques via `number(fallback(item.<champ>,0))` : une valeur absente devient 0 uniquement dans la lecture de la carte, les valeurs existantes restent prises en compte.
+- Aucune modification des templates Arme et Armure, du Catalogue, des valeurs d'Items, des jets, des stats, des règles ou des inventaires. Conservation du template PJ v3.80, nouvelle version v3.81 avec ID CSB stable.
+- Test de non-régression des 4 expressions et de la stabilité de tout le reste ; intégration réelle CSB à contrôler dans BAC-à-SABLES avant toute synchronisation du monde.
+
 ## v1.7.39 — HOTFIX : PJ v3.80, retour des jets de compétences fiables
 
 - Régression bloquante observée en Foundry : les clics sur les compétences ne lançaient plus rien dans les templates v3.75 à v3.79 après l'intégration des choix d20 / Faire 10 / Faire 20.

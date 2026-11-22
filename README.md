@@ -1,3 +1,10 @@
+## v1.7.40 — PJ v3.81 : types numériques sécurisés dans les tableaux d'équipement (BAC)
+
+- Corrige quatre expressions de lecture dans le raccourci des armes et l'inventaire d'armures : portée (allonge), cooldown, bonus DEF actif et seuil de FOR du trait Lourd. CSB 6.1.2 pouvait recevoir `undefined` ou une chaîne dans ses opérations numériques (`addScalar` / `larger`).
+- Utilise `fallback(...,0)` uniquement sur les valeurs de calcul manquantes, puis `number(...)` pour les champs numériques exprimés en chaînes ; conserve les valeurs présentes et leurs effets, y compris le trait Lourd et le bonus d'amélioration de DEF.
+- Ne change ni les jets d20, ni les mécaniques d'attaques, dégâts, PA, repos, équipement, ni les données existantes des PJ. Template CSB PJ v3.81 (identifiant stable, version unique incrémentée) ; anciens templates conservés.
+- Test statique avec émulation ciblée ; **la validation réelle dans BAC-à-SABLES sur Foundry v14 / CSB 6.1.2 est obligatoire** avant synchronisation des PJ et du monde de campagne. Voir `VALIDATION.txt`.
+
 ## v1.7.39 — Hotfix PJ v3.80 : compétences de nouveau au clic d20
 
 - Les versions v3.75 à v3.79 avaient introduit un sélecteur de mode dans les 23 jets de compétence et Focus, bloquant les clics constatés dans BAC.
@@ -104,7 +111,7 @@ En cas d'échec d'audit, la mise à jour n'est pas annulée : le manager signale
 - « Synchroniser le monde » conserve le dernier cycle restaurable lorsque la sélection ne contient aucun document.
 - Tests automatisés renforcés pour l’ordre snapshot/audit, la synchronisation et la sauvegarde interne. Validation en serveur Foundry à réaliser séparément.
 
-# H0D Template Manager — v1.7.39
+# H0D Template Manager — v1.7.40
 
 ## v1.7.26 — Bonus des Dons sur les Artisanats
 

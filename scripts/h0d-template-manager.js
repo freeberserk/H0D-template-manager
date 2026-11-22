@@ -16,7 +16,7 @@ import {
 } from "./h0d-ammo-recovery.js";
 
 const MODULE_ID = "h0d-template-manager";
-const MODULE_VERSION = "1.7.39";
+const MODULE_VERSION = "1.7.40";
 const LEGACY_TRAIT_ID = "H0DTraitTpl00001";
 const BACKUP_KEY = "backups";
 const MAX_BACKUPS = 5;
@@ -26,7 +26,7 @@ const INITIAL_AUDIT_FLAG = "initialAuditBackup";
 const FINAL_AUDIT_PENDING_SETTING = "finalAuditPendingReason";
 
 const TEMPLATE_INDEX = [
-  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.80", version:"3.80", file:"H0D_Actor-template-PJ-v3.80.json"},
+  {key:"actor-pj", family:"Actor", kind:"Actor", id:"uympqkQiS6MHHmIx", name:"H0D_Actor-template-PJ v3.81", version:"3.81", file:"H0D_Actor-template-PJ-v3.81.json"},
   {key:"actor-creature", family:"Actor", kind:"Actor", id:"H0DCreatActor001", name:"H0D_Actor-template-creature v1.28", version:"1.28", file:"H0D_Actor-template-creature-v1.28.json"},
   {key:"actor-conteneur", family:"Actor", kind:"Actor", id:"H0DContActor0001", name:"H0D_Actor-template-conteneur v1.0", version:"1.0", file:"H0D_Actor-template-conteneur-v1.0.json"},
   {key:"actor-machine", family:"Actor", kind:"Actor", id:"wRHfQ4gZbHTaYOsR", name:"H0D_Actor-template-machine v3.18", version:"3.18", file:"H0D_Actor-template-machine-v3.18.json"},
