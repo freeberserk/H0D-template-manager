@@ -11,7 +11,8 @@ assert.match(main,/const FINAL_AUDIT_PENDING_SETTING = "finalAuditPendingReason"
 assert.match(main,/game.settings.register\(MODULE_ID,FINAL_AUDIT_PENDING_SETTING/);
 assert.match(hbs,/data-action="migrateSafeVersions"[\s\S]*?data-action="finalAudit"/);
 assert.match(hbs,/data-action="finalAudit"[^>]+disabled/);
-assert.match(main,/finalAudit:H0DTemplateManagerApp\._finalAudit/);
+assert.match(main,/finalAudit:H0DTemplateManagerApp\._managedAction/);
+assert.match(main,/static async _finalAudit\(\)/);
 assert.match(main,/if\(!finalAuditPendingReason\(\)\)/);
 assert.match(main,/await game.settings.set\(MODULE_ID,FINAL_AUDIT_PENDING_SETTING,""\)/);
 assert.match(main,/await promptAuditExport\(report,\{final:true\}\)/);
